@@ -45,7 +45,7 @@
 				"typeProperties": {
 					"variableName": "parameters",
 					"value": {
-						"value": "{\n\"action\": @{pipeline().parameters.action},\n\"sku\": @{pipeline().parameters.sku},\n\"subscriptionId\": @{pipeline().parameters.subscriptionId},\n\"resourceGroupName\": @{pipeline().parameters.resourceGroupName},\n\"workspaceName\": @{pipeline().parameters.workspaceName},\n\"sqlPoolName\": @{pipeline().parameters.sqlPoolName},\n\"apiVersion\": @{pipeline().parameters.apiVersion}\n}",
+						"value": "{\n\"action\": \"@{pipeline().parameters.action}\",\n\"sku\": \"@{pipeline().parameters.sku}\",\n\"subscriptionId\": \"@{pipeline().parameters.subscriptionId}\",\n\"resourceGroupName\": \"@{pipeline().parameters.resourceGroupName}\",\n\"workspaceName\": \"@{pipeline().parameters.workspaceName}\",\n\"sqlPoolName\": \"@{pipeline().parameters.sqlPoolName}\",\n\"apiVersion\": \"@{pipeline().parameters.apiVersion}\"\n}",
 						"type": "Expression"
 					}
 				}
