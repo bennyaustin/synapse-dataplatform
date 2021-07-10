@@ -1,0 +1,42 @@
+{
+	"name": "Manage-All-SQLPools",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"body": {
+						"value": "@json(variables('parameters'))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"parameters": {
+				"type": "String",
+				"defaultValue": "{\"subscriptionId\": \"5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d\", \"resourceType\": \"Microsoft.Synapse/workspaces/sqlPools\", \"apiVersion\": \"2021-04-01\" }"
+			}
+		},
+		"folder": {
+			"name": "Manage-SQLPool"
+		},
+		"annotations": []
+	}
+}
