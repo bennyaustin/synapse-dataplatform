@@ -73,6 +73,14 @@
 			"apiVersion": {
 				"type": "string",
 				"defaultValue": "2021-03-01"
+			},
+			"action": {
+				"type": "string",
+				"defaultValue": "pause"
+			},
+			"sku": {
+				"type": "string",
+				"defaultValue": "DW100c"
 			}
 		},
 		"folder": {
