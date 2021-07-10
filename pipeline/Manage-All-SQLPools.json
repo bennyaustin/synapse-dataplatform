@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Web1",
+				"name": "Call Resource List Logic App",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
