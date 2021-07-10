@@ -1,0 +1,54 @@
+{
+	"name": "SQLPool-Pause-Resume-Scale",
+	"properties": {
+		"activities": [
+			{
+				"name": "Call SQL Pool Logic App",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().parameters.logicapp_endpoint",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"body": {
+						"subscriptionId": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d",
+						"resourceGroupName": "rg-dataplatform",
+						"workspaceName": "ba-synapseanalytics01",
+						"sqlPoolName": "dw01",
+						"apiVersion": "2021-03-01"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"logicapp_endpoint": {
+				"type": "string",
+				"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+			},
+			"subscriptionId": {
+				"type": "string",
+				"defaultValue": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d"
+			}
+		},
+		"folder": {
+			"name": "Manage-SQLPool"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-07-07T14:22:37Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

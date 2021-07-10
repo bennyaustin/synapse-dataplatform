@@ -1,0 +1,17 @@
+{
+	"name": "EnrichData_With_AML Model",
+	"properties": {
+		"content": {
+			"query": "CREATE PROCEDURE dbo.nyc_taxi_procedure\nAS\nBEGIN\n\nSELECT\n    CAST([paymentType] AS [bigint]) AS [paymentType],\n    CAST([passengerCount] AS [bigint]) AS [passengerCount],\n    [tripTimeSecs],\n    CAST([pickupTimeBin] AS [varchar]) AS [pickupTimeBin]\nINTO [dbo].[#nyc_taxi]\nFROM [dbo].[nyc_taxi];\n\nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM dbo.nyc_taxi_tip_aml_model WHERE [ID] = 'nyc_taxi_tip_predict:3'),\n              DATA = [dbo].[#nyc_taxi],\n              RUNTIME = ONNX) WITH ([output_label] [bigint])\n\nEND\nGO\n\nEXEC dbo.nyc_taxi_procedure",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "dw01",
+				"databaseName": "dw01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
