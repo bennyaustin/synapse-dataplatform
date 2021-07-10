@@ -139,6 +139,10 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
+									"logicapp_endpoint": {
+										"value": "@pipeline().parameters.sqlPool_logicapp_endpoint",
+										"type": "Expression"
+									},
 									"subscriptionId": {
 										"value": "@pipeline().parameters.subscriptionId",
 										"type": "Expression"
