@@ -46,6 +46,37 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Call Resource List Logic App",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Call Resource List Logic App').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
@@ -62,10 +93,30 @@
 			"apiVersion": {
 				"type": "string",
 				"defaultValue": "2021-04-01"
+			},
+			"action": {
+				"type": "string",
+				"defaultValue": "pause"
+			},
+			"sku": {
+				"type": "string",
+				"defaultValue": "DW100c"
 			}
 		},
 		"variables": {
 			"parameters": {
+				"type": "String"
+			},
+			"subscriptionId": {
+				"type": "String"
+			},
+			"resourceGroupName": {
+				"type": "String"
+			},
+			"workspaceName": {
+				"type": "String"
+			},
+			"sqlPoolName": {
 				"type": "String"
 			}
 		},
