@@ -57,16 +57,16 @@
 				"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
 			},
 			"subscriptionId": {
-				"type": "securestring"
+				"type": "string"
 			},
 			"resourceGroupName": {
-				"type": "securestring"
+				"type": "string"
 			},
 			"workspaceName": {
-				"type": "securestring"
+				"type": "string"
 			},
 			"sqlPoolName": {
-				"type": "securestring"
+				"type": "string"
 			},
 			"apiVersion": {
 				"type": "string",
