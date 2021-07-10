@@ -45,6 +45,240 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('workspaceName'), '/Manage-All-SQLPools')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Call Resource List Logic App",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Set Logic App Parameters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@pipeline().parameters.resourceList_logicapp_endpoint",
+								"type": "Expression"
+							},
+							"connectVia": {
+								"referenceName": "AutoResolveIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "@json(variables('parameters'))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Logic App Parameters",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "parameters",
+							"value": {
+								"value": "{\"subscriptionId\": \"@{pipeline().parameters.subscriptionId}\",\n\"resourceType\": \"@{pipeline().parameters.resourceType}\",\n\"apiVersion\": \"@{pipeline().parameters.apiVersion}\"\n}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Call Resource List Logic App",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Call Resource List Logic App').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "resourceGroupName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resourceGroupName",
+										"value": {
+											"value": "@last(take(split(item().id,'/'),5))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "workspaceName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "workspaceName",
+										"value": {
+											"value": "@first(split(item().name,'/'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "sqlPoolName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sqlPoolName",
+										"value": {
+											"value": "@last(split(item().name,'/'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "SQLPool-Pause-Resume-Scale",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "resourceGroupName",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "workspaceName",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "sqlPoolName",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SQLPool-Pause-Resume-Scale",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"logicapp_endpoint": {
+												"value": "@pipeline().parameters.sqlPool_logicapp_endpoint",
+												"type": "Expression"
+											},
+											"subscriptionId": {
+												"value": "@pipeline().parameters.subscriptionId",
+												"type": "Expression"
+											},
+											"resourceGroupName": {
+												"value": "@variables('resourceGroupName')",
+												"type": "Expression"
+											},
+											"workspaceName": {
+												"value": "@variables('workspaceName')",
+												"type": "Expression"
+											},
+											"sqlPoolName": {
+												"value": "@variables('sqlPoolName')",
+												"type": "Expression"
+											},
+											"apiVersion": {
+												"value": "2021-03-01",
+												"type": "Expression"
+											},
+											"action": {
+												"value": "@pipeline().parameters.action",
+												"type": "Expression"
+											},
+											"sku": {
+												"value": "@pipeline().parameters.sku",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"resourceList_logicapp_endpoint": {
+						"type": "string"
+					},
+					"subscriptionId": {
+						"type": "string"
+					},
+					"resourceType": {
+						"type": "string",
+						"defaultValue": "Microsoft.Synapse/workspaces/sqlPools"
+					},
+					"apiVersion": {
+						"type": "string",
+						"defaultValue": "2021-04-01"
+					},
+					"action": {
+						"type": "string",
+						"defaultValue": "pause"
+					},
+					"sku": {
+						"type": "string",
+						"defaultValue": "DW100c"
+					},
+					"sqlPool_logicapp_endpoint": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"parameters": {
+						"type": "String"
+					},
+					"resourceGroupName": {
+						"type": "String"
+					},
+					"workspaceName": {
+						"type": "String"
+					},
+					"sqlPoolName": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Manage-SQLPool"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/pipelines/SQLPool-Pause-Resume-Scale')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SQLPool-Pause-Resume-Scale')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -94,7 +328,7 @@
 						"typeProperties": {
 							"variableName": "parameters",
 							"value": {
-								"value": "{\n\"action\": @{pipeline().parameters.action},\n\"sku\": @{pipeline().parameters.sku},\n\"subscriptionId\": @{pipeline().parameters.subscriptionId},\n\"resourceGroupName\": @{pipeline().parameters.resourceGroupName},\n\"workspaceName\": @{pipeline().parameters.workspaceName},\n\"sqlPoolName\": @{pipeline().parameters.sqlPoolName},\n\"apiVersion\": @{pipeline().parameters.apiVersion}\n}",
+								"value": "{\n\"action\": \"@{pipeline().parameters.action}\",\n\"sku\": \"@{pipeline().parameters.sku}\",\n\"subscriptionId\": \"@{pipeline().parameters.subscriptionId}\",\n\"resourceGroupName\": \"@{pipeline().parameters.resourceGroupName}\",\n\"workspaceName\": \"@{pipeline().parameters.workspaceName}\",\n\"sqlPoolName\": \"@{pipeline().parameters.sqlPoolName}\",\n\"apiVersion\": \"@{pipeline().parameters.apiVersion}\"\n}",
 								"type": "Expression"
 							}
 						}
@@ -102,20 +336,19 @@
 				],
 				"parameters": {
 					"logicapp_endpoint": {
-						"type": "string",
-						"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+						"type": "string"
 					},
 					"subscriptionId": {
-						"type": "securestring"
+						"type": "string"
 					},
 					"resourceGroupName": {
-						"type": "securestring"
+						"type": "string"
 					},
 					"workspaceName": {
-						"type": "securestring"
+						"type": "string"
 					},
 					"sqlPoolName": {
-						"type": "securestring"
+						"type": "string"
 					},
 					"apiVersion": {
 						"type": "string",
