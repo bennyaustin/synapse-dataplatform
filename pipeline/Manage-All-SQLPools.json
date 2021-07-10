@@ -160,7 +160,7 @@
 										"type": "Expression"
 									},
 									"apiVersion": {
-										"value": "'2021-03-01'",
+										"value": "2021-03-01",
 										"type": "Expression"
 									},
 									"action": {
