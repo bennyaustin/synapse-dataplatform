@@ -1,2 +1,2 @@
 # synapse-dataplatform
-This repository implements the elt-framework for an Azure Synapse data platform
+This repository has sample artifacts to implement [ELT Framework](https://github.com/bennyaustin/elt-framework) on Azure Synapse Analytics
