@@ -34,7 +34,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "parameters",
-					"value": ""
+					"value": "{\"subscriptionId\": \"5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d\", \"resourceType\": \"Microsoft.Synapse/workspaces/sqlPools\", \"apiVersion\": \"2021-04-01\" }"
 				}
 			}
 		],
@@ -56,8 +56,7 @@
 		},
 		"variables": {
 			"parameters": {
-				"type": "String",
-				"defaultValue": "{\"subscriptionId\": \"5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d\", \"resourceType\": \"Microsoft.Synapse/workspaces/sqlPools\", \"apiVersion\": \"2021-04-01\" }"
+				"type": "String"
 			}
 		},
 		"folder": {
