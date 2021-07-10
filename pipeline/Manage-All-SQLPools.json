@@ -77,7 +77,7 @@
 							"typeProperties": {
 								"variableName": "resourceGroupName",
 								"value": {
-									"value": "@last(take(split(item().id,'/'),4))",
+									"value": "@last(take(split(item().id,'/'),5))",
 									"type": "Expression"
 								}
 							}
