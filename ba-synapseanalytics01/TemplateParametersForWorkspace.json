@@ -28,6 +28,27 @@
 		},
 		"storagecosmosdb1_properties_typeProperties_url": {
 			"value": "https://storagecosmosdb1.dfs.core.windows.net"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint": {
+			"value": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId": {
+			"value": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType": {
+			"value": "Microsoft.Synapse/workspaces/sqlPools"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion": {
+			"value": "2021-04-01"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action": {
+			"value": "pause"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku": {
+			"value": "DW100c"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
+			"value": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
 		}
 	}
 }

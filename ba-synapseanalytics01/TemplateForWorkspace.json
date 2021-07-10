@@ -38,6 +38,34 @@
 		"storagecosmosdb1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://storagecosmosdb1.dfs.core.windows.net"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint": {
+			"type": "string",
+			"defaultValue": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId": {
+			"type": "string",
+			"defaultValue": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType": {
+			"type": "string",
+			"defaultValue": "Microsoft.Synapse/workspaces/sqlPools"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion": {
+			"type": "string",
+			"defaultValue": "2021-04-01"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action": {
+			"type": "string",
+			"defaultValue": "pause"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku": {
+			"type": "string",
+			"defaultValue": "DW100c"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
+			"type": "string",
+			"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
 		}
 	},
 	"variables": {
@@ -100,7 +128,7 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach-SQLPool",
 						"type": "ForEach",
 						"dependsOn": [
 							{
@@ -483,6 +511,52 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Pause-ALL-Dedicated-SQLPools')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Manage-All-SQLPools",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"resourceList_logicapp_endpoint": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint')]",
+							"subscriptionId": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId')]",
+							"resourceType": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType')]",
+							"apiVersion": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion')]",
+							"action": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action')]",
+							"sku": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku')]",
+							"sqlPool_logicapp_endpoint": "[parameters('Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-07-11T19:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								19
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Manage-All-SQLPools')]"
 			]
 		},
 		{
