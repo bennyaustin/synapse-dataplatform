@@ -67,12 +67,12 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "subscriptionId",
+							"name": "resourceGroupName",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "subscriptionId",
+								"variableName": "resourceGroupName",
 								"value": {
 									"value": "@item().id",
 									"type": "Expression"
@@ -135,9 +135,6 @@
 		},
 		"variables": {
 			"parameters": {
-				"type": "String"
-			},
-			"subscriptionId": {
 				"type": "String"
 			},
 			"resourceGroupName": {
