@@ -36,12 +36,18 @@
 		],
 		"parameters": {
 			"logicapp_endpoint": {
-				"type": "string",
-				"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
 			},
 			"subscriptionId": {
-				"type": "string",
-				"defaultValue": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d"
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
 			}
 		},
 		"folder": {
