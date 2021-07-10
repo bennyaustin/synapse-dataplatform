@@ -22,7 +22,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo",
+					"url": {
+						"value": "@pipeline().parameters.resourceList_logicapp_endpoint",
+						"type": "Expression"
+					},
 					"connectVia": {
 						"referenceName": "AutoResolveIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
@@ -172,7 +175,7 @@
 			}
 		],
 		"parameters": {
-			"logicapp_endpoint": {
+			"resourceList_logicapp_endpoint": {
 				"type": "string"
 			},
 			"subscriptionId": {
@@ -193,6 +196,9 @@
 			"sku": {
 				"type": "string",
 				"defaultValue": "DW100c"
+			},
+			"sqlPool_logicapp_endpoint": {
+				"type": "string"
 			}
 		},
 		"variables": {
