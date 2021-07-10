@@ -48,6 +48,31 @@
 					"type": "SecureString",
 					"value": "**********"
 				}
+			},
+			"resourceGroupName": {
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			},
+			"workspaceName": {
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			},
+			"sqlPoolName": {
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
+			},
+			"apiVersion": {
+				"type": "string",
+				"defaultValue": "2021-03-01"
 			}
 		},
 		"folder": {
