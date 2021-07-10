@@ -32,6 +32,19 @@
 						"apiVersion": "2021-03-01"
 					}
 				}
+			},
+			{
+				"name": "Set Logic App Parameters",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "parameters",
+					"value": {
+						"value": "{\n\"action\": @{pipeline().parameters.action},\n\"sku\": @{pipeline().parameters.sku},\n\"subscriptionId\": @{pipeline().parameters.subscriptionId},\n\"resourceGroupName\": @{pipeline().parameters.resourceGroupName},\n\"workspaceName\": @{pipeline().parameters.workspaceName},\n\"sqlPoolName\": @{pipeline().parameters.sqlPoolName},\n\"apiVersion\": @{pipeline().parameters.apiVersion}\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -81,6 +94,11 @@
 			"sku": {
 				"type": "string",
 				"defaultValue": "DW100c"
+			}
+		},
+		"variables": {
+			"parameters": {
+				"type": "String"
 			}
 		},
 		"folder": {
