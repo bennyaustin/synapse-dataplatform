@@ -87,7 +87,7 @@
 							"typeProperties": {
 								"variableName": "workspaceName",
 								"value": {
-									"value": "@item().name",
+									"value": "@first(split(item().name,'/'))",
 									"type": "Expression"
 								}
 							}
@@ -100,8 +100,70 @@
 							"typeProperties": {
 								"variableName": "sqlPoolName",
 								"value": {
-									"value": "@item().name",
+									"value": "@last(split(item().name,'/'))",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "SQLPool-Pause-Resume-Scale",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "resourceGroupName",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "workspaceName",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "sqlPoolName",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "SQLPool-Pause-Resume-Scale",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"subscriptionId": {
+										"value": "@pipeline().parameters.subscriptionId",
+										"type": "Expression"
+									},
+									"resourceGroupName": {
+										"value": "@variables('resourceGroupName')",
+										"type": "Expression"
+									},
+									"workspaceName": {
+										"value": "@variables('workspaceName')",
+										"type": "Expression"
+									},
+									"sqlPoolName": {
+										"value": "@variables('sqlPoolName')",
+										"type": "Expression"
+									},
+									"apiVersion": {
+										"value": "'2021-03-01'",
+										"type": "Expression"
+									},
+									"action": {
+										"value": "@pipeline().parameters.action",
+										"type": "Expression"
+									},
+									"sku": {
+										"value": "@pipeline().parameters.sku",
+										"type": "Expression"
+									}
 								}
 							}
 						}
