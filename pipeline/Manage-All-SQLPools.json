@@ -5,7 +5,14 @@
 			{
 				"name": "Call Resource List Logic App",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set Logic App Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -34,7 +41,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "parameters",
-					"value": "{\"subscriptionId\": \"5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d\", \"resourceType\": \"Microsoft.Synapse/workspaces/sqlPools\", \"apiVersion\": \"2021-04-01\" }"
+					"value": {
+						"value": "{\"subscriptionId\": \"@{pipeline().parameters.subscriptionId}\",\n\"resourceType\": \"@{pipeline().parameters.resourceType}\",\n\"apiVersion\": \"@{pipeline().parameters.apiVersion}\"\n}",
+						"type": "Expression"
+					}
 				}
 			}
 		],
