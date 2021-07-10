@@ -51,7 +51,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach-SQLPool",
 				"type": "ForEach",
 				"dependsOn": [
 					{
