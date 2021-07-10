@@ -26,6 +26,16 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set Logic App Parameters",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "parameters",
+					"value": ""
+				}
 			}
 		],
 		"parameters": {
