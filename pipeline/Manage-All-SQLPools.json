@@ -28,6 +28,22 @@
 				}
 			}
 		],
+		"parameters": {
+			"logicapp_endpoint": {
+				"type": "string"
+			},
+			"subscriptionId": {
+				"type": "string"
+			},
+			"resourceType": {
+				"type": "string",
+				"defaultValue": "Microsoft.Synapse/workspaces/sqlPools"
+			},
+			"apiVersion": {
+				"type": "string",
+				"defaultValue": "2021-04-01"
+			}
+		},
 		"variables": {
 			"parameters": {
 				"type": "String",
