@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SampleDB_movies",
+						"referenceName": "SampleDB_container",
 						"type": "DatasetReference"
 					},
 					"name": "Movies"
@@ -14,7 +14,7 @@
 			],
 			"sinks": [],
 			"transformations": [],
-			"script": "parameters{\n\tcontainer as string ('movies')\n}\nsource(output(\n\t\tactors as (name as string)[],\n\t\tavailabilityDate as string,\n\t\tgenre as string,\n\t\trating as string,\n\t\treleaseYear as string,\n\t\truntime as string,\n\t\tstreamingAvailabilityDate as string,\n\t\ttier as string,\n\t\ttitle as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'document',\n\tsystemColumns: true) ~> Movies"
+			"script": "parameters{\n\tcontainer as string ('movies')\n}\nsource(output(\n\t\tactors as (name as string)[],\n\t\tavailabilityDate as timestamp,\n\t\tgenre as string,\n\t\trating as string,\n\t\treleaseYear as short,\n\t\truntime as short,\n\t\tstreamingAvailabilityDate as timestamp,\n\t\ttier as short,\n\t\ttitle as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'document',\n\tsystemColumns: true) ~> Movies"
 		}
 	}
 }
