@@ -1,0 +1,19 @@
+{
+	"name": "datalake_silver",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ba-synapseanalytics01-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "curated-silver"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
