@@ -1,6 +1,67 @@
 {
 	"name": "FlattenJSON-Dataflow",
 	"properties": {
+		"activities": [
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "FlattenJson-CosmosDB",
+						"type": "DataFlowReference",
+						"parameters": {
+							"container": {
+								"value": "'@{pipeline().parameters.srcCosmosContainer}'",
+								"type": "Expression"
+							},
+							"destFileSystem": "'curated-silver'",
+							"destFolder": "'movies'",
+							"destFile": "'movies[n].parquet'"
+						},
+						"datasetParameters": {
+							"MoviesCosmosDB": {
+								"container": {
+									"value": "@pipeline().parameters.srcCosmosContainer",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"srcCosmosContainer": {
+				"type": "string",
+				"defaultValue": "movies"
+			},
+			"destFileSystem": {
+				"type": "string",
+				"defaultValue": "curated-silver"
+			},
+			"destFolder": {
+				"type": "string",
+				"defaultValue": "movies"
+			},
+			"destFile": {
+				"type": "string",
+				"defaultValue": "movies[n].parquet"
+			}
+		},
 		"folder": {
 			"name": "Samples"
 		},
