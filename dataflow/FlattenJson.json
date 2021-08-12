@@ -1,0 +1,20 @@
+{
+	"name": "FlattenJson",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SampleDB_Container",
+						"type": "DatasetReference"
+					},
+					"name": "Movies"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "parameters{\n\tcontainer as string ('movies')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'document') ~> Movies"
+		}
+	}
+}
