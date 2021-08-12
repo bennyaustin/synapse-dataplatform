@@ -1,0 +1,9 @@
+{
+	"name": "FlattenJSON-Dataflow",
+	"properties": {
+		"folder": {
+			"name": "Samples"
+		},
+		"annotations": []
+	}
+}
