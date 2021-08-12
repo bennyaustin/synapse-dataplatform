@@ -1,0 +1,23 @@
+{
+	"name": "SampleDB_Container",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SampleDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"container": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {},
+		"typeProperties": {
+			"collectionName": {
+				"value": "@dataset().container",
+				"type": "Expression"
+			}
+		}
+	}
+}
