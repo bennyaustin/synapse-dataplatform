@@ -39,17 +39,17 @@
 						"datasetParameters": {
 							"MoviesCosmosDB": {
 								"container": {
-									"value": "@pipeline().parameters.srcCosmosContainer",
+									"value": "movies",
 									"type": "Expression"
 								}
 							},
 							"SilverMovies": {
 								"fileSystem": {
-									"value": "@pipeline().parameters.destFileSystem",
+									"value": "curated-silver",
 									"type": "Expression"
 								},
 								"folder": {
-									"value": "@pipeline().parameters.destFolder",
+									"value": "movies",
 									"type": "Expression"
 								}
 							}
