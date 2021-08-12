@@ -23,9 +23,18 @@
 								"value": "'@{pipeline().parameters.srcCosmosContainer}'",
 								"type": "Expression"
 							},
-							"destFileSystem": "'curated-silver'",
-							"destFolder": "'movies'",
-							"destFile": "'movies[n].parquet'"
+							"destFileSystem": {
+								"value": "'@{pipeline().parameters.destFileSystem}'",
+								"type": "Expression"
+							},
+							"destFolder": {
+								"value": "'@{pipeline().parameters.destFolder}'",
+								"type": "Expression"
+							},
+							"destFile": {
+								"value": "'@{pipeline().parameters.destFile}'",
+								"type": "Expression"
+							}
 						},
 						"datasetParameters": {
 							"MoviesCosmosDB": {
