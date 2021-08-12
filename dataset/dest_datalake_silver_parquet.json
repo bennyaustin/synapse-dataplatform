@@ -1,5 +1,5 @@
 {
-	"name": "datalake_silver",
+	"name": "dest_datalake_silver_parquet",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ba-synapseanalytics01-WorkspaceDefaultStorage",
