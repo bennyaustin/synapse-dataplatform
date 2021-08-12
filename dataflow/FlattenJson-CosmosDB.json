@@ -1,5 +1,5 @@
 {
-	"name": "FlattenJson",
+	"name": "FlattenJson-CosmosDB",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "datalake_silver",
+						"referenceName": "dest_datalake_silver_parquet",
 						"type": "DatasetReference"
 					},
 					"name": "SilverMovies"
