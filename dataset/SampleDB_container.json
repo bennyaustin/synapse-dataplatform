@@ -1,5 +1,5 @@
 {
-	"name": "SampleDB_Container",
+	"name": "SampleDB_container",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SampleDB",
