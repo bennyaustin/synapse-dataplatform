@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4565e75a-b9c0-4c9e-950b-e90cd81d49be"
+				"spark.autotune.trackingId": "49c380d8-bb8c-4a76-9d0f-e8a3b6cff7c7"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault02\"}"
 				],
-				"execution_count": 4
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -75,7 +75,7 @@
 				"source": [
 					"getSecret(\"formrecognizer-apiKey\")"
 				],
-				"execution_count": 5
+				"execution_count": 4
 			}
 		]
 	}

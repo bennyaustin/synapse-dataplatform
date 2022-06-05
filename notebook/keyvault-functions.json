@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b3aadc3c-4cca-4cdd-aded-58e2df36d040"
+				"spark.autotune.trackingId": "5f8ad4eb-f3fc-458f-afab-ff104097c81d"
 			}
 		},
 		"metadata": {
@@ -96,7 +96,7 @@
 				"source": [
 					"kvLinkedService ='your Azure Key Vault Linked Service referenced by this Synapse Workspace'"
 				],
-				"execution_count": 1
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -115,7 +115,7 @@
 				"source": [
 					"from notebookutils import mssparkutils"
 				],
-				"execution_count": 2
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -153,10 +153,9 @@
 					"    try:\n",
 					"        return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook\n",
 					"    except Exception as e:\n",
-					"        ex_type, ex_value, ex_traceback = sys.exc_info()\n",
-					"        print(str(ex_value))"
+					"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")"
 				],
-				"execution_count": 6
+				"execution_count": null
 			}
 		]
 	}
