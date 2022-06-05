@@ -19,14 +19,13 @@
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
-				"spark.dynamicAllocation.maxExecutors": "2"
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "dd999b90-d2b2-4186-b10e-aaece3aa3485"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"synapse_widget": {
-				"version": "0.1"
-			},
+			"enableDebugMode": false,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -47,8 +46,9 @@
 				"nodeCount": 3,
 				"cores": 4,
 				"memory": 28,
-				"extraHeader": null
-			}
+				"automaticScaleJobs": true
+			},
+			"sessionKeepAliveTimeout": 30
 		},
 		"cells": [
 			{
@@ -61,9 +61,42 @@
 					}
 				},
 				"source": [
-					"# Init and Parameters"
+					"# Re-usable Azure Key Vault Functions"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Parameters and Init"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"kvLinkedService"
 				],
-				"attachments": null
+				"execution_count": 17
 			},
 			{
 				"cell_type": "code",
@@ -82,29 +115,14 @@
 				"source": [
 					"from notebookutils import mssparkutils"
 				],
-				"attachments": null,
-				"execution_count": null
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"tags": [
-						"parameters"
-					]
-				},
-				"source": [
-					"kvLinkedService = \"keyvault01\""
-				],
-				"attachments": null,
-				"execution_count": 1
+				"execution_count": 18
 			},
 			{
 				"cell_type": "markdown",
 				"source": [
 					"## getSecret()\n",
 					""
-				],
-				"attachments": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -124,7 +142,7 @@
 					"def getSecret (secretName):\n",
 					"# ##########################################################################################################################  \n",
 					"# Function: getSecret\n",
-					"# Returns the value of a secret stored in Azure Key Vault\n",
+					"# Returns the value of a secret stored in Azure Key Vault that is referenced as link service\n",
 					"# \n",
 					"# Parameters:\n",
 					"# secretName = Name of secret in Azure Key Vault\n",
@@ -132,10 +150,27 @@
 					"# Returns:\n",
 					"# The value of secret stored in Azure Key Vault\n",
 					"# ##########################################################################################################################\n",
-					"    return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName)"
+					"    return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook"
 				],
-				"attachments": null,
-				"execution_count": 11
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"mssparkutils.credentials.help()"
+				],
+				"execution_count": 20
 			}
 		]
 	}
