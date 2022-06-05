@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2e3d40dd-5ca0-456d-a64c-6c9f1e0b6555"
+				"spark.autotune.trackingId": "4565e75a-b9c0-4c9e-950b-e90cd81d49be"
 			}
 		},
 		"metadata": {
@@ -29,7 +29,7 @@
 			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
-				"display_name": "python"
+				"display_name": "Synapse PySpark"
 			},
 			"language_info": {
 				"name": "python"
@@ -55,9 +55,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault02\"}"
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -75,7 +75,7 @@
 				"source": [
 					"getSecret(\"formrecognizer-apiKey\")"
 				],
-				"execution_count": null
+				"execution_count": 5
 			}
 		]
 	}
