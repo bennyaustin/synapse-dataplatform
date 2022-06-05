@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "dd999b90-d2b2-4186-b10e-aaece3aa3485"
+				"spark.autotune.trackingId": "8c17b983-ddd5-43b4-869a-6c8c18b7fd59"
 			}
 		},
 		"metadata": {
@@ -94,9 +94,9 @@
 					]
 				},
 				"source": [
-					"kvLinkedService"
+					"kvLinkedService ='your Azure Key Vault Linked Service referenced by this Synapse Workspace'"
 				],
-				"execution_count": 17
+				"execution_count": 21
 			},
 			{
 				"cell_type": "code",
@@ -115,7 +115,7 @@
 				"source": [
 					"from notebookutils import mssparkutils"
 				],
-				"execution_count": 18
+				"execution_count": 22
 			},
 			{
 				"cell_type": "markdown",
@@ -152,7 +152,7 @@
 					"# ##########################################################################################################################\n",
 					"    return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook"
 				],
-				"execution_count": 19
+				"execution_count": 23
 			},
 			{
 				"cell_type": "code",
@@ -170,7 +170,7 @@
 				"source": [
 					"mssparkutils.credentials.help()"
 				],
-				"execution_count": 20
+				"execution_count": 24
 			}
 		]
 	}
