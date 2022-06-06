@@ -1,8 +1,8 @@
 {
-	"name": "dedicatedSQL-functions",
+	"name": "test-pyodbc",
 	"properties": {
 		"folder": {
-			"name": "common"
+			"name": "tester"
 		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "255efbb0-f199-4c43-b9e0-08bc0d2e5acc"
+				"spark.autotune.trackingId": "9b6bd386-0326-4107-a7a1-1f825d3a8860"
 			}
 		},
 		"metadata": {
