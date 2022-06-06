@@ -8,7 +8,7 @@
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
-			"referenceName": "medium",
+			"referenceName": "medium31",
 			"type": "BigDataPoolReference"
 		},
 		"sessionProperties": {
@@ -20,8 +20,8 @@
 			"conf": {
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
-				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "beef3b6f-0f0a-4f5f-a82c-d674cda6c2da"
+				"spark.dynamicAllocation.maxExecutors": "4",
+				"spark.autotune.trackingId": "b6cb038d-6590-43af-a53e-c546f0e85aea"
 			}
 		},
 		"metadata": {
@@ -35,15 +35,15 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium",
-				"name": "medium",
+				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
+				"name": "medium31",
 				"type": "Spark",
-				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium",
+				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
 				},
-				"sparkVersion": "2.4",
+				"sparkVersion": "3.1",
 				"nodeCount": 10,
 				"cores": 8,
 				"memory": 56,
