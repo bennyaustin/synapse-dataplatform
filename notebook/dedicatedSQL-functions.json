@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "255efbb0-f199-4c43-b9e0-08bc0d2e5acc"
+				"spark.autotune.trackingId": "34b2723a-2224-4fc1-867a-461ee258fb99"
 			}
 		},
 		"metadata": {
@@ -80,7 +80,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 16
+				"execution_count": 25
 			},
 			{
 				"cell_type": "code",
@@ -100,9 +100,11 @@
 				},
 				"source": [
 					"server = \"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"dw01\""
+					"database = \"dw01\"\r\n",
+					"sqlUidSecret = \"dw01-sqlusername\"\r\n",
+					"sqlPwdSecret = \"dw01-sqlpassword\""
 				],
-				"execution_count": 17
+				"execution_count": 26
 			},
 			{
 				"cell_type": "code",
@@ -118,10 +120,11 @@
 					}
 				},
 				"source": [
-					"uid = getSecret(\"dw01-sqlusername\")\r\n",
-					"pwd = getSecret(\"dw01-sqlpassword\")"
+					"# import com.microsoft.spark.sqlanalytics\r\n",
+					"# import org.apache.spark.sql.sqlanalytics\r\n",
+					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
 				],
-				"execution_count": 18
+				"execution_count": 31
 			},
 			{
 				"cell_type": "code",
@@ -137,33 +140,8 @@
 					}
 				},
 				"source": [
-					"import pyodbc\r\n",
-					"\r\n",
-					"cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
-					"cursor = cnxn.cursor()\r\n",
-					"cnxn.autocommit = True"
-				],
-				"execution_count": 19
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"cursor.execute(\"truncate table dbo.DimActors\")\r\n",
-					"row = cursor.fetchone()\r\n",
-					"if row:\r\n",
-					"    print(row)\r\n",
-					""
+					"uid = getSecret(sqlUidSecret)\r\n",
+					"pwd = getSecret(sqlPwdSecret)"
 				],
 				"execution_count": null
 			},
@@ -181,46 +159,33 @@
 					}
 				},
 				"source": [
-					"sql = \"\"\"INSERT INTO stg.nyc_tlc_yellow_trip (vendorID,tpepPickupDateTime,tpepDropoffDateTime,passengerCount,tripDistance,puLocationId,doLocationId,startLon,startLat,endLon,endLat,rateCodeId,storeAndFwdFlag\r\n",
-					"      ,paymentType\r\n",
-					"      ,fareAmount\r\n",
-					"      ,extra\r\n",
-					"      ,mtaTax\r\n",
-					"      ,improvementSurcharge\r\n",
-					"      ,tipAmount\r\n",
-					"      ,tollsAmount\r\n",
-					"      ,totalAmount)\r\n",
-					"SELECT top 100 vendorID\r\n",
-					"      ,tpepPickupDateTime\r\n",
-					"      ,tpepDropoffDateTime\r\n",
-					"      ,passengerCount\r\n",
-					"      ,tripDistance\r\n",
-					"      ,puLocationId\r\n",
-					"      ,doLocationId\r\n",
-					"      ,startLon\r\n",
-					"      ,startLat\r\n",
-					"      ,endLon\r\n",
-					"      ,endLat\r\n",
-					"      ,rateCodeId\r\n",
-					"      ,storeAndFwdFlag\r\n",
-					"      ,paymentType\r\n",
-					"      ,fareAmount\r\n",
-					"      ,extra\r\n",
-					"      ,mtaTax\r\n",
-					"      ,improvementSurcharge\r\n",
-					"      ,tipAmount\r\n",
-					"      ,tollsAmount\r\n",
-					"      ,totalAmount\r\n",
-					"  FROM nyct.nyc_tlc_yellow_trip\r\n",
-					"  WHERE NOT EXISTS\r\n",
-					"  (SELECT 1 FROM stg.nyc_tlc_yellow_trip\r\n",
-					"  where stg.nyc_tlc_yellow_trip.vendorID= nyct.nyc_tlc_yellow_trip.vendorID\r\n",
-					"  and stg.nyc_tlc_yellow_trip.tpepPickupDateTime = nyct.nyc_tlc_yellow_trip.tpepPickupDateTime\r\n",
-					"  and stg.nyc_tlc_yellow_trip.tpepDropoffDateTime = nyct.nyc_tlc_yellow_trip.tpepDropoffDateTime)\"\"\"\r\n",
-					"\r\n",
-					"cursor.execute(sql)"
+					"# df = (spark.read\r\n",
+					"#             .option(Constants.SERVER,server)\r\n",
+					"#             .option(Constants.TEMP_FOLDER)\r\n",
+					"# )"
 				],
-				"execution_count": 21
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import pyodbc\r\n",
+					"cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+					"cursor = cnxn.cursor()\r\n",
+					"cnxn.autocommit = True"
+				],
+				"execution_count": null
 			}
 		]
 	}
