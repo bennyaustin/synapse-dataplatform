@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "23cbaa2e-fb7b-476b-a00a-ee6a520dcd7e"
+				"spark.autotune.trackingId": "12081936-d741-4b49-ae69-f10590229a89"
 			}
 		},
 		"metadata": {
@@ -104,7 +104,7 @@
 					"sqlUidSecret = \"dw01-sqlusername\"\r\n",
 					"sqlPwdSecret = \"dw01-sqlpassword\""
 				],
-				"execution_count": null
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -124,7 +124,7 @@
 					"# import org.apache.spark.sql.sqlanalytics\r\n",
 					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
 				],
-				"execution_count": null
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -143,7 +143,7 @@
 					"uid = getSecret(sqlUidSecret)\r\n",
 					"pwd = getSecret(sqlPwdSecret)"
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -159,12 +159,32 @@
 					}
 				},
 				"source": [
+					"def readSdpTable(schema,table,colList=None,filterCondition=None,limitRows=None):\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: readSdpTable\r\n",
+					"  # Reads records from the Azure Synapse Dedicated Pool table and returns as dataframe\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  #     schema          = Schema name of the Azure Synapse Dedicated Pool table.\r\n",
+					"  #     table           = Table Name.\r\n",
+					"  #     colList         = (Optional) List of columns to be returned in the dataframe. \r\n",
+					"  #                       E.g [\"col1\",\"col2\",\"col3\"].\r\n",
+					"  #                       Returns all columns if none provided.\r\n",
+					"  #     filterCondition = (Optional) Expression to filter the dataframe as push-down filter to database. \r\n",
+					"  #                       E.g col(\"Title\").contains(\"E\").\r\n",
+					"  #                       Returns all rows when not provided.\r\n",
+					"  #     limitRows       = (Optional) Integer to fetch N records from the table.\r\n",
+					"  #                       Returns all rows when none provided.\r\n",
+					"  #\r\n",
+					"  # Returns:\r\n",
+					"  # Dataframe containing all rows and columns of a table/view in Azure Datawarehouse\r\n",
+					"  # ##########################################################################################################################  \r\n",
 					"# df = (spark.read\r\n",
 					"#             .option(Constants.SERVER,server)\r\n",
 					"#             .option(Constants.TEMP_FOLDER)\r\n",
 					"# )"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -185,7 +205,7 @@
 					"cursor = cnxn.cursor()\r\n",
 					"cnxn.autocommit = True"
 				],
-				"execution_count": null
+				"execution_count": 6
 			}
 		]
 	}
