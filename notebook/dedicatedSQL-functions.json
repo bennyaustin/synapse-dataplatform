@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "d6a49aab-d645-432e-b2bd-e89dea1dd8f3"
+				"spark.autotune.trackingId": "4f35857b-8ebc-46a0-99da-a4cd5b2fa306"
 			}
 		},
 		"metadata": {
@@ -80,7 +80,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 1
+				"execution_count": 43
 			},
 			{
 				"cell_type": "code",
@@ -99,12 +99,12 @@
 					]
 				},
 				"source": [
-					"server = \"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
+					"server=\"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
 					"database = \"dw01\"\r\n",
 					"sqlUidSecret = \"dw01-sqlusername\"\r\n",
 					"sqlPwdSecret = \"dw01-sqlpassword\""
 				],
-				"execution_count": 2
+				"execution_count": 44
 			},
 			{
 				"cell_type": "code",
@@ -124,7 +124,7 @@
 					"# import org.apache.spark.sql.sqlanalytics\r\n",
 					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
 				],
-				"execution_count": 3
+				"execution_count": 45
 			},
 			{
 				"cell_type": "code",
@@ -143,7 +143,7 @@
 					"uid = getSecret(sqlUidSecret)\r\n",
 					"pwd = getSecret(sqlPwdSecret)"
 				],
-				"execution_count": 4
+				"execution_count": 46
 			},
 			{
 				"cell_type": "code",
@@ -179,12 +179,13 @@
 					"  # Returns:\r\n",
 					"  #     Dataframe containing the relevant rows and columns of an Azure Synapse Dedicated Pool table/view\r\n",
 					"  # ##########################################################################################################################  \r\n",
-					"    tableName = server + \".\" + schema+ \".\" + table\r\n",
-					"    if colList is not None and filterCondition is not None and limitRows is not None:\r\n",
+					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
+					"    print(tableName)\r\n",
+					"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
 					"        df = (spark.read\r\n",
 					"                    .option(Constants.SERVER,server)\r\n",
 					"                    .synapsesql(tableName)\r\n",
-					"        )\r\n",
+					"            )\r\n",
 					"\r\n",
 					"    if colList is not None:\r\n",
 					"        df = df.select(colList)\r\n",
@@ -197,7 +198,7 @@
 					"    \r\n",
 					"    return df"
 				],
-				"execution_count": 5
+				"execution_count": 47
 			},
 			{
 				"cell_type": "code",
@@ -213,12 +214,31 @@
 					}
 				},
 				"source": [
-					"import pyodbc\r\n",
-					"cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
-					"cursor = cnxn.cursor()\r\n",
-					"cnxn.autocommit = True"
+					"dftest =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+					"display(dftest)"
 				],
-				"execution_count": 6
+				"execution_count": 48
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# import pyodbc\r\n",
+					"# cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+					"# cursor = cnxn.cursor()\r\n",
+					"# cnxn.autocommit = True"
+				],
+				"execution_count": null
 			}
 		]
 	}
