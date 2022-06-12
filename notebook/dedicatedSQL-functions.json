@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "4f35857b-8ebc-46a0-99da-a4cd5b2fa306"
+				"spark.autotune.trackingId": "f90d2dee-0664-4c9c-b554-70e6165bfc94"
 			}
 		},
 		"metadata": {
@@ -180,7 +180,7 @@
 					"  #     Dataframe containing the relevant rows and columns of an Azure Synapse Dedicated Pool table/view\r\n",
 					"  # ##########################################################################################################################  \r\n",
 					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
-					"    print(tableName)\r\n",
+					"   \r\n",
 					"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
 					"        df = (spark.read\r\n",
 					"                    .option(Constants.SERVER,server)\r\n",
@@ -211,7 +211,8 @@
 						"transient": {
 							"deleting": false
 						}
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"dftest =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
@@ -238,7 +239,7 @@
 					"# cursor = cnxn.cursor()\r\n",
 					"# cnxn.autocommit = True"
 				],
-				"execution_count": null
+				"execution_count": 49
 			}
 		]
 	}
