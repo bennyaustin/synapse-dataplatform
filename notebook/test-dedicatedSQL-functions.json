@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "0151c278-1072-4cf4-adf6-22a7f7f1558f"
+				"spark.autotune.trackingId": "8b3b4439-d241-429a-9c6a-db97437550a1"
 			}
 		},
 		"metadata": {
@@ -84,25 +84,6 @@
 				"source": [
 					"## Test readSdpTable"
 				]
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
-					"display(df)"
-				],
-				"execution_count": null
 			},
 			{
 				"cell_type": "code",
