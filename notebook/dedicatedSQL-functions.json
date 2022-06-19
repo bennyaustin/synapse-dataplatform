@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "d7f61950-45f1-4ed7-96f6-ad2f6a8ad080"
+				"spark.autotune.trackingId": "50bc30c3-3675-4d36-b66c-86af792a0502"
 			}
 		},
 		"metadata": {
@@ -126,6 +126,19 @@
 				"execution_count": 45
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## readSdpTable()"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -159,6 +172,11 @@
 					"  # Returns:\r\n",
 					"  #     Dataframe containing the relevant rows and columns of an Azure Synapse Dedicated Pool table/view\r\n",
 					"  # ##########################################################################################################################  \r\n",
+					"    assert server is not None, \"Server not specified\"\r\n",
+					"    assert database is not None, \"Database not specified\"\r\n",
+					"    assert schema is not None, \"Schema not specified\"\r\n",
+					"    assert table is not None, \"Table not specified\"\r\n",
+					"\r\n",
 					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
 					"   \r\n",
 					"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
@@ -179,6 +197,66 @@
 					"    return df"
 				],
 				"execution_count": 47
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## insertSdpTable()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def insertSdpTable(df, schema,table, mode):\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: insertSdpTable\r\n",
+					"  # Writes a dataframe to an Azure Synapse Dedicated Pool table\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  #     df              = Dataframe to be written to Azure Synapse Dedicated Pool table.\r\n",
+					"  #     schema          = Schema name of the Azure Synapse Dedicated Pool table.\r\n",
+					"  #     table           = Table Name.\r\n",
+					"  #     mode            = Write mode to table. \r\n",
+					"  #                       Options for write modes are \"error\" or \"errorifexists\" (default), \"overwrite\", \"append\", \"ignore\".\r\n",
+					"  #\r\n",
+					"  # Returns:\r\n",
+					"  #     None\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"    assert server is not None, \"Server not specified\"\r\n",
+					"    assert database is not None, \"Database not specified\"\r\n",
+					"    assert schema is not None, \"Schema not specified\"\r\n",
+					"    assert table is not None, \"Table not specified\"\r\n",
+					"    assert mode in [\"append\",\"overwrite\",\"error\",\"errorifexists\",\"ignore\"], \"Invalid mode specified. Mode should be either append,overwrite,error,errorifexists or ignore\"\r\n",
+					"\r\n",
+					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
+					"\r\n",
+					"    (df.write\r\n",
+					"        .option(Constants.SERVER, server)\r\n",
+					"        .mode(mode)\r\n",
+					"        .synapsesql(tableName))\r\n",
+					"\r\n",
+					"    return\r\n",
+					""
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
