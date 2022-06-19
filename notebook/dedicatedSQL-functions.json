@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "0eba138f-8229-46fd-af67-031c2e2631b4"
+				"spark.autotune.trackingId": "abf44349-618c-4539-9a8b-18b72a281e10"
 			}
 		},
 		"metadata": {
@@ -121,29 +121,9 @@
 				},
 				"source": [
 					"import com.microsoft.spark.sqlanalytics\r\n",
-					"# import org.apache.spark.sql.sqlanalytics\r\n",
 					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
 				],
 				"execution_count": 45
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"uid = getSecret(sqlUidSecret)\r\n",
-					"pwd = getSecret(sqlPwdSecret)"
-				],
-				"execution_count": 46
 			},
 			{
 				"cell_type": "code",
@@ -199,6 +179,25 @@
 					"    return df"
 				],
 				"execution_count": 47
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# uid = getSecret(sqlUidSecret)\r\n",
+					"# pwd = getSecret(sqlPwdSecret)"
+				],
+				"execution_count": 46
 			},
 			{
 				"cell_type": "code",
