@@ -1,0 +1,23 @@
+{
+	"name": "AtlasREST_API",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AtlasREST",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"RelativeUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().RelativeUrl",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
