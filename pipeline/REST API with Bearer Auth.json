@@ -80,9 +80,6 @@
 								"value": "Bearer @{variables('BearerToken')}",
 								"type": "Expression"
 							}
-						},
-						"paginationRules": {
-							"": "true"
 						}
 					},
 					"sink": {
