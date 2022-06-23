@@ -59,7 +59,7 @@
 				"typeProperties": {
 					"variableName": "bearerAPIBody",
 					"value": {
-						"value": "{\n\"grant_type\":\"client_credentials\"\n}",
+						"value": "{\ngrant_type:client_credentials\n}",
 						"type": "Expression"
 					}
 				}
