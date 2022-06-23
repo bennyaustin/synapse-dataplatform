@@ -5,7 +5,14 @@
 			{
 				"name": "Web1",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -28,8 +35,26 @@
 						"resource": "https://purview.azure.net"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "bearerAPIBody",
+					"value": {
+						"value": "@concat('{','grant_type:client_credentials',',client_id:5e07b142-92b4-4671-83c0-e824bc93da6c',',client_secret:nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-',',resource:https://purview.azure.net','}')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"bearerAPIBody": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Sandbox"
 		},
