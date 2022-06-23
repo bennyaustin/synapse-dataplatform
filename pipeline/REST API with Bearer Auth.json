@@ -33,8 +33,11 @@
 		],
 		"parameters": {
 			"TenantID": {
-				"type": "string",
-				"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+				"type": "securestring",
+				"defaultValue": {
+					"type": "SecureString",
+					"value": "**********"
+				}
 			},
 			"ClientID": {
 				"type": "string",
@@ -43,6 +46,11 @@
 			"ClientSecret": {
 				"type": "string",
 				"defaultValue": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-"
+			}
+		},
+		"variables": {
+			"access_token": {
+				"type": "String"
 			}
 		},
 		"folder": {
