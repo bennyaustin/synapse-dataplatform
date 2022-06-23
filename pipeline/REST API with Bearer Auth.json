@@ -28,6 +28,9 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
 					"body": {
 						"value": "@json(variables('bearerAPIBody'))",
 						"type": "Expression"
