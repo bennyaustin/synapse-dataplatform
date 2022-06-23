@@ -33,13 +33,13 @@
 		],
 		"parameters": {
 			"TenantID": {
-				"type": "string"
+				"type": "securestring"
 			},
 			"ClientID": {
-				"type": "string"
+				"type": "securestring"
 			},
 			"ClientSecret": {
-				"type": "string"
+				"type": "securestring"
 			}
 		},
 		"folder": {
