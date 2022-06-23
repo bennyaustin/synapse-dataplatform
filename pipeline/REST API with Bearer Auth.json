@@ -3,11 +3,11 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Web1",
+				"name": "Bearer Token",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set bearerAPIBody",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -29,15 +29,13 @@
 					},
 					"method": "POST",
 					"body": {
-						"grant_type": "client_credentials",
-						"client_id": "5e07b142-92b4-4671-83c0-e824bc93da6c",
-						"client_secret": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-",
-						"resource": "https://purview.azure.net"
+						"value": "@json(variables('bearerAPIBody'))",
+						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set bearerAPIBody",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
