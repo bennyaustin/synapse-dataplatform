@@ -26,7 +26,7 @@
 				"secretName": "ba-purview-spn"
 			},
 			"tenant": "@{linkedService().TenantID}",
-			"aadResourceId": "https://management.azure.com"
+			"aadResourceId": "https://purview.azure.net"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
