@@ -25,7 +25,7 @@
 						"grant_type": "client_credentials",
 						"client_id": "5e07b142-92b4-4671-83c0-e824bc93da6c",
 						"client_secret": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-",
-						"resource": "https://management.azure.com"
+						"resource": "https://purview.azure.net"
 					},
 					"authentication": {
 						"type": "ServicePrincipal",
