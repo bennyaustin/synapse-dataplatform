@@ -28,12 +28,20 @@
 						"value": "tenant=72f988bf-86f1-41af-91ab-2d7cd011db47&client_id=5e07b142-92b4-4671-83c0-e824bc93da6c&client_secret=nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-&grant_type=client_credentials&scope=https://purview.azure.net",
 						"type": "Expression"
 					},
-					"linkedServices": [
-						{
-							"referenceName": "PurviewBearerToken",
-							"type": "LinkedServiceReference"
+					"authentication": {
+						"type": "ServicePrincipal",
+						"userTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+						"username": "5e07b142-92b4-4671-83c0-e824bc93da6c",
+						"resource": "https://purview.azure.net",
+						"password": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "keyvault01",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "ba-purview-spn"
 						}
-					]
+					}
 				}
 			}
 		],
