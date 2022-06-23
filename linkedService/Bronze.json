@@ -1,0 +1,15 @@
+{
+	"name": "Bronze",
+	"properties": {
+		"description": "Bronze Zone of Datalake Storage",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://bastoragedatalake01.dfs.core.windows.net/"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
