@@ -31,6 +31,17 @@
 				}
 			}
 		],
+		"parameters": {
+			"TenantID": {
+				"type": "string"
+			},
+			"ClientID": {
+				"type": "string"
+			},
+			"ClientSecret": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Sandbox"
 		},
