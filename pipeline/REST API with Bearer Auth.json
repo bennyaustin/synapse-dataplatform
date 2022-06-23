@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "Set AccessToken",
+				"name": "Set BearerToken",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -43,7 +43,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "AccessToken",
+					"variableName": "BearerToken",
 					"value": {
 						"value": "@activity('Get Bearer Token').output.access_token",
 						"type": "Expression"
@@ -66,7 +66,7 @@
 			}
 		},
 		"variables": {
-			"AccessToken": {
+			"BearerToken": {
 				"type": "String"
 			}
 		},
