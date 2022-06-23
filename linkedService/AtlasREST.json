@@ -1,0 +1,17 @@
+{
+	"name": "AtlasREST",
+	"properties": {
+		"description": "Endpoint for Purview Atlas REST APIs",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://ba-purview02-aug-pubpreview.purview.azure.com",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
