@@ -29,11 +29,25 @@
 					},
 					"method": "POST",
 					"headers": {
-						"Content-Type": "application/x-www-form-urlencoded"
+						"Content-Type": "application/json"
 					},
 					"body": {
 						"value": "@json(variables('bearerAPIBody'))",
 						"type": "Expression"
+					},
+					"authentication": {
+						"type": "ServicePrincipal",
+						"userTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+						"username": "5e07b142-92b4-4671-83c0-e824bc93da6c",
+						"resource": "https://purview.azure.net",
+						"password": {
+							"type": "AzureKeyVaultSecret",
+							"store": {
+								"referenceName": "keyvault01",
+								"type": "LinkedServiceReference"
+							},
+							"secretName": "ba-purview-spn"
+						}
 					}
 				}
 			},
