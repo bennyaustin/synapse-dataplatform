@@ -1,6 +1,39 @@
 {
 	"name": "REST API with Bearer Auth",
 	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"body": {
+						"grant_type": "client_credentials",
+						"client_id": "5e07b142-92b4-4671-83c0-e824bc93da6c",
+						"client_secret": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-",
+						"resource": "https://management.azure.com"
+					},
+					"authentication": {
+						"type": "ServicePrincipal",
+						"userTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+					}
+				}
+			}
+		],
 		"folder": {
 			"name": "Sandbox"
 		},
