@@ -1,0 +1,9 @@
+{
+	"name": "REST API with Bearer Auth",
+	"properties": {
+		"folder": {
+			"name": "Sandbox"
+		},
+		"annotations": []
+	}
+}
