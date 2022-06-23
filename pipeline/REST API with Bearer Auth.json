@@ -77,7 +77,7 @@
 						"requestMethod": "GET",
 						"additionalHeaders": {
 							"Authorization": {
-								"value": "Bearer @{variables('BearerToken')}",
+								"value": "Bearer @{variables('BearerToken')} audience='https://purview.azure.net'",
 								"type": "Expression"
 							}
 						}
