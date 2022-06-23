@@ -11,6 +11,22 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ba-synapseanalytics01-WorkspaceDefaultSqlServer'"
 		},
+		"PurviewBearerToken_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://login.microsoftonline.com"
+		},
+		"PurviewBearerToken_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "@{linkedService().ClientID}"
+		},
+		"PurviewBearerToken_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "@{linkedService().TenantID}"
+		},
+		"PurviewBearerToken_properties_typeProperties_aadResourceId": {
+			"type": "string",
+			"defaultValue": "https://purview.azure.net"
+		},
 		"ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://bastoragedatalake01.dfs.core.windows.net"
@@ -311,6 +327,70 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/REST API with Bearer Auth')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Bearer Token",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
+							"connectVia": {
+								"referenceName": "AutoResolveIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded"
+							},
+							"body": {
+								"value": "tenant=@{pipeline().parameters.TenantID}&client_id=@{pipeline().parameters.ClientID}&client_secret=@{pipeline().parameters.ClientSecret}&grant_type=client_credentials&scope=https://purview.azure.net",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"TenantID": {
+						"type": "securestring"
+					},
+					"ClientID": {
+						"type": "securestring"
+					},
+					"ClientSecret": {
+						"type": "securestring"
+					}
+				},
+				"variables": {
+					"access_token": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Sandbox"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SQLPool-Pause-Resume-Scale')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -412,6 +492,48 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PurviewBearerToken')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "AAD Service Principal Authentication that returns a bearer token for Purview endpoint",
+				"parameters": {
+					"TenantID": {
+						"type": "String"
+					},
+					"ClientID": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('PurviewBearerToken_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "AadServicePrincipal",
+					"servicePrincipalId": "[parameters('PurviewBearerToken_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyvault01",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "ba-purview-spn"
+					},
+					"tenant": "[parameters('PurviewBearerToken_properties_typeProperties_tenant')]",
+					"aadResourceId": "[parameters('PurviewBearerToken_properties_typeProperties_aadResourceId')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyvault01')]"
 			]
 		},
 		{
@@ -1352,7 +1474,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "ce234dd0-5536-467c-a8f5-c6d2cde0e672"
+						"spark.autotune.trackingId": "5da44c34-0234-4f4f-8f0c-c51bcac31c14"
 					}
 				},
 				"metadata": {
@@ -1404,7 +1526,7 @@
 							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 2
 					},
 					{
 						"cell_type": "markdown",
@@ -1765,18 +1887,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/dw01')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/small')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -1858,7 +1968,7 @@
 			"properties": {
 				"autoPause": {
 					"enabled": true,
-					"delayInMinutes": 15
+					"delayInMinutes": 60
 				},
 				"autoScale": {
 					"enabled": true,
@@ -1871,6 +1981,18 @@
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "australiaeast"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dw01')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],

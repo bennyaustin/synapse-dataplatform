@@ -8,6 +8,18 @@
 		"ba-synapseanalytics01-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
+		"PurviewBearerToken_properties_typeProperties_url": {
+			"value": "https://login.microsoftonline.com"
+		},
+		"PurviewBearerToken_properties_typeProperties_servicePrincipalId": {
+			"value": "@{linkedService().ClientID}"
+		},
+		"PurviewBearerToken_properties_typeProperties_tenant": {
+			"value": "@{linkedService().TenantID}"
+		},
+		"PurviewBearerToken_properties_typeProperties_aadResourceId": {
+			"value": "https://purview.azure.net"
+		},
 		"ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bastoragedatalake01.dfs.core.windows.net"
 		},
