@@ -3,131 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Bearer Token",
-				"type": "WebActivity",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
-					"connectVia": {
-						"referenceName": "AutoResolveIntegrationRuntime",
-						"type": "IntegrationRuntimeReference"
-					},
-					"method": "POST",
-					"headers": {
-						"Content-Type": "application/x-www-form-urlencoded"
-					},
-					"body": {
-						"value": "tenant=@{pipeline().parameters.TenantID}&client_id=@{pipeline().parameters.ClientID}&client_secret=@{pipeline().parameters.ClientSecret}&grant_type=client_credentials&scope=https://purview.azure.net",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set BearerToken",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get Bearer Token",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "BearerToken",
-					"value": {
-						"value": "@activity('Get Bearer Token').output.access_token",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "CopyREST2Bronze",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Set BearerToken",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "RestSource",
-						"httpRequestTimeout": "00:01:40",
-						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET",
-						"additionalHeaders": {
-							"Authorization": {
-								"value": "Bearer @{variables('BearerToken')}",
-								"type": "Expression"
-							}
-						}
-					},
-					"sink": {
-						"type": "JsonSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "JsonWriteSettings"
-						}
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "AtlasREST_API",
-						"type": "DatasetReference",
-						"parameters": {
-							"RelativeUrl": {
-								"value": "@pipeline().parameters.EntityName",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "Bronze_JSON",
-						"type": "DatasetReference",
-						"parameters": {
-							"FileSystem": {
-								"value": "@pipeline().parameters.DestinationRawFileSystem",
-								"type": "Expression"
-							},
-							"Folder": {
-								"value": "@pipeline().parameters.DestinationRawFolder",
-								"type": "Expression"
-							},
-							"File": {
-								"value": "@pipeline().parameters.DestinationRawFile",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
-				"name": "CopyREST2Bronze_copy1",
+				"name": "CopyREST2Parquet",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -191,18 +67,6 @@
 			}
 		],
 		"parameters": {
-			"TenantID": {
-				"type": "string",
-				"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-			},
-			"ClientID": {
-				"type": "string",
-				"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
-			},
-			"ClientSecret": {
-				"type": "string",
-				"defaultValue": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-"
-			},
 			"EntityName": {
 				"type": "string",
 				"defaultValue": "/scan/datasources?api-version=2022-02-01-preview"
@@ -218,11 +82,6 @@
 			"DestinationRawFile": {
 				"type": "string",
 				"defaultValue": "datasources_20220624.json"
-			}
-		},
-		"variables": {
-			"BearerToken": {
-				"type": "String"
 			}
 		},
 		"folder": {
