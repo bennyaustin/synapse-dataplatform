@@ -63,22 +63,6 @@
 			"ClientSecret": {
 				"type": "string",
 				"defaultValue": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-"
-			},
-			"EntityName": {
-				"type": "string",
-				"defaultValue": "/scan/datasources?api-version=2022-02-01-preview"
-			},
-			"DestinationRawFileSystem": {
-				"type": "string",
-				"defaultValue": "raw-bronze"
-			},
-			"DestinationRawFolder": {
-				"type": "string",
-				"defaultValue": "purview/datasources/2022-06"
-			},
-			"DestinationRawFile": {
-				"type": "string",
-				"defaultValue": "datasources_20220624.json"
 			}
 		},
 		"variables": {
