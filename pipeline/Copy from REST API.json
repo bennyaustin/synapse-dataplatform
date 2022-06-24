@@ -24,13 +24,164 @@
 					"sink": {
 						"type": "ParquetSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
 						},
 						"formatSettings": {
 							"type": "ParquetWriteSettings"
 						}
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['endpoint']"
+								},
+								"sink": {
+									"name": "endpoint"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['resourceGroup']"
+								},
+								"sink": {
+									"name": "resourceGroup"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['subscriptionId']"
+								},
+								"sink": {
+									"name": "subscriptionId"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['location']"
+								},
+								"sink": {
+									"name": "location"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['resourceName']"
+								},
+								"sink": {
+									"name": "resourceName"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['resourceId']"
+								},
+								"sink": {
+									"name": "resourceId"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['dataUseGovernance']"
+								},
+								"sink": {
+									"name": "dataUseGovernance"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['createdAt']"
+								},
+								"sink": {
+									"name": "createdAt"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['lastModifiedAt']"
+								},
+								"sink": {
+									"name": "value'][0]['properties_lastModifiedAt"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['parentCollection']"
+								},
+								"sink": {
+									"name": "parentCollection"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['collection']['lastModifiedAt']"
+								},
+								"sink": {
+									"name": "value'][0]['properties_collection_lastModifiedAt"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['collection']['referenceName']"
+								},
+								"sink": {
+									"name": "referenceName"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['collection']['type']"
+								},
+								"sink": {
+									"name": "type"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['properties']['dataSourceCollectionMovingState']"
+								},
+								"sink": {
+									"name": "dataSourceCollectionMovingState"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['kind']"
+								},
+								"sink": {
+									"name": "kind"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['id']"
+								},
+								"sink": {
+									"name": "id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['value'][0]['name']"
+								},
+								"sink": {
+									"name": "name"
+								}
+							},
+							{
+								"source": {
+									"path": "$['count']"
+								},
+								"sink": {
+									"name": "count"
+								}
+							}
+						],
+						"collectionReference": "$['value']"
+					}
 				},
 				"inputs": [
 					{
