@@ -22,12 +22,12 @@
 						"requestMethod": "GET"
 					},
 					"sink": {
-						"type": "JsonSink",
+						"type": "ParquetSink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
-							"type": "JsonWriteSettings"
+							"type": "ParquetWriteSettings"
 						}
 					},
 					"enableStaging": false
@@ -46,7 +46,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Bronze_JSON",
+						"referenceName": "Bronze_Parquet",
 						"type": "DatasetReference",
 						"parameters": {
 							"FileSystem": {
@@ -81,7 +81,7 @@
 			},
 			"DestinationRawFile": {
 				"type": "string",
-				"defaultValue": "datasources_20220624.json"
+				"defaultValue": "datasources_20220625.parquet"
 			}
 		},
 		"folder": {
