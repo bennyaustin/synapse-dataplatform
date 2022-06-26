@@ -1,5 +1,5 @@
 {
-	"name": "SQL script 1",
+	"name": "Query Parquet",
 	"properties": {
 		"content": {
 			"query": "-- This is auto-generated code\nSELECT\n  top 100  *\nFROM\n    OPENROWSET(\n        BULK 'https://bastoragedatalake01.dfs.core.windows.net/raw-bronze/purview/datasources/2022-06/datasources_20220625.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n",
