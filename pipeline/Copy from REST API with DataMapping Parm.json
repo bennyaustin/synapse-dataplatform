@@ -5,7 +5,14 @@
 			{
 				"name": "CopyREST2Parquet",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set datamapping",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -33,173 +40,8 @@
 					},
 					"enableStaging": false,
 					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"path": "['properties']['endpoint']"
-								},
-								"sink": {
-									"name": "endpoint",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceGroup']"
-								},
-								"sink": {
-									"name": "resourceGroup",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['subscriptionId']"
-								},
-								"sink": {
-									"name": "subscriptionId",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['location']"
-								},
-								"sink": {
-									"name": "location",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceName']"
-								},
-								"sink": {
-									"name": "resourceName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceId']"
-								},
-								"sink": {
-									"name": "resourceId",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['dataUseGovernance']"
-								},
-								"sink": {
-									"name": "dataUseGovernance",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['createdAt']"
-								},
-								"sink": {
-									"name": "createdAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['lastModifiedAt']"
-								},
-								"sink": {
-									"name": "lastModifiedAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['parentCollection']"
-								},
-								"sink": {
-									"name": "parentCollection",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['lastModifiedAt']"
-								},
-								"sink": {
-									"name": "Collection_lastModifiedAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['referenceName']"
-								},
-								"sink": {
-									"name": "referenceName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['type']"
-								},
-								"sink": {
-									"name": "type",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['dataSourceCollectionMovingState']"
-								},
-								"sink": {
-									"name": "dataSourceCollectionMovingState",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['kind']"
-								},
-								"sink": {
-									"name": "kind",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['id']"
-								},
-								"sink": {
-									"name": "id",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['name']"
-								},
-								"sink": {
-									"name": "name",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "$['count']"
-								},
-								"sink": {
-									"name": "count",
-									"type": "String"
-								}
-							}
-						],
-						"collectionReference": "$['value']",
-						"mapComplexValuesToString": true
+						"value": "@json(variables('datamapping'))",
+						"type": "Expression"
 					}
 				},
 				"inputs": [
@@ -234,6 +76,16 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Set datamapping",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "datamapping",
+					"value": "\"translator\": {\n                        \"type\": \"TabularTranslator\",\n                        \"mappings\": [\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['endpoint']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"endpoint\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['resourceGroup']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"resourceGroup\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['subscriptionId']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"subscriptionId\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['location']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"location\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['resourceName']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"resourceName\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['resourceId']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"resourceId\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['dataUseGovernance']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"dataUseGovernance\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['createdAt']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"createdAt\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['lastModifiedAt']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"lastModifiedAt\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['parentCollection']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"parentCollection\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['collection']['lastModifiedAt']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"Collection_lastModifiedAt\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['collection']['referenceName']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"referenceName\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['collection']['type']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"type\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['properties']['dataSourceCollectionMovingState']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"dataSourceCollectionMovingState\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['kind']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"kind\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['id']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"id\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"['name']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"name\",\n                                    \"type\": \"String\"\n                                }\n                            },\n                            {\n                                \"source\": {\n                                    \"path\": \"$['count']\"\n                                },\n                                \"sink\": {\n                                    \"name\": \"count\",\n                                    \"type\": \"String\"\n                                }\n                            }\n                        ],\n                        \"collectionReference\": \"$['value']\",\n                        \"mapComplexValuesToString\": true\n                    }"
+				}
 			}
 		],
 		"parameters": {
@@ -252,6 +104,11 @@
 			"DestinationRawFile": {
 				"type": "string",
 				"defaultValue": "datasources_20220625.parquet"
+			}
+		},
+		"variables": {
+			"datamapping": {
+				"type": "String"
 			}
 		},
 		"folder": {
