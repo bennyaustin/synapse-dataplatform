@@ -54,11 +54,6 @@
 								}
 							},
 							{
-								"sink": {
-									"type": "String"
-								}
-							},
-							{
 								"source": {
 									"path": "['properties']['subscriptionId']"
 								},
