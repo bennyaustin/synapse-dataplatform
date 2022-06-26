@@ -1,5 +1,5 @@
 {
-	"name": "Copy from REST API with DataMapping Parm",
+	"name": "Copy using Parametrized DataMapping",
 	"properties": {
 		"activities": [
 			{
