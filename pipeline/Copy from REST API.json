@@ -40,7 +40,8 @@
 									"path": "$['value'][0]['properties']['endpoint']"
 								},
 								"sink": {
-									"name": "endpoint"
+									"name": "endpoint",
+									"type": "String"
 								}
 							},
 							{
@@ -48,7 +49,8 @@
 									"path": "$['value'][0]['properties']['resourceGroup']"
 								},
 								"sink": {
-									"name": "resourceGroup"
+									"name": "resourceGroup",
+									"type": "String"
 								}
 							},
 							{
@@ -56,7 +58,8 @@
 									"path": "$['value'][0]['properties']['subscriptionId']"
 								},
 								"sink": {
-									"name": "subscriptionId"
+									"name": "subscriptionId",
+									"type": "String"
 								}
 							},
 							{
@@ -64,7 +67,8 @@
 									"path": "$['value'][0]['properties']['location']"
 								},
 								"sink": {
-									"name": "location"
+									"name": "location",
+									"type": "String"
 								}
 							},
 							{
@@ -72,7 +76,8 @@
 									"path": "$['value'][0]['properties']['resourceName']"
 								},
 								"sink": {
-									"name": "resourceName"
+									"name": "resourceName",
+									"type": "String"
 								}
 							},
 							{
@@ -80,7 +85,8 @@
 									"path": "$['value'][0]['properties']['resourceId']"
 								},
 								"sink": {
-									"name": "resourceId"
+									"name": "resourceId",
+									"type": "String"
 								}
 							},
 							{
@@ -88,7 +94,8 @@
 									"path": "$['value'][0]['properties']['dataUseGovernance']"
 								},
 								"sink": {
-									"name": "dataUseGovernance"
+									"name": "dataUseGovernance",
+									"type": "String"
 								}
 							},
 							{
@@ -96,7 +103,8 @@
 									"path": "$['value'][0]['properties']['createdAt']"
 								},
 								"sink": {
-									"name": "createdAt"
+									"name": "createdAt",
+									"type": "String"
 								}
 							},
 							{
@@ -104,7 +112,8 @@
 									"path": "$['value'][0]['properties']['lastModifiedAt']"
 								},
 								"sink": {
-									"name": "lastModifiedAt"
+									"name": "lastModifiedAt",
+									"type": "Single"
 								}
 							},
 							{
@@ -112,7 +121,8 @@
 									"path": "$['value'][0]['properties']['parentCollection']"
 								},
 								"sink": {
-									"name": "parentCollection"
+									"name": "parentCollection",
+									"type": "String"
 								}
 							},
 							{
@@ -120,7 +130,8 @@
 									"path": "$['value'][0]['properties']['collection']['lastModifiedAt']"
 								},
 								"sink": {
-									"name": "Collection_lastModifiedAt"
+									"name": "Collection_lastModifiedAt",
+									"type": "String"
 								}
 							},
 							{
@@ -128,7 +139,8 @@
 									"path": "$['value'][0]['properties']['collection']['referenceName']"
 								},
 								"sink": {
-									"name": "referenceName"
+									"name": "referenceName",
+									"type": "String"
 								}
 							},
 							{
@@ -136,7 +148,8 @@
 									"path": "$['value'][0]['properties']['collection']['type']"
 								},
 								"sink": {
-									"name": "type"
+									"name": "type",
+									"type": "String"
 								}
 							},
 							{
@@ -144,7 +157,8 @@
 									"path": "$['value'][0]['properties']['dataSourceCollectionMovingState']"
 								},
 								"sink": {
-									"name": "dataSourceCollectionMovingState"
+									"name": "dataSourceCollectionMovingState",
+									"type": "String"
 								}
 							},
 							{
@@ -152,7 +166,8 @@
 									"path": "$['value'][0]['kind']"
 								},
 								"sink": {
-									"name": "kind"
+									"name": "kind",
+									"type": "String"
 								}
 							},
 							{
@@ -160,7 +175,8 @@
 									"path": "$['value'][0]['id']"
 								},
 								"sink": {
-									"name": "id"
+									"name": "id",
+									"type": "String"
 								}
 							},
 							{
@@ -168,7 +184,8 @@
 									"path": "$['value'][0]['name']"
 								},
 								"sink": {
-									"name": "name"
+									"name": "name",
+									"type": "String"
 								}
 							},
 							{
@@ -176,7 +193,8 @@
 									"path": "$['count']"
 								},
 								"sink": {
-									"name": "count"
+									"name": "count",
+									"type": "String"
 								}
 							}
 						],
