@@ -104,7 +104,7 @@
 									"path": "$['value'][0]['properties']['lastModifiedAt']"
 								},
 								"sink": {
-									"name": "value'][0]['properties_lastModifiedAt"
+									"name": "lastModifiedAt"
 								}
 							},
 							{
@@ -120,7 +120,7 @@
 									"path": "$['value'][0]['properties']['collection']['lastModifiedAt']"
 								},
 								"sink": {
-									"name": "value'][0]['properties_collection_lastModifiedAt"
+									"name": "collection_lastModifiedAt"
 								}
 							},
 							{
@@ -180,7 +180,7 @@
 								}
 							}
 						],
-						"collectionReference": "$['value']"
+						"collectionReference": ""
 					}
 				},
 				"inputs": [
