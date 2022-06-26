@@ -37,7 +37,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['endpoint']"
+									"path": "['properties']['endpoint']"
 								},
 								"sink": {
 									"name": "endpoint",
@@ -46,7 +46,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['resourceGroup']"
+									"path": "['properties']['resourceGroup']"
 								},
 								"sink": {
 									"name": "resourceGroup",
@@ -55,7 +55,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['subscriptionId']"
+									"path": "['properties']['subscriptionId']"
 								},
 								"sink": {
 									"name": "subscriptionId",
@@ -64,7 +64,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['location']"
+									"path": "['properties']['location']"
 								},
 								"sink": {
 									"name": "location",
@@ -73,7 +73,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['resourceName']"
+									"path": "['properties']['resourceName']"
 								},
 								"sink": {
 									"name": "resourceName",
@@ -82,7 +82,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['resourceId']"
+									"path": "['properties']['resourceId']"
 								},
 								"sink": {
 									"name": "resourceId",
@@ -91,7 +91,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['dataUseGovernance']"
+									"path": "['properties']['dataUseGovernance']"
 								},
 								"sink": {
 									"name": "dataUseGovernance",
@@ -100,7 +100,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['createdAt']"
+									"path": "['properties']['createdAt']"
 								},
 								"sink": {
 									"name": "createdAt",
@@ -109,7 +109,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['lastModifiedAt']"
+									"path": "['properties']['lastModifiedAt']"
 								},
 								"sink": {
 									"name": "lastModifiedAt",
@@ -118,7 +118,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['parentCollection']"
+									"path": "['properties']['parentCollection']"
 								},
 								"sink": {
 									"name": "parentCollection",
@@ -127,7 +127,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['collection']['lastModifiedAt']"
+									"path": "['properties']['collection']['lastModifiedAt']"
 								},
 								"sink": {
 									"name": "Collection_lastModifiedAt",
@@ -136,7 +136,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['collection']['referenceName']"
+									"path": "['properties']['collection']['referenceName']"
 								},
 								"sink": {
 									"name": "referenceName",
@@ -145,7 +145,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['collection']['type']"
+									"path": "['properties']['collection']['type']"
 								},
 								"sink": {
 									"name": "type",
@@ -154,7 +154,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['properties']['dataSourceCollectionMovingState']"
+									"path": "['properties']['dataSourceCollectionMovingState']"
 								},
 								"sink": {
 									"name": "dataSourceCollectionMovingState",
@@ -163,7 +163,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['kind']"
+									"path": "['kind']"
 								},
 								"sink": {
 									"name": "kind",
@@ -172,7 +172,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['id']"
+									"path": "['id']"
 								},
 								"sink": {
 									"name": "id",
@@ -181,7 +181,7 @@
 							},
 							{
 								"source": {
-									"path": "$['value'][0]['name']"
+									"path": "['name']"
 								},
 								"sink": {
 									"name": "name",
@@ -198,7 +198,7 @@
 								}
 							}
 						],
-						"collectionReference": "",
+						"collectionReference": "$['value']",
 						"mapComplexValuesToString": true
 					}
 				},
