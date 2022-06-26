@@ -113,7 +113,7 @@
 								},
 								"sink": {
 									"name": "lastModifiedAt",
-									"type": "Single"
+									"type": "String"
 								}
 							},
 							{
