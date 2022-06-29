@@ -4,7 +4,7 @@
 		"description": "Generic Pipeline to ingest data from any REST API",
 		"activities": [
 			{
-				"name": "Insert IngestInstance - Running",
+				"name": "Ingest Running",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
@@ -91,7 +91,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Insert IngestInstance - Running",
+						"activity": "Ingest Running",
 						"dependencyConditions": [
 							"Succeeded"
 						]
