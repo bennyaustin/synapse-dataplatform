@@ -1,0 +1,10 @@
+{
+	"name": "ELT REST API",
+	"properties": {
+		"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
+		"folder": {
+			"name": "REST API Pipeline"
+		},
+		"annotations": []
+	}
+}
