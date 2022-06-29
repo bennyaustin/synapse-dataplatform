@@ -1,5 +1,5 @@
 {
-	"name": "ELT REST API",
+	"name": "Master ELT REST API",
 	"properties": {
 		"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
 		"activities": [
@@ -49,8 +49,8 @@
 						"referenceName": "ControlDB_Dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Table": "Not Applicable",
-							"Schema": "Not Applicable"
+							"Table": "NotApplicable",
+							"Schema": "NotApplicable"
 						}
 					},
 					"firstRowOnly": false
@@ -261,7 +261,7 @@
 			}
 		},
 		"folder": {
-			"name": "REST API Pipeline"
+			"name": "REST API Pipelines"
 		},
 		"annotations": []
 	}
