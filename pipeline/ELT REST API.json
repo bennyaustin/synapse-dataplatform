@@ -40,10 +40,12 @@
 		],
 		"parameters": {
 			"SourceSystemName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Purview"
 			},
 			"StreamName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "%"
 			},
 			"MaxIngestInstance": {
 				"type": "string",
