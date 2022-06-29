@@ -1,0 +1,78 @@
+{
+	"name": "Get Bearer Auth",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Bearer Token",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": {
+						"value": "tenant=@{pipeline().parameters.TenantID}&client_id=@{pipeline().parameters.ClientID}&client_secret=@{pipeline().parameters.ClientSecret}&grant_type=client_credentials&scope=https://purview.azure.net",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set BearerToken",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Bearer Token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "BearerToken",
+					"value": {
+						"value": "@activity('Get Bearer Token').output.access_token",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"TenantID": {
+				"type": "string",
+				"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+			},
+			"ClientID": {
+				"type": "string",
+				"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+			},
+			"ClientSecret": {
+				"type": "string",
+				"defaultValue": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-"
+			}
+		},
+		"variables": {
+			"BearerToken": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Sandbox"
+		},
+		"annotations": []
+	}
+}

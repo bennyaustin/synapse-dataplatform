@@ -1,0 +1,28 @@
+{
+	"name": "AtlasREST",
+	"properties": {
+		"description": "Endpoint for Purview Atlas REST APIs",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://ba-purview02-aug-pubpreview.purview.azure.com",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "AadServicePrincipal",
+			"servicePrincipalId": "5e07b142-92b4-4671-83c0-e824bc93da6c",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyvault01",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ba-purview-spn"
+			},
+			"tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+			"aadResourceId": "https://purview.azure.net"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
