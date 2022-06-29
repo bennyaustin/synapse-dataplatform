@@ -1,5 +1,5 @@
 {
-	"name": "IngestREST",
+	"name": "IngestREST_bak",
 	"properties": {
 		"description": "Generic Pipeline to ingest data from any REST API",
 		"activities": [
