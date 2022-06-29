@@ -5,6 +5,9 @@
 		"workspaceName": {
 			"value": "ba-synapseanalytics01"
 		},
+		"ControlDB_connectionString": {
+			"value": ""
+		},
 		"SampleDB_connectionString": {
 			"value": ""
 		},
@@ -25,6 +28,18 @@
 		},
 		"Bronze_properties_typeProperties_url": {
 			"value": "https://bastoragedatalake01.dfs.core.windows.net/"
+		},
+		"REST_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
+		"REST_properties_typeProperties_servicePrincipalId": {
+			"value": "@{linkedService().ServicePrincipalID}"
+		},
+		"REST_properties_typeProperties_tenant": {
+			"value": "@{linkedService().TenantID}"
+		},
+		"REST_properties_typeProperties_aadResourceId": {
+			"value": "@{linkedService().AADResource}"
 		},
 		"ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bastoragedatalake01.dfs.core.windows.net"

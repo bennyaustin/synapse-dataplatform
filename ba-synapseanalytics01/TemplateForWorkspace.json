@@ -7,6 +7,10 @@
 			"metadata": "Workspace name",
 			"defaultValue": "ba-synapseanalytics01"
 		},
+		"ControlDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ControlDB'"
+		},
 		"SampleDB_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SampleDB'"
@@ -34,6 +38,22 @@
 		"Bronze_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://bastoragedatalake01.dfs.core.windows.net/"
+		},
+		"REST_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseURL}"
+		},
+		"REST_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "@{linkedService().ServicePrincipalID}"
+		},
+		"REST_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "@{linkedService().TenantID}"
+		},
+		"REST_properties_typeProperties_aadResourceId": {
+			"type": "string",
+			"defaultValue": "@{linkedService().AADResource}"
 		},
 		"ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
@@ -498,6 +518,284 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/ELT REST API')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
+				"activities": [
+					{
+						"name": "Get Ingest Instances",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition]",
+								"storedProcedureParameters": {
+									"MaxIngestInstance": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.MaxIngestInstance",
+											"type": "Expression"
+										}
+									},
+									"SourceSystemName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.SourceSystemName",
+											"type": "Expression"
+										}
+									},
+									"StreamName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.StreamName",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "Not Applicable",
+									"Schema": "Not Applicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach Ingest Instance",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Ingest Instances",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Ingest Instances').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestREST",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "IngestREST",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"IngestID": {
+												"value": "@item().IngestID",
+												"type": "Expression"
+											},
+											"SourceSystemName": {
+												"value": "@item().SourceSystemName",
+												"type": "Expression"
+											},
+											"StreamName": {
+												"value": "@item().StreamName",
+												"type": "Expression"
+											},
+											"Backend": {
+												"value": "@item().Backend",
+												"type": "Expression"
+											},
+											"EntityName": {
+												"value": "@item().EntityName",
+												"type": "Expression"
+											},
+											"DeltaName": {
+												"value": "@item().DeltaName",
+												"type": "Expression"
+											},
+											"LastDeltaDate": {
+												"value": "@item().LastDeltaDate",
+												"type": "Expression"
+											},
+											"DataFromTimestamp": {
+												"value": "@item().DataFromTimestamp",
+												"type": "Expression"
+											},
+											"DataToTimestamp": {
+												"value": "@item().DataToTimestamp",
+												"type": "Expression"
+											},
+											"LastDeltaNumber": {
+												"value": "@item().LastDeltaNumber",
+												"type": "Expression"
+											},
+											"DataFromNumber": {
+												"value": "@item().DataFromNumber",
+												"type": "Expression"
+											},
+											"DataToNumber": {
+												"value": "@item().DataToNumber",
+												"type": "Expression"
+											},
+											"DataFormat": {
+												"value": "@item().DataFormat",
+												"type": "Expression"
+											},
+											"SourceStructure": {
+												"value": "@item().SourceStructure",
+												"type": "Expression"
+											},
+											"MaxIntervalMinutes": {
+												"value": "@item().MaxIntervalMinutes",
+												"type": "Expression"
+											},
+											"MaxIntervalNumber": {
+												"value": "@item().MaxIntervalNumber",
+												"type": "Expression"
+											},
+											"DataMapping": {
+												"value": "@item().DataMapping",
+												"type": "Expression"
+											},
+											"RunSequence": {
+												"value": "@item().RunSequence",
+												"type": "Expression"
+											},
+											"ActiveFlag": {
+												"value": "@item().ActiveFlag",
+												"type": "Expression"
+											},
+											"L1TransformationReqdFlag": {
+												"value": "@item().L1TransformationReqdFlag",
+												"type": "Expression"
+											},
+											"L2TransformationReqdFlag": {
+												"value": "@item().L2TransformationReqdFlag",
+												"type": "Expression"
+											},
+											"DelayL1TransformationFlag": {
+												"value": "@item().DelayL1TransformationFlag",
+												"type": "Expression"
+											},
+											"DelayL2TransformationFlag": {
+												"value": "@item().DelayL2TransformationFlag",
+												"type": "Expression"
+											},
+											"DestinationRawFileSystem": {
+												"value": "@item().DestinationRawFileSystem",
+												"type": "Expression"
+											},
+											"DestinationRawFolder": {
+												"value": "@item().DestinationRawFolder",
+												"type": "Expression"
+											},
+											"DestinationRawFile": {
+												"value": "@item().DestinationRawFile",
+												"type": "Expression"
+											},
+											"SourceSQL": {
+												"value": "@item().SourceSQL",
+												"type": "Expression"
+											},
+											"StatSQL": {
+												"value": "@item().StatSQL",
+												"type": "Expression"
+											},
+											"ReloadFlag": {
+												"value": "@item().ReloadFlag",
+												"type": "Expression"
+											},
+											"ADFPipelineRunID": {
+												"value": "@item().ADFPipelineRunID",
+												"type": "Expression"
+											},
+											"BaseURL": {
+												"value": "@item().BaseURL",
+												"type": "Expression"
+											},
+											"ServicePrincipalID": {
+												"value": "@item().ServicePrincipalID",
+												"type": "Expression"
+											},
+											"TenantID": {
+												"value": "@item().TenantID",
+												"type": "Expression"
+											},
+											"AADResource": {
+												"value": "@item().AADResource",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceSystemName": {
+						"type": "string",
+						"defaultValue": "Purview"
+					},
+					"StreamName": {
+						"type": "string",
+						"defaultValue": "%"
+					},
+					"MaxIngestInstance": {
+						"type": "string",
+						"defaultValue": "20"
+					},
+					"BaseURL": {
+						"type": "string",
+						"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+					},
+					"ServicePrincipalID": {
+						"type": "string",
+						"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+					},
+					"TenantID": {
+						"type": "string",
+						"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+					},
+					"AADResource": {
+						"type": "string",
+						"defaultValue": "https://purview.azure.net"
+					}
+				},
+				"folder": {
+					"name": "REST API Pipeline"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
+				"[concat(variables('workspaceId'), '/pipelines/IngestREST')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Get Bearer Auth')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -582,6 +880,302 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/IngestREST')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Generic Pipeline to ingest data from any REST API",
+				"activities": [
+					{
+						"name": "Insert IngestInstance - Running",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[InsertIngestInstance]",
+							"storedProcedureParameters": {
+								"ADFPipelineRunID": {
+									"value": {
+										"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"DestinationRawFile": {
+									"value": {
+										"value": "@pipeline().parameters.DestinationRawFile",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"DestinationRawFileSystem": {
+									"value": {
+										"value": "@pipeline().parameters.DestinationRawFileSystem",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"DestinationRawFolder": {
+									"value": {
+										"value": "@pipeline().parameters.DestinationRawFolder",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"IngestID": {
+									"value": {
+										"value": "@pipeline().parameters.IngestID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"ReloadFlag": {
+									"value": {
+										"value": "@pipeline().parameters.ReloadFlag",
+										"type": "Expression"
+									},
+									"type": "Boolean"
+								},
+								"SourceFileDropFile": {
+									"value": null,
+									"type": "String"
+								},
+								"SourceFileDropFileSystem": {
+									"value": null,
+									"type": "String"
+								},
+								"SourceFileDropFolder": {
+									"value": null,
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Source To Datalake Bronze Zone",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Insert IngestInstance - Running",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"value": "@json(pipeline().parameters.DataMapping)",
+								"type": "Expression"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "REST_API",
+								"type": "DatasetReference",
+								"parameters": {
+									"BaseURL": {
+										"value": "@pipeline().parameters.BaseURL",
+										"type": "Expression"
+									},
+									"ServicePrincipalID": {
+										"value": "@pipeline().parameters.ServicePrincipalID",
+										"type": "Expression"
+									},
+									"TenantID": {
+										"value": "@pipeline().parameters.TenantID",
+										"type": "Expression"
+									},
+									"AADResource": {
+										"value": "@pipeline().parameters.AADResource",
+										"type": "Expression"
+									},
+									"RelativeURL": {
+										"value": "@pipeline().parameters.SourceSQL",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Bronze_Parquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileSystem": {
+										"value": "@pipeline().parameters.DestinationRawFileSystem",
+										"type": "Expression"
+									},
+									"Folder": {
+										"value": "@pipeline().parameters.DestinationRawFolder",
+										"type": "Expression"
+									},
+									"File": {
+										"value": "@pipeline().parameters.DestinationRawFile",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"IngestID": {
+						"type": "int"
+					},
+					"SourceSystemName": {
+						"type": "string"
+					},
+					"StreamName": {
+						"type": "string"
+					},
+					"Backend": {
+						"type": "string"
+					},
+					"EntityName": {
+						"type": "string"
+					},
+					"DeltaName": {
+						"type": "string"
+					},
+					"LastDeltaDate": {
+						"type": "string"
+					},
+					"DataFromTimestamp": {
+						"type": "string"
+					},
+					"DataToTimestamp": {
+						"type": "string"
+					},
+					"LastDeltaNumber": {
+						"type": "int"
+					},
+					"DataFromNumber": {
+						"type": "int"
+					},
+					"DataToNumber": {
+						"type": "int"
+					},
+					"DataFormat": {
+						"type": "string"
+					},
+					"SourceStructure": {
+						"type": "string"
+					},
+					"MaxIntervalMinutes": {
+						"type": "int"
+					},
+					"MaxIntervalNumber": {
+						"type": "int"
+					},
+					"DataMapping": {
+						"type": "string"
+					},
+					"RunSequence": {
+						"type": "int"
+					},
+					"ActiveFlag": {
+						"type": "bool"
+					},
+					"L1TransformationReqdFlag": {
+						"type": "string"
+					},
+					"L2TransformationReqdFlag": {
+						"type": "string"
+					},
+					"DelayL1TransformationFlag": {
+						"type": "bool"
+					},
+					"DelayL2TransformationFlag": {
+						"type": "bool"
+					},
+					"DestinationRawFileSystem": {
+						"type": "string"
+					},
+					"DestinationRawFolder": {
+						"type": "string"
+					},
+					"DestinationRawFile": {
+						"type": "string"
+					},
+					"SourceSQL": {
+						"type": "string"
+					},
+					"StatSQL": {
+						"type": "string"
+					},
+					"ReloadFlag": {
+						"type": "bool"
+					},
+					"ADFPipelineRunID": {
+						"type": "string"
+					},
+					"BaseURL": {
+						"type": "string"
+					},
+					"ServicePrincipalID": {
+						"type": "string"
+					},
+					"TenantID": {
+						"type": "string"
+					},
+					"AADResource": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "REST API Pipeline"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
+				"[concat(variables('workspaceId'), '/datasets/REST_API')]",
+				"[concat(variables('workspaceId'), '/datasets/Bronze_Parquet')]"
 			]
 		},
 		{
@@ -1055,243 +1649,102 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SampleDB_container')]",
+			"name": "[concat(parameters('workspaceName'), '/ControlDB_Dataset')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "SampleDB",
+					"referenceName": "ControlDB",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"container": {
+					"Table": {
+						"type": "string"
+					},
+					"Schema": {
 						"type": "string"
 					}
 				},
 				"folder": {
-					"name": "azure"
+					"name": "Azure/Datalake"
 				},
 				"annotations": [],
-				"type": "CosmosDbSqlApiCollection",
-				"schema": {},
+				"type": "AzureSqlTable",
+				"schema": [],
 				"typeProperties": {
-					"collectionName": {
-						"value": "@dataset().container",
+					"schema": {
+						"value": "@dataset().Schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().Table",
 						"type": "Expression"
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/SampleDB')]"
+				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SampleDB_movies')]",
+			"name": "[concat(parameters('workspaceName'), '/REST_API')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "SampleDB",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "azure"
-				},
-				"annotations": [],
-				"type": "CosmosDbSqlApiCollection",
-				"schema": {
-					"type": "object",
-					"properties": {
-						"actors": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"name": {
-										"type": "string"
-									}
-								}
-							}
+					"referenceName": "REST",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"BaseURL": {
+							"value": "@dataset().BaseURL",
+							"type": "Expression"
 						},
-						"availabilityDate": {
-							"type": "string"
+						"ServicePrincipalID": {
+							"value": "@dataset().ServicePrincipalID",
+							"type": "Expression"
 						},
-						"genre": {
-							"type": "string"
+						"TenantID": {
+							"value": "@dataset().TenantID",
+							"type": "Expression"
 						},
-						"rating": {
-							"type": "string"
-						},
-						"releaseYear": {
-							"type": "integer"
-						},
-						"runtime": {
-							"type": "integer"
-						},
-						"streamingAvailabilityDate": {
-							"type": "string"
-						},
-						"tier": {
-							"type": "integer"
-						},
-						"title": {
-							"type": "string"
+						"AADResource": {
+							"value": "@dataset().AADResource",
+							"type": "Expression"
 						}
 					}
-				},
-				"typeProperties": {
-					"collectionName": "movies"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/SampleDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/dest_datalake_parquet')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ba-synapseanalytics01-WorkspaceDefaultStorage",
-					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"fileSystem": {
+					"BaseURL": {
 						"type": "string"
 					},
-					"folder": {
+					"ServicePrincipalID": {
+						"type": "string"
+					},
+					"TenantID": {
+						"type": "string"
+					},
+					"AADResource": {
+						"type": "string"
+					},
+					"RelativeURL": {
 						"type": "string"
 					}
 				},
 				"folder": {
-					"name": "azure"
+					"name": "Azure/REST"
 				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "RestResource",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@dataset().folder",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().fileSystem",
-							"type": "Expression"
-						}
-					},
-					"compressionCodec": "gzip"
+					"relativeUrl": {
+						"value": "@dataset().RelativeURL",
+						"type": "Expression"
+					}
 				},
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/ba-synapseanalytics01-WorkspaceDefaultStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/src_datalake_json')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ba-synapseanalytics01-WorkspaceDefaultStorage",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"srcFileSystem": {
-						"type": "string"
-					},
-					"srcFolder": {
-						"type": "string"
-					},
-					"srcFile": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "azure"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().srcFile",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().srcFolder",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().srcFileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"actors": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"name": {
-										"type": "string"
-									}
-								}
-							}
-						},
-						"availabilityDate": {
-							"type": "string"
-						},
-						"genre": {
-							"type": "string"
-						},
-						"rating": {
-							"type": "string"
-						},
-						"releaseYear": {
-							"type": "integer"
-						},
-						"runtime": {
-							"type": "integer"
-						},
-						"streamingAvailabilityDate": {
-							"type": "string"
-						},
-						"tier": {
-							"type": "integer"
-						},
-						"title": {
-							"type": "string"
-						},
-						"id": {
-							"type": "string"
-						},
-						"_rid": {
-							"type": "string"
-						},
-						"_self": {
-							"type": "string"
-						},
-						"_etag": {
-							"type": "string"
-						},
-						"_attachments": {
-							"type": "string"
-						},
-						"_ts": {
-							"type": "integer"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/ba-synapseanalytics01-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/linkedServices/REST')]"
 			]
 		},
 		{
@@ -1346,6 +1799,74 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ControlDB')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Linked service for ELT Framework database",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ControlDB_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/REST')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Parametrized Linked Service for a REST API data source using Service Principal AAD Authentication",
+				"parameters": {
+					"BaseURL": {
+						"type": "String"
+					},
+					"ServicePrincipalID": {
+						"type": "String"
+					},
+					"TenantID": {
+						"type": "String"
+					},
+					"AADResource": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('REST_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "AadServicePrincipal",
+					"servicePrincipalId": "[parameters('REST_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyvault01",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "ba-purview-spn"
+					},
+					"tenant": "[parameters('REST_properties_typeProperties_tenant')]",
+					"aadResourceId": "[parameters('REST_properties_typeProperties_aadResourceId')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyvault01')]"
 			]
 		},
 		{
@@ -1538,44 +2059,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/FlattenJson-CosmosDB')]",
-			"type": "Microsoft.Synapse/workspaces/dataflows",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "SampleDB_container",
-								"type": "DatasetReference"
-							},
-							"name": "MoviesCosmosDB"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "dest_datalake_parquet",
-								"type": "DatasetReference"
-							},
-							"name": "SilverMovies"
-						}
-					],
-					"transformations": [
-						{
-							"name": "FlattenActors"
-						}
-					],
-					"script": "parameters{\n\tcontainer as string ('movies'),\n\tdestFileSystem as string ('curated-silver'),\n\tdestFolder as string ('movies'),\n\tdestFile as string ('movies[n].parquet')\n}\nsource(output(\n\t\tactors as (name as string)[],\n\t\tavailabilityDate as timestamp,\n\t\tgenre as string,\n\t\trating as string,\n\t\treleaseYear as short,\n\t\truntime as short,\n\t\tstreamingAvailabilityDate as timestamp,\n\t\ttier as short,\n\t\ttitle as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'document',\n\tsystemColumns: true) ~> MoviesCosmosDB\nMoviesCosmosDB foldDown(unroll(actors),\n\tmapColumn(\n\t\tactorName = actors,\n\t\tavailabilityDate,\n\t\tgenre,\n\t\trating,\n\t\treleaseYear,\n\t\truntime,\n\t\tstreamingAvailabilityDate,\n\t\ttier,\n\t\ttitle,\n\t\tid\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> FlattenActors\nFlattenActors sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tfilePattern:($destFile),\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SilverMovies"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/SampleDB_container')]",
-				"[concat(variables('workspaceId'), '/datasets/dest_datalake_parquet')]"
-			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
@@ -1852,7 +2335,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "d7f61950-45f1-4ed7-96f6-ad2f6a8ad080"
+						"spark.autotune.trackingId": "50bc30c3-3675-4d36-b66c-86af792a0502"
 					}
 				},
 				"metadata": {
@@ -1960,6 +2443,19 @@
 						"execution_count": 45
 					},
 					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## readSdpTable()"
+						]
+					},
+					{
 						"cell_type": "code",
 						"metadata": {
 							"jupyter": {
@@ -1993,6 +2489,11 @@
 							"  # Returns:\r\n",
 							"  #     Dataframe containing the relevant rows and columns of an Azure Synapse Dedicated Pool table/view\r\n",
 							"  # ##########################################################################################################################  \r\n",
+							"    assert server is not None, \"Server not specified\"\r\n",
+							"    assert database is not None, \"Database not specified\"\r\n",
+							"    assert schema is not None, \"Schema not specified\"\r\n",
+							"    assert table is not None, \"Table not specified\"\r\n",
+							"\r\n",
 							"    tableName = database + \".\" + schema+ \".\" + table\r\n",
 							"   \r\n",
 							"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
@@ -2014,6 +2515,67 @@
 						],
 						"outputs": [],
 						"execution_count": 47
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## insertSdpTable()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def insertSdpTable(df, schema,table, mode):\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  # Function: insertSdpTable\r\n",
+							"  # Writes a dataframe to an Azure Synapse Dedicated Pool table\r\n",
+							"  # \r\n",
+							"  # Parameters:\r\n",
+							"  #     df              = Dataframe to be written to Azure Synapse Dedicated Pool table.\r\n",
+							"  #     schema          = Schema name of the Azure Synapse Dedicated Pool table.\r\n",
+							"  #     table           = Table Name.\r\n",
+							"  #     mode            = Write mode to table. \r\n",
+							"  #                       Options for write modes are \"error\" or \"errorifexists\" (default), \"overwrite\", \"append\", \"ignore\".\r\n",
+							"  #\r\n",
+							"  # Returns:\r\n",
+							"  #     None\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"    assert server is not None, \"Server not specified\"\r\n",
+							"    assert database is not None, \"Database not specified\"\r\n",
+							"    assert schema is not None, \"Schema not specified\"\r\n",
+							"    assert table is not None, \"Table not specified\"\r\n",
+							"    assert mode in [\"append\",\"overwrite\",\"error\",\"errorifexists\",\"ignore\"], \"Invalid mode specified. Mode should be either append,overwrite,error,errorifexists or ignore\"\r\n",
+							"\r\n",
+							"    tableName = database + \".\" + schema+ \".\" + table\r\n",
+							"\r\n",
+							"    (df.write\r\n",
+							"        .option(Constants.SERVER, server)\r\n",
+							"        .mode(mode)\r\n",
+							"        .synapsesql(tableName))\r\n",
+							"\r\n",
+							"    return\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -2363,12 +2925,12 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "5da44c34-0234-4f4f-8f0c-c51bcac31c14"
+						"spark.autotune.trackingId": "709307ae-6f97-4a47-a026-b54da5d5993c"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"enableDebugMode": false,
+					"enableDebugMode": true,
 					"kernelspec": {
 						"name": "synapse_pyspark",
 						"display_name": "Synapse PySpark"
@@ -2415,7 +2977,7 @@
 							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -2427,7 +2989,41 @@
 							}
 						},
 						"source": [
-							"## Test readSdpTable"
+							"## Test readSdpTable()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+							"display(df)"
+						],
+						"outputs": [],
+						"execution_count": 7
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## Test insertSdpTable()"
 						]
 					},
 					{
@@ -2444,11 +3040,10 @@
 							}
 						},
 						"source": [
-							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
-							"display(df)"
+							"insertSdpTable(df,\"nyct\",\"nyc_tlc_yellow_trip\",\"overwrite\")"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 9
 					}
 				]
 			},
