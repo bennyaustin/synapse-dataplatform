@@ -90,6 +90,122 @@
 									"IngestID": {
 										"value": "@item().IngestID",
 										"type": "Expression"
+									},
+									"SourceSystemName": {
+										"value": "@item().SourceSystemName",
+										"type": "Expression"
+									},
+									"StreamName": {
+										"value": "@item().StreamName",
+										"type": "Expression"
+									},
+									"Backend": {
+										"value": "@item().Backend",
+										"type": "Expression"
+									},
+									"EntityName": {
+										"value": "@item().EntityName",
+										"type": "Expression"
+									},
+									"DeltaName": {
+										"value": "@item().DeltaName",
+										"type": "Expression"
+									},
+									"LastDeltaDate": {
+										"value": "@item().LastDeltaDate",
+										"type": "Expression"
+									},
+									"DataFromTimestamp": {
+										"value": "@item().DataFromTimestamp",
+										"type": "Expression"
+									},
+									"DataToTimestamp": {
+										"value": "@item().DataToTimestamp",
+										"type": "Expression"
+									},
+									"LastDeltaNumber": {
+										"value": "@item().LastDeltaNumber",
+										"type": "Expression"
+									},
+									"DataFromNumber": {
+										"value": "@item().DataFromNumber",
+										"type": "Expression"
+									},
+									"DataToNumber": {
+										"value": "@item().DataToNumber",
+										"type": "Expression"
+									},
+									"DataFormat": {
+										"value": "@item().DataFormat",
+										"type": "Expression"
+									},
+									"SourceStructure": {
+										"value": "@item().SourceStructure",
+										"type": "Expression"
+									},
+									"MaxIntervalMinutes": {
+										"value": "@item().MaxIntervalMinutes",
+										"type": "Expression"
+									},
+									"MaxIntervalNumber": {
+										"value": "@item().MaxIntervalNumber",
+										"type": "Expression"
+									},
+									"DataMapping": {
+										"value": "@item().DataMapping",
+										"type": "Expression"
+									},
+									"RunSequence": {
+										"value": "@item().RunSequence",
+										"type": "Expression"
+									},
+									"ActiveFlag": {
+										"value": "@item().ActiveFlag",
+										"type": "Expression"
+									},
+									"L1TransformationReqdFlag": {
+										"value": "@item().L1TransformationReqdFlag",
+										"type": "Expression"
+									},
+									"L2TransformationReqdFlag": {
+										"value": "@item().L2TransformationReqdFlag",
+										"type": "Expression"
+									},
+									"DelayL1TransformationFlag": {
+										"value": "@item().DelayL1TransformationFlag",
+										"type": "Expression"
+									},
+									"DelayL2TransformationFlag": {
+										"value": "@item().DelayL2TransformationFlag",
+										"type": "Expression"
+									},
+									"DestinationRawFileSystem": {
+										"value": "@item().DestinationRawFileSystem",
+										"type": "Expression"
+									},
+									"DestinationRawFolder": {
+										"value": "@item().DestinationRawFolder",
+										"type": "Expression"
+									},
+									"DestinationRawFile": {
+										"value": "@item().DestinationRawFile",
+										"type": "Expression"
+									},
+									"SourceSQL": {
+										"value": "@item().SourceSQL",
+										"type": "Expression"
+									},
+									"StatSQL": {
+										"value": "@item().StatSQL",
+										"type": "Expression"
+									},
+									"ReloadFlag": {
+										"value": "@item().ReloadFlag",
+										"type": "Expression"
+									},
+									"ADFPipelineRunID": {
+										"value": "@item().ADFPipelineRunID",
+										"type": "Expression"
 									}
 								}
 							}
