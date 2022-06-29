@@ -55,6 +55,47 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "ForEach Ingest Instance",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Ingest Instances",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Ingest Instances').output",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "IngestREST",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "IngestREST",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"IngestID": {
+										"value": "@item().IngestID",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
