@@ -19,15 +19,24 @@
 					"storedProcedureName": "[ELT].[GetIngestDefinition]",
 					"storedProcedureParameters": {
 						"MaxIngestInstance": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.MaxIngestInstance",
+								"type": "Expression"
+							},
 							"type": "Int32"
 						},
 						"SourceSystemName": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.SourceSystemName",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"StreamName": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.StreamName",
+								"type": "Expression"
+							},
 							"type": "String"
 						}
 					}
