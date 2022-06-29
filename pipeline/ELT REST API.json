@@ -2,6 +2,54 @@
 	"name": "ELT REST API",
 	"properties": {
 		"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
+		"activities": [
+			{
+				"name": "Get Ingest Instances",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[GetIngestDefinition]",
+					"storedProcedureParameters": {
+						"MaxIngestInstance": {
+							"value": "",
+							"type": "Int32"
+						},
+						"SourceSystemName": {
+							"value": "",
+							"type": "String"
+						},
+						"StreamName": {
+							"value": "",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"SourceSystemName": {
+				"type": "string"
+			},
+			"StreamName": {
+				"type": "string"
+			},
+			"MaxIngestInstance": {
+				"type": "string",
+				"defaultValue": "20"
+			}
+		},
 		"folder": {
 			"name": "REST API Pipeline"
 		},
