@@ -818,23 +818,38 @@
 										"type": "Int32"
 									},
 									"LookupColumns": {
-										"value": "",
+										"value": {
+											"value": "@item().LookupColumns",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"NotebookName": {
-										"value": "",
+										"value": {
+											"value": "@item().NotebookName",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"NotebookPath": {
-										"value": "",
+										"value": {
+											"value": "@item().NotebookPath",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWStagingTable": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputDWStagingTable",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWTable": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputDWTable",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWTableWriteMode": {
