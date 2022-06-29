@@ -206,6 +206,22 @@
 									"ADFPipelineRunID": {
 										"value": "@item().ADFPipelineRunID",
 										"type": "Expression"
+									},
+									"BaseURL": {
+										"value": "@item().BaseURL",
+										"type": "Expression"
+									},
+									"ServicePrincipalID": {
+										"value": "@item().ServicePrincipalID",
+										"type": "Expression"
+									},
+									"TenantID": {
+										"value": "@item().TenantID",
+										"type": "Expression"
+									},
+									"AADResource": {
+										"value": "@item().AADResource",
+										"type": "Expression"
 									}
 								}
 							}
