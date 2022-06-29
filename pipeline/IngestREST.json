@@ -187,7 +187,7 @@
 				"typeProperties": {
 					"variableName": "ADFPipelineRunID",
 					"value": {
-						"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
+						"value": "@{if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)}",
 						"type": "Expression"
 					}
 				}
