@@ -853,31 +853,52 @@
 										"type": "String"
 									},
 									"OutputDWTableWriteMode": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputDWTableWriteMode",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CuratedFile": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CuratedFile",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CuratedFileDelimiter": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CuratedFileDelimiter",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CuratedFileFormat": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CuratedFileFormat",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CuratedFileWriteMode": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CuratedFileWriteMode",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CuratedFolder": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CuratedFolder",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL1CurateFileSystem": {
-										"value": "",
+										"value": {
+											"value": "@item().OutputL1CurateFileSystem",
+											"type": "Expression"
+										},
 										"type": "String"
 									}
 								}
