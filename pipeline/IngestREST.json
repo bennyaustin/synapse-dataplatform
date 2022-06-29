@@ -14,7 +14,55 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[InsertIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFPipelineRunID": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DestinationRawFile": {
+							"value": "",
+							"type": "String"
+						},
+						"DestinationRawFileSystem": {
+							"value": "",
+							"type": "String"
+						},
+						"DestinationRawFolder": {
+							"value": "",
+							"type": "String"
+						},
+						"IngestID": {
+							"value": "",
+							"type": "Int32"
+						},
+						"ReloadFlag": {
+							"value": "",
+							"type": "Boolean"
+						},
+						"SourceFileDropFile": {
+							"value": null,
+							"type": "String"
+						},
+						"SourceFileDropFileSystem": {
+							"value": null,
+							"type": "String"
+						},
+						"SourceFileDropFolder": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"folder": {
