@@ -208,19 +208,19 @@
 										"type": "Expression"
 									},
 									"BaseURL": {
-										"value": "@item().BaseURL",
+										"value": "@pipeline().parameters.BaseURL",
 										"type": "Expression"
 									},
 									"ServicePrincipalID": {
-										"value": "@item().ServicePrincipalID",
+										"value": "@pipeline().parameters.ServicePrincipalID",
 										"type": "Expression"
 									},
 									"TenantID": {
-										"value": "@item().TenantID",
+										"value": "@pipeline().parameters.TenantID",
 										"type": "Expression"
 									},
 									"AADResource": {
-										"value": "@item().AADResource",
+										"value": "@pipeline().parameters.AADResource",
 										"type": "Expression"
 									}
 								}
