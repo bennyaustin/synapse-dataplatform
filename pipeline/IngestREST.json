@@ -339,6 +339,73 @@
 					"referenceName": "ControlDB",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "L1 Transformation",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Ingest Success",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(pipeline().parameters.L1TransformationReqdFlag,true)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Get L1Transform Definition",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderStoredProcedureName": "[ELT].[GetTransformDefinition_L1]",
+									"storedProcedureParameters": {
+										"DeltaDate": {
+											"type": "DateTime",
+											"value": {
+												"value": "@pipeline().parameters.DataFromTimestamp",
+												"type": "Expression"
+											}
+										},
+										"IngestID": {
+											"type": "Int32",
+											"value": {
+												"value": "@pipeline().parameters.IngestID",
+												"type": "Expression"
+											}
+										}
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ControlDB_Dataset",
+									"type": "DatasetReference",
+									"parameters": {
+										"Table": "Not Applicable",
+										"Schema": "Not Applicable"
+									}
+								},
+								"firstRowOnly": false
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
