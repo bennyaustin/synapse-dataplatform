@@ -1,5 +1,5 @@
 {
-	"name": "ELT REST API",
+	"name": "Master ELT REST API",
 	"properties": {
 		"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
 		"activities": [
