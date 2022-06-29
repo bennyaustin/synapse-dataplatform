@@ -518,284 +518,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/ELT REST API')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
-				"activities": [
-					{
-						"name": "Get Ingest Instances",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition]",
-								"storedProcedureParameters": {
-									"MaxIngestInstance": {
-										"type": "Int32",
-										"value": {
-											"value": "@pipeline().parameters.MaxIngestInstance",
-											"type": "Expression"
-										}
-									},
-									"SourceSystemName": {
-										"type": "String",
-										"value": {
-											"value": "@pipeline().parameters.SourceSystemName",
-											"type": "Expression"
-										}
-									},
-									"StreamName": {
-										"type": "String",
-										"value": {
-											"value": "@pipeline().parameters.StreamName",
-											"type": "Expression"
-										}
-									}
-								},
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ControlDB_Dataset",
-								"type": "DatasetReference",
-								"parameters": {
-									"Table": "Not Applicable",
-									"Schema": "Not Applicable"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach Ingest Instance",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get Ingest Instances",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get Ingest Instances').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "IngestREST",
-									"type": "ExecutePipeline",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "IngestREST",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {
-											"IngestID": {
-												"value": "@item().IngestID",
-												"type": "Expression"
-											},
-											"SourceSystemName": {
-												"value": "@item().SourceSystemName",
-												"type": "Expression"
-											},
-											"StreamName": {
-												"value": "@item().StreamName",
-												"type": "Expression"
-											},
-											"Backend": {
-												"value": "@item().Backend",
-												"type": "Expression"
-											},
-											"EntityName": {
-												"value": "@item().EntityName",
-												"type": "Expression"
-											},
-											"DeltaName": {
-												"value": "@item().DeltaName",
-												"type": "Expression"
-											},
-											"LastDeltaDate": {
-												"value": "@item().LastDeltaDate",
-												"type": "Expression"
-											},
-											"DataFromTimestamp": {
-												"value": "@item().DataFromTimestamp",
-												"type": "Expression"
-											},
-											"DataToTimestamp": {
-												"value": "@item().DataToTimestamp",
-												"type": "Expression"
-											},
-											"LastDeltaNumber": {
-												"value": "@item().LastDeltaNumber",
-												"type": "Expression"
-											},
-											"DataFromNumber": {
-												"value": "@item().DataFromNumber",
-												"type": "Expression"
-											},
-											"DataToNumber": {
-												"value": "@item().DataToNumber",
-												"type": "Expression"
-											},
-											"DataFormat": {
-												"value": "@item().DataFormat",
-												"type": "Expression"
-											},
-											"SourceStructure": {
-												"value": "@item().SourceStructure",
-												"type": "Expression"
-											},
-											"MaxIntervalMinutes": {
-												"value": "@item().MaxIntervalMinutes",
-												"type": "Expression"
-											},
-											"MaxIntervalNumber": {
-												"value": "@item().MaxIntervalNumber",
-												"type": "Expression"
-											},
-											"DataMapping": {
-												"value": "@item().DataMapping",
-												"type": "Expression"
-											},
-											"RunSequence": {
-												"value": "@item().RunSequence",
-												"type": "Expression"
-											},
-											"ActiveFlag": {
-												"value": "@item().ActiveFlag",
-												"type": "Expression"
-											},
-											"L1TransformationReqdFlag": {
-												"value": "@item().L1TransformationReqdFlag",
-												"type": "Expression"
-											},
-											"L2TransformationReqdFlag": {
-												"value": "@item().L2TransformationReqdFlag",
-												"type": "Expression"
-											},
-											"DelayL1TransformationFlag": {
-												"value": "@item().DelayL1TransformationFlag",
-												"type": "Expression"
-											},
-											"DelayL2TransformationFlag": {
-												"value": "@item().DelayL2TransformationFlag",
-												"type": "Expression"
-											},
-											"DestinationRawFileSystem": {
-												"value": "@item().DestinationRawFileSystem",
-												"type": "Expression"
-											},
-											"DestinationRawFolder": {
-												"value": "@item().DestinationRawFolder",
-												"type": "Expression"
-											},
-											"DestinationRawFile": {
-												"value": "@item().DestinationRawFile",
-												"type": "Expression"
-											},
-											"SourceSQL": {
-												"value": "@item().SourceSQL",
-												"type": "Expression"
-											},
-											"StatSQL": {
-												"value": "@item().StatSQL",
-												"type": "Expression"
-											},
-											"ReloadFlag": {
-												"value": "@item().ReloadFlag",
-												"type": "Expression"
-											},
-											"ADFPipelineRunID": {
-												"value": "@item().ADFPipelineRunID",
-												"type": "Expression"
-											},
-											"BaseURL": {
-												"value": "@pipeline().parameters.BaseURL",
-												"type": "Expression"
-											},
-											"ServicePrincipalID": {
-												"value": "@pipeline().parameters.ServicePrincipalID",
-												"type": "Expression"
-											},
-											"TenantID": {
-												"value": "@pipeline().parameters.TenantID",
-												"type": "Expression"
-											},
-											"AADResource": {
-												"value": "@pipeline().parameters.AADResource",
-												"type": "Expression"
-											}
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"SourceSystemName": {
-						"type": "string",
-						"defaultValue": "Purview"
-					},
-					"StreamName": {
-						"type": "string",
-						"defaultValue": "%"
-					},
-					"MaxIngestInstance": {
-						"type": "string",
-						"defaultValue": "20"
-					},
-					"BaseURL": {
-						"type": "string",
-						"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
-					},
-					"ServicePrincipalID": {
-						"type": "string",
-						"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
-					},
-					"TenantID": {
-						"type": "string",
-						"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-					},
-					"AADResource": {
-						"type": "string",
-						"defaultValue": "https://purview.azure.net"
-					}
-				},
-				"folder": {
-					"name": "REST API Pipeline"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
-				"[concat(variables('workspaceId'), '/pipelines/IngestREST')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/Get Bearer Auth')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -894,7 +616,7 @@
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
-								"activity": "Set ADFPipelineRunID",
+								"activity": "ADFPipelineRunID",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1066,14 +788,14 @@
 						]
 					},
 					{
-						"name": "Set ADFPipelineRunID",
+						"name": "ADFPipelineRunID",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "ADFPipelineRunID",
 							"value": {
-								"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
+								"value": "@{if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)}",
 								"type": "Expression"
 							}
 						}
@@ -1272,213 +994,11 @@
 								"referenceName": "ControlDB_Dataset",
 								"type": "DatasetReference",
 								"parameters": {
-									"Table": "Not Applicable",
-									"Schema": "Not Applicable"
+									"Table": "NotApplicable",
+									"Schema": "NotApplicable"
 								}
 							},
 							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach L1Transform",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get L1Transform Definition",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get L1Transform Definition').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Insert L1Transform Instance",
-									"type": "SqlServerStoredProcedure",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"storedProcedureName": "[ELT].[InsertTransformInstance_L1]",
-										"storedProcedureParameters": {
-											"CustomParameters": {
-												"value": {
-													"value": "@item().CustomParameters",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"IngestADFPipelineRunID": {
-												"value": {
-													"value": "@variables('ADFPipelineRunID')",
-													"type": "Expression"
-												},
-												"type": "Guid"
-											},
-											"IngestCount": {
-												"value": {
-													"value": "@activity('Source To Datalake Bronze Zone').output.rowsCopied",
-													"type": "Expression"
-												},
-												"type": "Int32"
-											},
-											"IngestID": {
-												"value": {
-													"value": "@item.IngestID",
-													"type": "Expression"
-												},
-												"type": "Int32"
-											},
-											"IngestInstanceID": {
-												"value": null,
-												"type": "Int32"
-											},
-											"InputFileHeaderFlag": {
-												"value": {
-													"value": "@item().InputFileHeaderFlag",
-													"type": "Expression"
-												},
-												"type": "Boolean"
-											},
-											"InputRawFile": {
-												"value": {
-													"value": "@pipeline().parameters.DestinationRawFile",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"InputRawFileDelimiter": {
-												"value": {
-													"value": "@item().InputRawFileDelimiter",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"InputRawFileFolder": {
-												"value": {
-													"value": "@pipeline().parameters.DestinationRawFolder",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"InputRawFileSystem": {
-												"value": {
-													"value": "@pipeline().parameters.DestinationRawFileSystem",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"L1TransformID": {
-												"value": {
-													"value": "@item().L1TransformID",
-													"type": "Expression"
-												},
-												"type": "Int32"
-											},
-											"LookupColumns": {
-												"value": {
-													"value": "@item().LookupColumns",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"NotebookName": {
-												"value": {
-													"value": "@item().NotebookName",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"NotebookPath": {
-												"value": {
-													"value": "@item().NotebookPath",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputDWStagingTable": {
-												"value": {
-													"value": "@item().OutputDWStagingTable",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputDWTable": {
-												"value": {
-													"value": "@item().OutputDWTable",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputDWTableWriteMode": {
-												"value": {
-													"value": "@item().OutputDWTableWriteMode",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CuratedFile": {
-												"value": {
-													"value": "@item().OutputL1CuratedFile",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CuratedFileDelimiter": {
-												"value": {
-													"value": "@item().OutputL1CuratedFileDelimiter",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CuratedFileFormat": {
-												"value": {
-													"value": "@item().OutputL1CuratedFileFormat",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CuratedFileWriteMode": {
-												"value": {
-													"value": "@item().OutputL1CuratedFileWriteMode",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CuratedFolder": {
-												"value": {
-													"value": "@item().OutputL1CuratedFolder",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
-											"OutputL1CurateFileSystem": {
-												"value": {
-													"value": "@item().OutputL1CurateFileSystem",
-													"type": "Expression"
-												},
-												"type": "String"
-											}
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "ControlDB",
-										"type": "LinkedServiceReference"
-									}
-								}
-							]
 						}
 					},
 					{
@@ -1531,8 +1051,8 @@
 								"referenceName": "ControlDB_Dataset",
 								"type": "DatasetReference",
 								"parameters": {
-									"Table": "Not Applicable",
-									"Schema": "Not Applicable"
+									"Table": "NotApplicable",
+									"Schema": "NotApplicable"
 								}
 							},
 							"firstRowOnly": false
@@ -1796,6 +1316,208 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "ForEach L1Transform",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get L1Transform Definition",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get L1Transform Definition').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Insert L1Transform Instance",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[ELT].[InsertTransformInstance_L1]",
+										"storedProcedureParameters": {
+											"CustomParameters": {
+												"value": {
+													"value": "@item().CustomParameters",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"IngestADFPipelineRunID": {
+												"value": {
+													"value": "@variables('ADFPipelineRunID')",
+													"type": "Expression"
+												},
+												"type": "Guid"
+											},
+											"IngestCount": {
+												"value": {
+													"value": "@activity('Source To Datalake Bronze Zone').output.rowsCopied",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"IngestID": {
+												"value": {
+													"value": "@item().IngestID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"IngestInstanceID": {
+												"value": null,
+												"type": "Int32"
+											},
+											"InputFileHeaderFlag": {
+												"value": {
+													"value": "@item().InputFileHeaderFlag",
+													"type": "Expression"
+												},
+												"type": "Boolean"
+											},
+											"InputRawFile": {
+												"value": {
+													"value": "@pipeline().parameters.DestinationRawFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputRawFileDelimiter": {
+												"value": {
+													"value": "@item().InputRawFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputRawFileFolder": {
+												"value": {
+													"value": "@pipeline().parameters.DestinationRawFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputRawFileSystem": {
+												"value": {
+													"value": "@pipeline().parameters.DestinationRawFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"L1TransformID": {
+												"value": {
+													"value": "@item().L1TransformID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"LookupColumns": {
+												"value": {
+													"value": "@item().LookupColumns",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"NotebookName": {
+												"value": {
+													"value": "@item().NotebookName",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"NotebookPath": {
+												"value": {
+													"value": "@item().NotebookPath",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWStagingTable": {
+												"value": {
+													"value": "@item().OutputDWStagingTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTable": {
+												"value": {
+													"value": "@item().OutputDWTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTableWriteMode": {
+												"value": {
+													"value": "@item().OutputDWTableWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CuratedFile": {
+												"value": {
+													"value": "@item().OutputL1CuratedFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CuratedFileDelimiter": {
+												"value": {
+													"value": "@item().OutputL1CuratedFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CuratedFileFormat": {
+												"value": {
+													"value": "@item().OutputL1CuratedFileFormat",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CuratedFileWriteMode": {
+												"value": {
+													"value": "@item().OutputL1CuratedFileWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CuratedFolder": {
+												"value": {
+													"value": "@item().OutputL1CuratedFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL1CurateFileSystem": {
+												"value": {
+													"value": "@item().OutputL1CurateFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "ControlDB",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -1912,7 +1634,7 @@
 					}
 				},
 				"folder": {
-					"name": "REST API Pipeline"
+					"name": "REST API Pipelines"
 				},
 				"annotations": []
 			},
@@ -2159,6 +1881,284 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('workspaceId'), '/pipelines/SQLPool-Pause-Resume-Scale')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Master ELT REST API')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
+				"activities": [
+					{
+						"name": "Get Ingest Instances",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition]",
+								"storedProcedureParameters": {
+									"MaxIngestInstance": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.MaxIngestInstance",
+											"type": "Expression"
+										}
+									},
+									"SourceSystemName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.SourceSystemName",
+											"type": "Expression"
+										}
+									},
+									"StreamName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.StreamName",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "NotApplicable",
+									"Schema": "NotApplicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach Ingest Instance",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Ingest Instances",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Ingest Instances').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestREST",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "IngestREST",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"IngestID": {
+												"value": "@item().IngestID",
+												"type": "Expression"
+											},
+											"SourceSystemName": {
+												"value": "@item().SourceSystemName",
+												"type": "Expression"
+											},
+											"StreamName": {
+												"value": "@item().StreamName",
+												"type": "Expression"
+											},
+											"Backend": {
+												"value": "@item().Backend",
+												"type": "Expression"
+											},
+											"EntityName": {
+												"value": "@item().EntityName",
+												"type": "Expression"
+											},
+											"DeltaName": {
+												"value": "@item().DeltaName",
+												"type": "Expression"
+											},
+											"LastDeltaDate": {
+												"value": "@item().LastDeltaDate",
+												"type": "Expression"
+											},
+											"DataFromTimestamp": {
+												"value": "@item().DataFromTimestamp",
+												"type": "Expression"
+											},
+											"DataToTimestamp": {
+												"value": "@item().DataToTimestamp",
+												"type": "Expression"
+											},
+											"LastDeltaNumber": {
+												"value": "@item().LastDeltaNumber",
+												"type": "Expression"
+											},
+											"DataFromNumber": {
+												"value": "@item().DataFromNumber",
+												"type": "Expression"
+											},
+											"DataToNumber": {
+												"value": "@item().DataToNumber",
+												"type": "Expression"
+											},
+											"DataFormat": {
+												"value": "@item().DataFormat",
+												"type": "Expression"
+											},
+											"SourceStructure": {
+												"value": "@item().SourceStructure",
+												"type": "Expression"
+											},
+											"MaxIntervalMinutes": {
+												"value": "@item().MaxIntervalMinutes",
+												"type": "Expression"
+											},
+											"MaxIntervalNumber": {
+												"value": "@item().MaxIntervalNumber",
+												"type": "Expression"
+											},
+											"DataMapping": {
+												"value": "@item().DataMapping",
+												"type": "Expression"
+											},
+											"RunSequence": {
+												"value": "@item().RunSequence",
+												"type": "Expression"
+											},
+											"ActiveFlag": {
+												"value": "@item().ActiveFlag",
+												"type": "Expression"
+											},
+											"L1TransformationReqdFlag": {
+												"value": "@item().L1TransformationReqdFlag",
+												"type": "Expression"
+											},
+											"L2TransformationReqdFlag": {
+												"value": "@item().L2TransformationReqdFlag",
+												"type": "Expression"
+											},
+											"DelayL1TransformationFlag": {
+												"value": "@item().DelayL1TransformationFlag",
+												"type": "Expression"
+											},
+											"DelayL2TransformationFlag": {
+												"value": "@item().DelayL2TransformationFlag",
+												"type": "Expression"
+											},
+											"DestinationRawFileSystem": {
+												"value": "@item().DestinationRawFileSystem",
+												"type": "Expression"
+											},
+											"DestinationRawFolder": {
+												"value": "@item().DestinationRawFolder",
+												"type": "Expression"
+											},
+											"DestinationRawFile": {
+												"value": "@item().DestinationRawFile",
+												"type": "Expression"
+											},
+											"SourceSQL": {
+												"value": "@item().SourceSQL",
+												"type": "Expression"
+											},
+											"StatSQL": {
+												"value": "@item().StatSQL",
+												"type": "Expression"
+											},
+											"ReloadFlag": {
+												"value": "@item().ReloadFlag",
+												"type": "Expression"
+											},
+											"ADFPipelineRunID": {
+												"value": "@item().ADFPipelineRunID",
+												"type": "Expression"
+											},
+											"BaseURL": {
+												"value": "@pipeline().parameters.BaseURL",
+												"type": "Expression"
+											},
+											"ServicePrincipalID": {
+												"value": "@pipeline().parameters.ServicePrincipalID",
+												"type": "Expression"
+											},
+											"TenantID": {
+												"value": "@pipeline().parameters.TenantID",
+												"type": "Expression"
+											},
+											"AADResource": {
+												"value": "@pipeline().parameters.AADResource",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceSystemName": {
+						"type": "string",
+						"defaultValue": "Purview"
+					},
+					"StreamName": {
+						"type": "string",
+						"defaultValue": "%"
+					},
+					"MaxIngestInstance": {
+						"type": "string",
+						"defaultValue": "20"
+					},
+					"BaseURL": {
+						"type": "string",
+						"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+					},
+					"ServicePrincipalID": {
+						"type": "string",
+						"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+					},
+					"TenantID": {
+						"type": "string",
+						"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+					},
+					"AADResource": {
+						"type": "string",
+						"defaultValue": "https://purview.azure.net"
+					}
+				},
+				"folder": {
+					"name": "REST API Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
+				"[concat(variables('workspaceId'), '/pipelines/IngestREST')]"
 			]
 		},
 		{
@@ -4116,18 +4116,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/dw01')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/small')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -4222,6 +4210,18 @@
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "australiaeast"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dw01')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],
