@@ -413,7 +413,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Stored procedure1",
+							"name": "Insert L1Transform Instance",
 							"type": "SqlServerStoredProcedure",
 							"dependsOn": [],
 							"policy": {
