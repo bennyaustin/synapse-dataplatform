@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "5da44c34-0234-4f4f-8f0c-c51bcac31c14"
+				"spark.autotune.trackingId": "709307ae-6f97-4a47-a026-b54da5d5993c"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 				],
-				"execution_count": 2
+				"execution_count": 6
 			},
 			{
 				"cell_type": "markdown",
@@ -85,7 +85,40 @@
 					}
 				},
 				"source": [
-					"## Test readSdpTable"
+					"## Test readSdpTable()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+					"display(df)"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Test insertSdpTable()"
 				]
 			},
 			{
@@ -102,10 +135,9 @@
 					}
 				},
 				"source": [
-					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
-					"display(df)"
+					"insertSdpTable(df,\"nyct\",\"nyc_tlc_yellow_trip\",\"overwrite\")"
 				],
-				"execution_count": null
+				"execution_count": 9
 			}
 		]
 	}
