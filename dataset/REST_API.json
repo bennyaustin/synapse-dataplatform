@@ -35,6 +35,9 @@
 			},
 			"AADResource": {
 				"type": "string"
+			},
+			"RelativeURL": {
+				"type": "string"
 			}
 		},
 		"folder": {
@@ -42,6 +45,12 @@
 		},
 		"annotations": [],
 		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().RelativeURL",
+				"type": "Expression"
+			}
+		},
 		"schema": []
 	}
 }
