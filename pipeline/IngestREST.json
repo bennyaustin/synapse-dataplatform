@@ -170,6 +170,18 @@
 			},
 			"ADFPipelineRunID": {
 				"type": "string"
+			},
+			"BaseURL": {
+				"type": "string"
+			},
+			"ServicePrincipalID": {
+				"type": "string"
+			},
+			"TenantID": {
+				"type": "string"
+			},
+			"AADResource": {
+				"type": "string"
 			}
 		},
 		"folder": {
