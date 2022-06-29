@@ -6,7 +6,14 @@
 			{
 				"name": "Insert IngestInstance - Running",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set ADFPipelineRunID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -20,7 +27,7 @@
 					"storedProcedureParameters": {
 						"ADFPipelineRunID": {
 							"value": {
-								"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
+								"value": "@variables('ADFPipelineRunID')",
 								"type": "Expression"
 							},
 							"type": "Guid"
@@ -171,6 +178,19 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Set ADFPipelineRunID",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "ADFPipelineRunID",
+					"value": {
+						"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -275,6 +295,11 @@
 			},
 			"AADResource": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"ADFPipelineRunID": {
+				"type": "String"
 			}
 		},
 		"folder": {
