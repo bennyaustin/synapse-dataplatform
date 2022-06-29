@@ -82,7 +82,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "IngestREST",
+									"referenceName": "IngestREST_copy1",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true,
