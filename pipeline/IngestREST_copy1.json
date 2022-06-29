@@ -451,11 +451,11 @@
 				}
 			},
 			{
-				"name": "ForEach L1Transform",
+				"name": "ForEach L2Transform",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get L1Transform Definition",
+						"activity": "Get L2Transform Definition",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -464,13 +464,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get L1Transform Definition').output.value",
+						"value": "@activity('Get L2Transform Definition').output.value",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Insert L1Transform Instance",
+							"name": "Insert L2Transform Instance",
 							"type": "SqlServerStoredProcedure",
 							"dependsOn": [],
 							"policy": {
@@ -482,11 +482,46 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"storedProcedureName": "[ELT].[InsertTransformInstance_L1]",
+								"storedProcedureName": "[ELT].[InsertTransformInstance_L2]",
 								"storedProcedureParameters": {
 									"CustomParameters": {
 										"value": {
 											"value": "@item().CustomParameters",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"DataFromNumber": {
+										"value": {
+											"value": "@item().DataFromNumber",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"DataFromTimestamp": {
+										"value": {
+											"value": "@item().DataToTimestamp",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"DataToNumber": {
+										"value": {
+											"value": "@item().DataToNumber",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"DataToTimestamp": {
+										"value": {
+											"value": "@item().DataToTimestamp",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"DeltaName": {
+										"value": {
+											"value": "@item().DeltaName",
 											"type": "Expression"
 										},
 										"type": "String"
@@ -498,23 +533,40 @@
 										},
 										"type": "Guid"
 									},
-									"IngestCount": {
-										"value": {
-											"value": "@activity('Source To Datalake Bronze Zone').output.rowsCopied",
-											"type": "Expression"
-										},
-										"type": "Int32"
-									},
 									"IngestID": {
 										"value": {
-											"value": "@item.IngestID",
+											"value": "@item().IngestID",
 											"type": "Expression"
 										},
 										"type": "Int32"
 									},
-									"IngestInstanceID": {
-										"value": "",
-										"type": "Int32"
+									"InputDWTable": {
+										"value": {
+											"value": "@item().InputDWTable",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"InputFile": {
+										"value": {
+											"value": "@item().InputFile",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"InputFileDelimiter": {
+										"value": {
+											"value": "@item().InputFileDelimiter",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"InputFileFolder": {
+										"value": {
+											"value": "@item().InputFileFolder",
+											"type": "Expression"
+										},
+										"type": "String"
 									},
 									"InputFileHeaderFlag": {
 										"value": {
@@ -523,33 +575,16 @@
 										},
 										"type": "Boolean"
 									},
-									"InputRawFile": {
+									"InputFileSystem": {
 										"value": {
-											"value": "@pipeline().parameters.DestinationRawFile",
+											"value": "@item().InputFileSystem",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"InputRawFileDelimiter": {
-										"value": {
-											"value": "@item().InputRawFileDelimiter",
-											"type": "Expression"
-										},
-										"type": "String"
-									},
-									"InputRawFileFolder": {
-										"value": {
-											"value": "@pipeline().parameters.DestinationRawFolder",
-											"type": "Expression"
-										},
-										"type": "String"
-									},
-									"InputRawFileSystem": {
-										"value": {
-											"value": "@pipeline().parameters.DestinationRawFileSystem",
-											"type": "Expression"
-										},
-										"type": "String"
+									"L1TransformADFPipelineRunID": {
+										"value": null,
+										"type": "Guid"
 									},
 									"L1TransformID": {
 										"value": {
@@ -558,12 +593,34 @@
 										},
 										"type": "Int32"
 									},
+									"L2TransformID": {
+										"value": {
+											"value": "@item().L2TransformID",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"LastDeltaDate": {
+										"value": null,
+										"type": "DateTime"
+									},
+									"LastDeltaNumber": {
+										"value": null,
+										"type": "Int32"
+									},
 									"LookupColumns": {
 										"value": {
 											"value": "@item().LookupColumns",
 											"type": "Expression"
 										},
 										"type": "String"
+									},
+									"MaxRetries": {
+										"value": {
+											"value": "@item().MaxRetries",
+											"type": "Expression"
+										},
+										"type": "Int32"
 									},
 									"NotebookName": {
 										"value": {
@@ -600,44 +657,44 @@
 										},
 										"type": "String"
 									},
-									"OutputL1CuratedFile": {
+									"OutputL2CuratedFile": {
 										"value": {
-											"value": "@item().OutputL1CuratedFile",
+											"value": "@item().OutputL2CuratedFile",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"OutputL1CuratedFileDelimiter": {
+									"OutputL2CuratedFileDelimiter": {
 										"value": {
-											"value": "@item().OutputL1CuratedFileDelimiter",
+											"value": "@item().OutputL2CuratedFileDelimiter",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"OutputL1CuratedFileFormat": {
+									"OutputL2CuratedFileFormat": {
 										"value": {
-											"value": "@item().OutputL1CuratedFileFormat",
+											"value": "@item().OutputL2CuratedFileFormat",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"OutputL1CuratedFileWriteMode": {
+									"OutputL2CuratedFileWriteMode": {
 										"value": {
-											"value": "@item().OutputL1CuratedFileWriteMode",
+											"value": "@item().OutputL2CuratedFileWriteMode",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"OutputL1CuratedFolder": {
+									"OutputL2CuratedFolder": {
 										"value": {
-											"value": "@item().OutputL1CuratedFolder",
+											"value": "@item().OutputL2CuratedFolder",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
-									"OutputL1CurateFileSystem": {
+									"OutputL2CurateFileSystem": {
 										"value": {
-											"value": "@item().OutputL1CurateFileSystem",
+											"value": "@item().OutputL2CurateFileSystem",
 											"type": "Expression"
 										},
 										"type": "String"
@@ -647,6 +704,37 @@
 							"linkedServiceName": {
 								"referenceName": "ControlDB",
 								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach L1Transform",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get L1Transform Definition",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get L1Transform Definition').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
 							}
 						}
 					]
