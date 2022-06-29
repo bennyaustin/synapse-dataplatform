@@ -669,7 +669,180 @@
 						"value": "@activity('Get L2Transform Definition').output.value",
 						"type": "Expression"
 					},
-					"isSequential": true
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Insert L2Transform Instance",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[ELT].[InsertTransformInstance_L2]",
+								"storedProcedureParameters": {
+									"CustomParameters": {
+										"value": {
+											"value": "@item().CustomParameters",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"DataFromNumber": {
+										"value": {
+											"value": "@item().DataFromNumber",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"DataFromTimestamp": {
+										"value": {
+											"value": "@item().DataToTimestamp",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"DataToNumber": {
+										"value": {
+											"value": "@item().DataToNumber",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									},
+									"DataToTimestamp": {
+										"value": {
+											"value": "@item().DataToTimestamp",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"DeltaName": {
+										"value": {
+											"value": "@item().DeltaName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"IngestADFPipelineRunID": {
+										"value": {
+											"value": "@variables('ADFPipelineRunID')",
+											"type": "Expression"
+										},
+										"type": "Guid"
+									},
+									"IngestID": {
+										"value": "",
+										"type": "Int32"
+									},
+									"InputDWTable": {
+										"value": "",
+										"type": "String"
+									},
+									"InputFile": {
+										"value": "",
+										"type": "String"
+									},
+									"InputFileDelimiter": {
+										"value": "",
+										"type": "String"
+									},
+									"InputFileFolder": {
+										"value": "",
+										"type": "String"
+									},
+									"InputFileHeaderFlag": {
+										"value": "",
+										"type": "Boolean"
+									},
+									"InputFileSystem": {
+										"value": "",
+										"type": "String"
+									},
+									"L1TransformADFPipelineRunID": {
+										"value": "",
+										"type": "Guid"
+									},
+									"L1TransformID": {
+										"value": "",
+										"type": "Int32"
+									},
+									"L2TransformID": {
+										"value": "",
+										"type": "Int32"
+									},
+									"LastDeltaDate": {
+										"value": "",
+										"type": "DateTime"
+									},
+									"LastDeltaNumber": {
+										"value": "",
+										"type": "Int32"
+									},
+									"LookupColumns": {
+										"value": "",
+										"type": "String"
+									},
+									"MaxRetries": {
+										"value": "",
+										"type": "Int32"
+									},
+									"NotebookName": {
+										"value": "",
+										"type": "String"
+									},
+									"NotebookPath": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputDWStagingTable": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputDWTable": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputDWTableWriteMode": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CuratedFile": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CuratedFileDelimiter": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CuratedFileFormat": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CuratedFileWriteMode": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CuratedFolder": {
+										"value": "",
+										"type": "String"
+									},
+									"OutputL2CurateFileSystem": {
+										"value": "",
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ControlDB",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
 				}
 			}
 		],
