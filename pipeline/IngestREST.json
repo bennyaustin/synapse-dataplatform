@@ -1,0 +1,10 @@
+{
+	"name": "IngestREST",
+	"properties": {
+		"description": "Generic Pipeline to ingest data from any REST API",
+		"folder": {
+			"name": "REST API Pipeline"
+		},
+		"annotations": []
+	}
+}
