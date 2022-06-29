@@ -70,7 +70,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Ingest Instances').output",
+						"value": "@activity('Get Ingest Instances').output.value",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -88,7 +88,7 @@
 								"waitOnCompletion": true,
 								"parameters": {
 									"IngestID": {
-										"value": "@{item().IngestID}",
+										"value": "@item().IngestID",
 										"type": "Expression"
 									},
 									"SourceSystemName": {
