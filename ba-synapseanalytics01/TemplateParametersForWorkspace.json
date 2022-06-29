@@ -5,6 +5,9 @@
 		"workspaceName": {
 			"value": "ba-synapseanalytics01"
 		},
+		"SampleDB_connectionString": {
+			"value": ""
+		},
 		"ba-synapseanalytics01-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
