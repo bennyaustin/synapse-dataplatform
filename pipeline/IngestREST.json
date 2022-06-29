@@ -26,23 +26,38 @@
 							"type": "Guid"
 						},
 						"DestinationRawFile": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.DestinationRawFile",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"DestinationRawFileSystem": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.DestinationRawFileSystem",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"DestinationRawFolder": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.DestinationRawFolder",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"IngestID": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.IngestID",
+								"type": "Expression"
+							},
 							"type": "Int32"
 						},
 						"ReloadFlag": {
-							"value": "",
+							"value": {
+								"value": "@pipeline().parameters.ReloadFlag",
+								"type": "Expression"
+							},
 							"type": "Boolean"
 						},
 						"SourceFileDropFile": {
