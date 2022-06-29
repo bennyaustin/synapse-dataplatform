@@ -1,22 +1,14 @@
 {
-	"name": "PurviewBearerToken",
+	"name": "AtlasREST",
 	"properties": {
-		"description": "AAD Service Principal Authentication that returns a bearer token for Purview endpoint",
-		"parameters": {
-			"TenantID": {
-				"type": "String"
-			},
-			"ClientID": {
-				"type": "String"
-			}
-		},
+		"description": "Endpoint for Purview Atlas REST APIs",
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://login.microsoftonline.com",
+			"url": "https://ba-purview02-aug-pubpreview.purview.azure.com",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "AadServicePrincipal",
-			"servicePrincipalId": "@{linkedService().ClientID}",
+			"servicePrincipalId": "5e07b142-92b4-4671-83c0-e824bc93da6c",
 			"servicePrincipalKey": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
@@ -25,7 +17,7 @@
 				},
 				"secretName": "ba-purview-spn"
 			},
-			"tenant": "@{linkedService().TenantID}",
+			"tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
 			"aadResourceId": "https://purview.azure.net"
 		},
 		"connectVia": {
