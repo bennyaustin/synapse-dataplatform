@@ -20,7 +20,7 @@
 					"storedProcedureParameters": {
 						"ADFPipelineRunID": {
 							"value": {
-								"value": "@pipeline().RunId",
+								"value": "@if(empty(pipeline().parameters.ADFPipelineRunID),pipeline().RunId,pipeline().parameters.ADFPipelineRunID)",
 								"type": "Expression"
 							},
 							"type": "Guid"
