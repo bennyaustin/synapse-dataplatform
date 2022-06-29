@@ -8,7 +8,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Set ADFPipelineRunID",
+						"activity": "ADFPipelineRunID",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -180,7 +180,7 @@
 				]
 			},
 			{
-				"name": "Set ADFPipelineRunID",
+				"name": "ADFPipelineRunID",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
