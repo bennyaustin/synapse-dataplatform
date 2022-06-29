@@ -1,0 +1,42 @@
+{
+	"name": "REST",
+	"properties": {
+		"description": "Parametrized Linked Service for a REST API data source using Service Principal AAD Authentication",
+		"parameters": {
+			"BaseURL": {
+				"type": "String"
+			},
+			"ServicePrincipalID": {
+				"type": "String"
+			},
+			"TenantID": {
+				"type": "String"
+			},
+			"AADResource": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "@{linkedService().BaseURL}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "AadServicePrincipal",
+			"servicePrincipalId": "@{linkedService().ServicePrincipalID}",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyvault01",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ba-purview-spn"
+			},
+			"tenant": "@{linkedService().TenantID}",
+			"aadResourceId": "@{linkedService().AADResource}"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

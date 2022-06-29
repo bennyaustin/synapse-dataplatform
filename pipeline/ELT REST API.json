@@ -1,0 +1,268 @@
+{
+	"name": "ELT REST API",
+	"properties": {
+		"description": "Wrapper Pipeline that Extracts, Loads and Transforms data from a REST API data source",
+		"activities": [
+			{
+				"name": "Get Ingest Instances",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition]",
+						"storedProcedureParameters": {
+							"MaxIngestInstance": {
+								"type": "Int32",
+								"value": {
+									"value": "@pipeline().parameters.MaxIngestInstance",
+									"type": "Expression"
+								}
+							},
+							"SourceSystemName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								}
+							},
+							"StreamName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ControlDB_Dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"Table": "Not Applicable",
+							"Schema": "Not Applicable"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach Ingest Instance",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Ingest Instances",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Ingest Instances').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "IngestREST",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "IngestREST",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"IngestID": {
+										"value": "@item().IngestID",
+										"type": "Expression"
+									},
+									"SourceSystemName": {
+										"value": "@item().SourceSystemName",
+										"type": "Expression"
+									},
+									"StreamName": {
+										"value": "@item().StreamName",
+										"type": "Expression"
+									},
+									"Backend": {
+										"value": "@item().Backend",
+										"type": "Expression"
+									},
+									"EntityName": {
+										"value": "@item().EntityName",
+										"type": "Expression"
+									},
+									"DeltaName": {
+										"value": "@item().DeltaName",
+										"type": "Expression"
+									},
+									"LastDeltaDate": {
+										"value": "@item().LastDeltaDate",
+										"type": "Expression"
+									},
+									"DataFromTimestamp": {
+										"value": "@item().DataFromTimestamp",
+										"type": "Expression"
+									},
+									"DataToTimestamp": {
+										"value": "@item().DataToTimestamp",
+										"type": "Expression"
+									},
+									"LastDeltaNumber": {
+										"value": "@item().LastDeltaNumber",
+										"type": "Expression"
+									},
+									"DataFromNumber": {
+										"value": "@item().DataFromNumber",
+										"type": "Expression"
+									},
+									"DataToNumber": {
+										"value": "@item().DataToNumber",
+										"type": "Expression"
+									},
+									"DataFormat": {
+										"value": "@item().DataFormat",
+										"type": "Expression"
+									},
+									"SourceStructure": {
+										"value": "@item().SourceStructure",
+										"type": "Expression"
+									},
+									"MaxIntervalMinutes": {
+										"value": "@item().MaxIntervalMinutes",
+										"type": "Expression"
+									},
+									"MaxIntervalNumber": {
+										"value": "@item().MaxIntervalNumber",
+										"type": "Expression"
+									},
+									"DataMapping": {
+										"value": "@item().DataMapping",
+										"type": "Expression"
+									},
+									"RunSequence": {
+										"value": "@item().RunSequence",
+										"type": "Expression"
+									},
+									"ActiveFlag": {
+										"value": "@item().ActiveFlag",
+										"type": "Expression"
+									},
+									"L1TransformationReqdFlag": {
+										"value": "@item().L1TransformationReqdFlag",
+										"type": "Expression"
+									},
+									"L2TransformationReqdFlag": {
+										"value": "@item().L2TransformationReqdFlag",
+										"type": "Expression"
+									},
+									"DelayL1TransformationFlag": {
+										"value": "@item().DelayL1TransformationFlag",
+										"type": "Expression"
+									},
+									"DelayL2TransformationFlag": {
+										"value": "@item().DelayL2TransformationFlag",
+										"type": "Expression"
+									},
+									"DestinationRawFileSystem": {
+										"value": "@item().DestinationRawFileSystem",
+										"type": "Expression"
+									},
+									"DestinationRawFolder": {
+										"value": "@item().DestinationRawFolder",
+										"type": "Expression"
+									},
+									"DestinationRawFile": {
+										"value": "@item().DestinationRawFile",
+										"type": "Expression"
+									},
+									"SourceSQL": {
+										"value": "@item().SourceSQL",
+										"type": "Expression"
+									},
+									"StatSQL": {
+										"value": "@item().StatSQL",
+										"type": "Expression"
+									},
+									"ReloadFlag": {
+										"value": "@item().ReloadFlag",
+										"type": "Expression"
+									},
+									"ADFPipelineRunID": {
+										"value": "@item().ADFPipelineRunID",
+										"type": "Expression"
+									},
+									"BaseURL": {
+										"value": "@item().BaseURL",
+										"type": "Expression"
+									},
+									"ServicePrincipalID": {
+										"value": "@item().ServicePrincipalID",
+										"type": "Expression"
+									},
+									"TenantID": {
+										"value": "@item().TenantID",
+										"type": "Expression"
+									},
+									"AADResource": {
+										"value": "@item().AADResource",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"SourceSystemName": {
+				"type": "string",
+				"defaultValue": "Purview"
+			},
+			"StreamName": {
+				"type": "string",
+				"defaultValue": "%"
+			},
+			"MaxIngestInstance": {
+				"type": "string",
+				"defaultValue": "20"
+			},
+			"BaseURL": {
+				"type": "string",
+				"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+			},
+			"ServicePrincipalID": {
+				"type": "string",
+				"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+			},
+			"TenantID": {
+				"type": "string",
+				"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+			},
+			"AADResource": {
+				"type": "string",
+				"defaultValue": "https://purview.azure.net"
+			}
+		},
+		"folder": {
+			"name": "REST API Pipeline"
+		},
+		"annotations": []
+	}
+}

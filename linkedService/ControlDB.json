@@ -1,0 +1,15 @@
+{
+	"name": "ControlDB",
+	"properties": {
+		"description": "Linked service for ELT Framework database",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sqlserver1.database.windows.net;Initial Catalog=ControlDB"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
