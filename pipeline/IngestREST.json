@@ -4,7 +4,7 @@
 		"description": "Generic Pipeline to ingest data from any REST API",
 		"activities": [
 			{
-				"name": "Stored procedure1",
+				"name": "Insert IngestInstance - Running",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
 				"policy": {
@@ -65,6 +65,98 @@
 				}
 			}
 		],
+		"parameters": {
+			"IngestID": {
+				"type": "int"
+			},
+			"SourceSystemName": {
+				"type": "string"
+			},
+			"StreamName": {
+				"type": "string"
+			},
+			"Backend": {
+				"type": "string"
+			},
+			"EntityName": {
+				"type": "string"
+			},
+			"DeltaName": {
+				"type": "string"
+			},
+			"LastDeltaDate": {
+				"type": "string"
+			},
+			"DataFromTimestamp": {
+				"type": "string"
+			},
+			"DataToTimestamp": {
+				"type": "string"
+			},
+			"LastDeltaNumber": {
+				"type": "int"
+			},
+			"DataFromNumber": {
+				"type": "int"
+			},
+			"DataToNumber": {
+				"type": "int"
+			},
+			"DataFormat": {
+				"type": "string"
+			},
+			"SourceStructure": {
+				"type": "string"
+			},
+			"MaxIntervalMinutes": {
+				"type": "int"
+			},
+			"MaxIntervalNumber": {
+				"type": "int"
+			},
+			"DataMapping": {
+				"type": "string"
+			},
+			"RunSequence": {
+				"type": "int"
+			},
+			"ActiveFlag": {
+				"type": "bool"
+			},
+			"L1TransformationReqdFlag": {
+				"type": "string"
+			},
+			"L2TransformationReqdFlag": {
+				"type": "string"
+			},
+			"DelayL1TransformationFlag": {
+				"type": "bool"
+			},
+			"DelayL2TransformationFlag": {
+				"type": "bool"
+			},
+			"DestinationRawFileSystem": {
+				"type": "string"
+			},
+			"DestinationRawFolder": {
+				"type": "string"
+			},
+			"DestinationRawFile": {
+				"type": "string"
+			},
+			"SourceSQL": {
+				"type": "string"
+			},
+			"StatSQL": {
+				"type": "string"
+			},
+			"ReloadFlag": {
+				"type": "bool"
+			},
+			"ADFPipelineRunID": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "REST API Pipeline"
 		},
