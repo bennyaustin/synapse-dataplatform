@@ -226,6 +226,22 @@
 			"MaxIngestInstance": {
 				"type": "string",
 				"defaultValue": "20"
+			},
+			"BaseURL": {
+				"type": "string",
+				"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+			},
+			"ServicePrincipalID": {
+				"type": "string",
+				"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+			},
+			"TenantID": {
+				"type": "string",
+				"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+			},
+			"AADResource": {
+				"type": "string",
+				"defaultValue": "https://purview.azure.net"
 			}
 		},
 		"folder": {
