@@ -1,0 +1,47 @@
+{
+	"name": "REST_API",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "REST",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseURL": {
+					"value": "@dataset().BaseURL",
+					"type": "Expression"
+				},
+				"ServicePrincipalID": {
+					"value": "@dataset().ServicePrincipalID",
+					"type": "Expression"
+				},
+				"TenantID": {
+					"value": "@dataset().TenantID",
+					"type": "Expression"
+				},
+				"AADResource": {
+					"value": "@dataset().AADResource",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"BaseURL": {
+				"type": "string"
+			},
+			"ServicePrincipalID": {
+				"type": "string"
+			},
+			"TenantID": {
+				"type": "string"
+			},
+			"AADResource": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Azure/REST"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
