@@ -49,8 +49,8 @@
 						"referenceName": "ControlDB_Dataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"Table": "Not Applicable",
-							"Schema": "Not Applicable"
+							"Table": "NotApplicable",
+							"Schema": "NotApplicable"
 						}
 					},
 					"firstRowOnly": false
