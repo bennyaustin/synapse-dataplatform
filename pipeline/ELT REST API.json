@@ -5,7 +5,7 @@
 		"activities": [
 			{
 				"name": "Get Ingest Instances",
-				"type": "SqlServerStoredProcedure",
+				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -16,34 +16,44 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[ELT].[GetIngestDefinition]",
-					"storedProcedureParameters": {
-						"MaxIngestInstance": {
-							"value": {
-								"value": "@pipeline().parameters.MaxIngestInstance",
-								"type": "Expression"
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition]",
+						"storedProcedureParameters": {
+							"MaxIngestInstance": {
+								"type": "Int32",
+								"value": {
+									"value": "@pipeline().parameters.MaxIngestInstance",
+									"type": "Expression"
+								}
 							},
-							"type": "Int32"
+							"SourceSystemName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								}
+							},
+							"StreamName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								}
+							}
 						},
-						"SourceSystemName": {
-							"value": {
-								"value": "@pipeline().parameters.SourceSystemName",
-								"type": "Expression"
-							},
-							"type": "String"
-						},
-						"StreamName": {
-							"value": {
-								"value": "@pipeline().parameters.StreamName",
-								"type": "Expression"
-							},
-							"type": "String"
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ControlDB_Dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"Table": "Not Applicable",
+							"Schema": "Not Applicable"
 						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "ControlDB",
-					"type": "LinkedServiceReference"
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
