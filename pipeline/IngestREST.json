@@ -191,6 +191,154 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Ingest Success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Source To Datalake Bronze Zone",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFIngestPipelineRunID": {
+							"value": {
+								"value": "@variables('ADFPipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DataFromNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataFromTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"DataToNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataToTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"IngestCount": {
+							"value": {
+								"value": "@activity('Source To Datalake Bronze Zone').output.rowsCopied",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"IngestStatus": {
+							"value": "Success",
+							"type": "String"
+						},
+						"ReloadFlag": {
+							"value": {
+								"value": "@pipeline().parameters.ReloadFlag",
+								"type": "Expression"
+							},
+							"type": "Boolean"
+						},
+						"SourceCount": {
+							"value": {
+								"value": "@activity('Source To Datalake Bronze Zone').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Ingest Failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Source To Datalake Bronze Zone",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFIngestPipelineRunID": {
+							"value": {
+								"value": "@variables('ADFPipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DataFromNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataFromTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"DataToNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataToTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"IngestCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"IngestStatus": {
+							"value": "Failure",
+							"type": "String"
+						},
+						"ReloadFlag": {
+							"value": {
+								"value": "@pipeline().parameters.ReloadFlag",
+								"type": "Expression"
+							},
+							"type": "Boolean"
+						},
+						"SourceCount": {
+							"value": null,
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {
