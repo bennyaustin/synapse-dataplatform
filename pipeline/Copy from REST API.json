@@ -37,155 +37,74 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "['properties']['endpoint']"
-								},
-								"sink": {
-									"name": "endpoint",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceGroup']"
-								},
-								"sink": {
-									"name": "resourceGroup",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['subscriptionId']"
-								},
-								"sink": {
-									"name": "subscriptionId",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['location']"
-								},
-								"sink": {
-									"name": "location",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceName']"
-								},
-								"sink": {
-									"name": "resourceName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['resourceId']"
-								},
-								"sink": {
-									"name": "resourceId",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['dataUseGovernance']"
-								},
-								"sink": {
-									"name": "dataUseGovernance",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['createdAt']"
-								},
-								"sink": {
-									"name": "createdAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['lastModifiedAt']"
-								},
-								"sink": {
-									"name": "lastModifiedAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['parentCollection']"
-								},
-								"sink": {
-									"name": "parentCollection",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['lastModifiedAt']"
-								},
-								"sink": {
-									"name": "Collection_lastModifiedAt",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['referenceName']"
-								},
-								"sink": {
-									"name": "referenceName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['collection']['type']"
-								},
-								"sink": {
-									"name": "type",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['properties']['dataSourceCollectionMovingState']"
-								},
-								"sink": {
-									"name": "dataSourceCollectionMovingState",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['kind']"
-								},
-								"sink": {
-									"name": "kind",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "['id']"
-								},
-								"sink": {
-									"name": "id",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
 									"path": "['name']"
 								},
 								"sink": {
-									"name": "name",
-									"type": "String"
+									"name": "name"
+								}
+							},
+							{
+								"source": {
+									"path": "['friendlyName']"
+								},
+								"sink": {
+									"name": "friendlyName"
+								}
+							},
+							{
+								"source": {
+									"path": "['description']"
+								},
+								"sink": {
+									"name": "description"
+								}
+							},
+							{
+								"source": {
+									"path": "['systemData']['createdBy']"
+								},
+								"sink": {
+									"name": "createdBy"
+								}
+							},
+							{
+								"source": {
+									"path": "['systemData']['createdByType']"
+								},
+								"sink": {
+									"name": "createdByType"
+								}
+							},
+							{
+								"source": {
+									"path": "['systemData']['createdAt']"
+								},
+								"sink": {
+									"name": "createdAt"
+								}
+							},
+							{
+								"source": {
+									"path": "['systemData']['lastModifiedByType']"
+								},
+								"sink": {
+									"name": "lastModifiedByType"
+								}
+							},
+							{
+								"source": {
+									"path": "['systemData']['lastModifiedAt']"
+								},
+								"sink": {
+									"name": "lastModifiedAt"
+								}
+							},
+							{
+								"source": {
+									"path": "['collectionProvisioningState']"
+								},
+								"sink": {
+									"name": "collectionProvisioningState"
 								}
 							},
 							{
@@ -193,8 +112,7 @@
 									"path": "$['count']"
 								},
 								"sink": {
-									"name": "count",
-									"type": "String"
+									"name": "count"
 								}
 							}
 						],
