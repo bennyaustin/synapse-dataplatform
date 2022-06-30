@@ -62,6 +62,27 @@
 		"storagecosmosdb1_properties_typeProperties_url": {
 			"value": "https://storagecosmosdb1.dfs.core.windows.net"
 		},
+		"Azure Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Azure"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "100"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://management.azure.com"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://management.azure.com"
+		},
 		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint": {
 			"value": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo"
 		},
