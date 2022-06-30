@@ -86,7 +86,7 @@
 								},
 								"sink": {
 									"name": "createdAt",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
@@ -104,7 +104,7 @@
 								},
 								"sink": {
 									"name": "lastModifiedAt",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
