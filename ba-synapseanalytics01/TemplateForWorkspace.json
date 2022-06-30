@@ -110,6 +110,34 @@
 		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
 			"type": "string",
 			"defaultValue": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"type": "string",
+			"defaultValue": "Purview"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"type": "string",
+			"defaultValue": "%"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"type": "string",
+			"defaultValue": "50"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"type": "string",
+			"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"type": "string",
+			"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"type": "string",
+			"defaultValue": "https://purview.azure.net"
 		}
 	},
 	"variables": {
@@ -2784,6 +2812,53 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/pipelines/Manage-All-SQLPools')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Purview Daily')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Daily trigger to refresh Purview data",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Master ELT REST API",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceSystemName": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_StreamName')]",
+							"MaxIngestInstance": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance')]",
+							"BaseURL": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_BaseURL')]",
+							"ServicePrincipalID": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID')]",
+							"TenantID": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_TenantID')]",
+							"AADResource": "[parameters('Purview Daily_properties_Master ELT REST API_parameters_AADResource')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-30T00:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								5
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Master ELT REST API')]"
 			]
 		},
 		{

@@ -82,6 +82,27 @@
 		},
 		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
 			"value": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Purview"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "50"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://purview.azure.net"
 		}
 	}
 }
