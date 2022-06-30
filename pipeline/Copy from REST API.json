@@ -40,7 +40,8 @@
 									"path": "['name']"
 								},
 								"sink": {
-									"name": "name"
+									"name": "name",
+									"type": "String"
 								}
 							},
 							{
@@ -48,7 +49,8 @@
 									"path": "['friendlyName']"
 								},
 								"sink": {
-									"name": "friendlyName"
+									"name": "friendlyName",
+									"type": "String"
 								}
 							},
 							{
@@ -56,7 +58,8 @@
 									"path": "['description']"
 								},
 								"sink": {
-									"name": "description"
+									"name": "description",
+									"type": "String"
 								}
 							},
 							{
@@ -64,7 +67,8 @@
 									"path": "['systemData']['createdBy']"
 								},
 								"sink": {
-									"name": "createdBy"
+									"name": "createdBy",
+									"type": "String"
 								}
 							},
 							{
@@ -72,7 +76,8 @@
 									"path": "['systemData']['createdByType']"
 								},
 								"sink": {
-									"name": "createdByType"
+									"name": "createdByType",
+									"type": "String"
 								}
 							},
 							{
@@ -80,7 +85,8 @@
 									"path": "['systemData']['createdAt']"
 								},
 								"sink": {
-									"name": "createdAt"
+									"name": "createdAt",
+									"type": "String"
 								}
 							},
 							{
@@ -88,7 +94,8 @@
 									"path": "['systemData']['lastModifiedByType']"
 								},
 								"sink": {
-									"name": "lastModifiedByType"
+									"name": "lastModifiedByType",
+									"type": "String"
 								}
 							},
 							{
@@ -96,7 +103,8 @@
 									"path": "['systemData']['lastModifiedAt']"
 								},
 								"sink": {
-									"name": "lastModifiedAt"
+									"name": "lastModifiedAt",
+									"type": "String"
 								}
 							},
 							{
@@ -104,7 +112,26 @@
 									"path": "['collectionProvisioningState']"
 								},
 								"sink": {
-									"name": "collectionProvisioningState"
+									"name": "collectionProvisioningState",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['parentCollection']['type']"
+								},
+								"sink": {
+									"name": "parentCollectionType",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['parentCollection']['referenceName']"
+								},
+								"sink": {
+									"name": "parentCollectionReferenceName",
+									"type": "String"
 								}
 							}
 						],
