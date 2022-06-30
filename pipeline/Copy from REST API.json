@@ -239,7 +239,7 @@
 		"parameters": {
 			"EntityName": {
 				"type": "string",
-				"defaultValue": "/scan/datasources?api-version=2022-02-01-preview"
+				"defaultValue": "/collections?api-version=2019-11-01-preview"
 			},
 			"DestinationRawFileSystem": {
 				"type": "string",
@@ -247,11 +247,11 @@
 			},
 			"DestinationRawFolder": {
 				"type": "string",
-				"defaultValue": "purview/datasources/2022-06"
+				"defaultValue": "purview/collections/2022-06"
 			},
 			"DestinationRawFile": {
 				"type": "string",
-				"defaultValue": "datasources_20220625.parquet"
+				"defaultValue": "collections_20220625.parquet"
 			}
 		},
 		"folder": {
