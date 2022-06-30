@@ -106,14 +106,6 @@
 								"sink": {
 									"name": "collectionProvisioningState"
 								}
-							},
-							{
-								"source": {
-									"path": "$['count']"
-								},
-								"sink": {
-									"name": "count"
-								}
 							}
 						],
 						"collectionReference": "$['value']",
