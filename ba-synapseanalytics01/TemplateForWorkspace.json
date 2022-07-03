@@ -3167,7 +3167,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "50bc30c3-3675-4d36-b66c-86af792a0502"
+						"spark.autotune.trackingId": "cbfee924-8c77-458b-bb53-40edbf50ca4a"
 					}
 				},
 				"metadata": {
@@ -3227,7 +3227,7 @@
 							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 						],
 						"outputs": [],
-						"execution_count": 43
+						"execution_count": 5
 					},
 					{
 						"cell_type": "code",
@@ -3247,9 +3247,7 @@
 						},
 						"source": [
 							"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-							"database = \"<DedicatedSQLPool>\"\r\n",
-							"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
-							"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
+							"database = \"<DedicatedSQLPool>\""
 						],
 						"outputs": [],
 						"execution_count": 44
@@ -3269,7 +3267,8 @@
 						},
 						"source": [
 							"import com.microsoft.spark.sqlanalytics\r\n",
-							"from com.microsoft.spark.sqlanalytics.Constants import Constants"
+							"from com.microsoft.spark.sqlanalytics.Constants import Constants\r\n",
+							"import sys"
 						],
 						"outputs": [],
 						"execution_count": 45
@@ -3328,21 +3327,24 @@
 							"\r\n",
 							"    tableName = database + \".\" + schema+ \".\" + table\r\n",
 							"   \r\n",
-							"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
-							"        df = (spark.read\r\n",
-							"                    .option(Constants.SERVER,server)\r\n",
-							"                    .synapsesql(tableName)\r\n",
-							"            )\r\n",
+							"    try:\r\n",
+							"        if server is not None and database is not None and schema is not None and table is not None:\r\n",
+							"            df = (spark.read\r\n",
+							"                        .option(Constants.SERVER,server)\r\n",
+							"                        .synapsesql(tableName)\r\n",
+							"                )\r\n",
 							"\r\n",
-							"    if colList is not None:\r\n",
-							"        df = df.select(colList)\r\n",
-							"    \r\n",
-							"    if filterCondition is not None:\r\n",
-							"        df = df.filter(filterCondition)\r\n",
+							"        if colList is not None:\r\n",
+							"            df = df.select(colList)\r\n",
+							"        \r\n",
+							"        if filterCondition is not None:\r\n",
+							"            df = df.filter(filterCondition)\r\n",
 							"\r\n",
-							"    if limitRows is not None:\r\n",
-							"        df = df.limit(limitRows)\r\n",
-							"    \r\n",
+							"        if limitRows is not None:\r\n",
+							"            df = df.limit(limitRows)\r\n",
+							"    except Exception as e:\r\n",
+							"        print(\"Read from {}.{} failed with exception:\".format(schema,table))   \r\n",
+							"        raise e\r\n",
 							"    return df"
 						],
 						"outputs": [],
@@ -3397,59 +3399,19 @@
 							"    assert mode in [\"append\",\"overwrite\",\"error\",\"errorifexists\",\"ignore\"], \"Invalid mode specified. Mode should be either append,overwrite,error,errorifexists or ignore\"\r\n",
 							"\r\n",
 							"    tableName = database + \".\" + schema+ \".\" + table\r\n",
-							"\r\n",
-							"    (df.write\r\n",
-							"        .option(Constants.SERVER, server)\r\n",
-							"        .mode(mode)\r\n",
-							"        .synapsesql(tableName))\r\n",
-							"\r\n",
+							"    try:\r\n",
+							"      (df.write\r\n",
+							"          .option(Constants.SERVER, server)\r\n",
+							"          .mode(mode)\r\n",
+							"          .synapsesql(tableName))\r\n",
+							"    except Exception as e:\r\n",
+							"      print(\"Insert to {}.{} failed with exception:\".format(schema,table))\r\n",
+							"      raise e\r\n",
 							"    return\r\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": null
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# uid = getSecret(sqlUidSecret)\r\n",
-							"# pwd = getSecret(sqlPwdSecret)"
-						],
-						"outputs": [],
-						"execution_count": 46
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# import pyodbc\r\n",
-							"# cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
-							"# cursor = cnxn.cursor()\r\n",
-							"# cnxn.autocommit = True"
-						],
-						"outputs": [],
-						"execution_count": 49
+						"execution_count": 1
 					}
 				]
 			},
@@ -3627,7 +3589,7 @@
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"description": "Notebook to test datalake-functions",
+				"description": "Notebook for unit testing test datalake-functions",
 				"folder": {
 					"name": "tester"
 				},
@@ -3647,7 +3609,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "b6cb038d-6590-43af-a53e-c546f0e85aea"
+						"spark.autotune.trackingId": "75402820-390f-4ccc-afef-36f98a317e9f"
 					}
 				},
 				"metadata": {
@@ -3737,7 +3699,7 @@
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"description": "Notebook to test dedicatedSQL-functions",
+				"description": "Notebook for unit testing dedicatedSQL-functions",
 				"folder": {
 					"name": "tester"
 				},
@@ -3757,7 +3719,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "709307ae-6f97-4a47-a026-b54da5d5993c"
+						"spark.autotune.trackingId": "72e2af25-e1c3-47b6-b5ac-709953c33459"
 					}
 				},
 				"metadata": {
@@ -3806,10 +3768,10 @@
 							"collapsed": false
 						},
 						"source": [
-							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
+							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 40
 					},
 					{
 						"cell_type": "markdown",
@@ -3843,7 +3805,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 41
 					},
 					{
 						"cell_type": "markdown",
@@ -3869,13 +3831,94 @@
 								"transient": {
 									"deleting": false
 								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"# Test Overwrite\r\n",
+							"schema =\"nyct\"\r\n",
+							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+							"insertSdpTable(df,schema,table,\"overwrite\")\r\n",
+							"\r\n",
+							"df =readSdpTable(schema,table,None,None,10)\r\n",
+							"display(df)\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 42
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"# Test Append\r\n",
+							"schema =\"nyct\"\r\n",
+							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+							"insertSdpTable(df,schema,table,\"append\")\r\n",
+							"\r\n",
+							"df =readSdpTable(schema,table,None,None,10)\r\n",
+							"display(df)\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 43
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
 							}
 						},
 						"source": [
-							"insertSdpTable(df,\"nyct\",\"nyc_tlc_yellow_trip\",\"overwrite\")"
+							"# # Test Error\r\n",
+							"# schema =\"nyct\"\r\n",
+							"# table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+							"# insertSdpTable(df,schema,table,\"error\")\r\n",
+							""
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 44
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Test Ignore\r\n",
+							"schema =\"nyct\"\r\n",
+							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+							"insertSdpTable(df,schema,table,\"ignore\")\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 45
 					}
 				]
 			},
@@ -3886,7 +3929,7 @@
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"description": "Notebook to test keyvault-functions",
+				"description": "Notebook for unit testing keyvault-functions",
 				"folder": {
 					"name": "tester"
 				},
@@ -3906,7 +3949,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "711e5464-e360-423f-8c3d-5f491d7cfc99"
+						"spark.autotune.trackingId": "d209b807-7e37-4740-8305-5c6c4cf7d83e"
 					}
 				},
 				"metadata": {
@@ -4197,6 +4240,377 @@
 						],
 						"outputs": [],
 						"execution_count": 21
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/test-upsert-function')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook for unit testing upsert-function",
+				"folder": {
+					"name": "tester"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "small31",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "a900347f-0243-4115-b24e-2c845b2a4ac2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/small31",
+						"name": "small31",
+						"type": "Spark",
+						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/small31",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
+						],
+						"outputs": [],
+						"execution_count": 34
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/upsert-function')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook that implements upsert function using PyOdbc",
+				"folder": {
+					"name": "common"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "small31",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 1,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "true",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "1",
+						"spark.autotune.trackingId": "fcae3a90-0241-47bc-a285-628d8ab59cd5"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/small31",
+						"name": "small31",
+						"type": "Spark",
+						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/small31",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Re-usable Upsert function for Azure SQL Server/Azure Synapse Analytics SQL Dedicated Pool"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
+							"database = \"<DedicatedSQLPool>\"\r\n",
+							"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
+							"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+						],
+						"outputs": [],
+						"execution_count": 11
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
+						],
+						"outputs": [],
+						"execution_count": 12
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import pyodbc"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"sqlUidSecret = \"dw01-sqlusername\"\r\n",
+							"sqlPwdSecret = \"dw01-sqlpassword\"\r\n",
+							"server =\"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
+							"database = \"dw01\""
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+							"# ##########################################################################################################################  \r\n",
+							"# Function: upsert\r\n",
+							"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
+							"# \r\n",
+							"# Parameters:\r\n",
+							"# df = Input dataframe\r\n",
+							"# StagingTable = Name of Table used to temporarily stage the input data frame\r\n",
+							"# SchemaStagingTable = Database schema of staging table\r\n",
+							"# SchemaTargetTable = Database schema of target table\r\n",
+							"# TargetTable  = Name of Target Table\r\n",
+							"# KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+							"# DeltaColumn = Name of watermark column in input dataframe\r\n",
+							"#\r\n",
+							"# Returns:\r\n",
+							"# None\r\n",
+							"# ##########################################################################################################################  \r\n",
+							"    insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
+							"    insertCols=\"\"\r\n",
+							"    updateCols=\"\"\r\n",
+							"    whereCols =\"\"\r\n",
+							"    keyCols = \"\"\r\n",
+							"\r\n",
+							"    # MATCHED Clause of MERGE\r\n",
+							"    for keyCol in KeyColumns:\r\n",
+							"        keyCols = keyCols + \"source.\" + keyCol + \" = \" + \"target.\" + keyCol + \" and \"\r\n",
+							"\r\n",
+							"    whereClause = keyCols\r\n",
+							"    #Tidy up where clause and remove last \"and\"\r\n",
+							"    remove=\"and\"\r\n",
+							"    reverse_remove=remove[::-1]\r\n",
+							"    whereClause = whereClause[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+							"\r\n",
+							"    # INSERT and UPDATE part of MERGE\r\n",
+							"    for col in df.schema.fieldNames():\r\n",
+							"        insertCols = insertCols + col + \",\"\r\n",
+							"        if col not in KeyColumns: # Do not include key columns in update statement\r\n",
+							"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
+							"\r\n",
+							"    #Tidy up insertCols and remove last \",\"\r\n",
+							"    remove=\",\"\r\n",
+							"    reverse_remove=remove[::-1]\r\n",
+							"    insertCols = insertCols[::-1].replace(reverse_remove,\"\",1)[::-1]  \r\n",
+							"\r\n",
+							"    #Tidy up insertCols and remove last \",\"\r\n",
+							"    remove=\",\"\r\n",
+							"    reverse_remove=remove[::-1]\r\n",
+							"    updateCols = updateCols[::-1].replace(reverse_remove,\"\",1)[::-1]   \r\n",
+							"\r\n",
+							"    # MERGE Statement in full\r\n",
+							"    mergeSQL= \"MERGE INTO \" + SchemaTargetTable +\".\" + TargetTable + \" AS target\" +  \" USING \" + SchemaStagingTable + \".\" + StagingTable + \" AS source\" + \" ON \"\r\n",
+							"    mergeSQL = mergeSQL + whereClause\r\n",
+							"\r\n",
+							"    # WHEN MATCHED\r\n",
+							"    if DeltaColumn != None:\r\n",
+							"        mergeSQL =  mergeSQL + \" WHEN MATCHED AND \" + \"source.\" + DeltaColumn + \" > \" + \"target.\" + DeltaColumn \r\n",
+							"    else:\r\n",
+							"        mergeSQL =  mergeSQL + \" WHEN MATCHED\"\r\n",
+							"\r\n",
+							"    mergeSQL = mergeSQL + \" THEN UPDATE SET \" + updateCols\r\n",
+							"\r\n",
+							"    # WHEN NOT MATCHED BY TARGET\r\n",
+							"    mergeSQL = mergeSQL + \" WHEN NOT MATCHED BY TARGET \" # including BY TARGET clause for Synapse requires the table to be Hash Distributed\r\n",
+							"    mergeSQL = mergeSQL + \" THEN INSERT \" +  \"(\"+ insertCols +\")\" + \" VALUES \" + \" ( \"+ insertCols +\" ) \"\r\n",
+							"\r\n",
+							"    mergeSQL = mergeSQL +\";\"\r\n",
+							"    \r\n",
+							"    #Execute Merge Statement using Pyodbc\r\n",
+							"    uid = getSecret(sqlUidSecret)\r\n",
+							"    pwd = getSecret(sqlPwdSecret)\r\n",
+							" \r\n",
+							"    try:\r\n",
+							"        cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+							"        cursor = cnxn.cursor()\r\n",
+							"        cnxn.autocommit = True\r\n",
+							"\r\n",
+							"        cursor.execute(mergeSQL)\r\n",
+							"    except Exception as e:\r\n",
+							"        print(\"Upsert to {}.{} failed with exception:\".format(SchemaTargetTable,TargetTable))\r\n",
+							"        raise e\r\n",
+							"\r\n",
+							"    print(\"Upsert statement executed successfully : {} \".format(mergeSQL))\r\n",
+							"    return"
+						],
+						"outputs": [],
+						"execution_count": 30
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)"
+						],
+						"outputs": [],
+						"execution_count": 28
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
+						],
+						"outputs": [],
+						"execution_count": 31
 					}
 				]
 			},
