@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "8777a1ad-6bd7-41d7-bedc-a1ebeedf3c71"
+				"spark.autotune.trackingId": "6e8b0aac-1f91-4b2f-9eb5-d4ca7ccd60ba"
 			}
 		},
 		"metadata": {
@@ -71,7 +71,7 @@
 					"collapsed": false
 				},
 				"source": [
-					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
+					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
 				"execution_count": 40
 			},

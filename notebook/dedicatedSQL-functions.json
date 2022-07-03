@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "07b74d7b-f7c1-4e2d-8a73-517011f23ed0"
+				"spark.autotune.trackingId": "cbfee924-8c77-458b-bb53-40edbf50ca4a"
 			}
 		},
 		"metadata": {
@@ -100,9 +100,7 @@
 				},
 				"source": [
 					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<DedicatedSQLPool>\"\r\n",
-					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
-					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
+					"database = \"<DedicatedSQLPool>\""
 				],
 				"execution_count": 44
 			},
