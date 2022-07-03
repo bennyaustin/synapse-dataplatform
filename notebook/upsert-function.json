@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b688b321-27fa-4e1c-9008-9131b8300a67"
+				"spark.autotune.trackingId": "4a982645-46e6-47a7-846d-aed443890548"
 			}
 		},
 		"metadata": {
@@ -210,7 +210,8 @@
 					"    # INSERT and UPDATE part of MERGE\r\n",
 					"    for col in df.schema.fieldNames():\r\n",
 					"        insertCols = insertCols + col + \",\"\r\n",
-					"        updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
+					"        if col not in KeyColumns: # Do not include key columns in update statement\r\n",
+					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 					"\r\n",
 					"    #Tidy up insertCols and remove last \",\"\r\n",
 					"    remove=\",\"\r\n",
@@ -242,7 +243,7 @@
 					"    print(\"Upsert statement to be executed: {} \".format(mergeSQL))\r\n",
 					"    return"
 				],
-				"execution_count": 22
+				"execution_count": 25
 			},
 			{
 				"cell_type": "code",
@@ -276,9 +277,9 @@
 					}
 				},
 				"source": [
-					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
+					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 23
+				"execution_count": 26
 			}
 		]
 	}
