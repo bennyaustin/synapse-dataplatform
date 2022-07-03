@@ -1,7 +1,7 @@
 {
 	"name": "upsert-function",
 	"properties": {
-		"description": "Notebook that implements upsert function using Pyodbc",
+		"description": "Notebook that implements upsert function using PyOdbc",
 		"folder": {
 			"name": "common"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "d2665db3-81de-4150-b871-fd316be285ad"
+				"spark.autotune.trackingId": "fcae3a90-0241-47bc-a285-628d8ab59cd5"
 			}
 		},
 		"metadata": {

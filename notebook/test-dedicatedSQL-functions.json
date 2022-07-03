@@ -1,7 +1,7 @@
 {
 	"name": "test-dedicatedSQL-functions",
 	"properties": {
-		"description": "Notebook to test dedicatedSQL-functions",
+		"description": "Notebook for unit testing dedicatedSQL-functions",
 		"folder": {
 			"name": "tester"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "6e8b0aac-1f91-4b2f-9eb5-d4ca7ccd60ba"
+				"spark.autotune.trackingId": "72e2af25-e1c3-47b6-b5ac-709953c33459"
 			}
 		},
 		"metadata": {

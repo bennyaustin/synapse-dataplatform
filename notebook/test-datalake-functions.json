@@ -1,7 +1,7 @@
 {
 	"name": "test-datalake-functions",
 	"properties": {
-		"description": "Notebook to test datalake-functions",
+		"description": "Notebook for unit testing test datalake-functions",
 		"folder": {
 			"name": "tester"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "b6cb038d-6590-43af-a53e-c546f0e85aea"
+				"spark.autotune.trackingId": "75402820-390f-4ccc-afef-36f98a317e9f"
 			}
 		},
 		"metadata": {
