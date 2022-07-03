@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "9282c1ca-4188-460a-b97d-c1daa4d9311b"
+				"spark.autotune.trackingId": "767fa7e2-b7db-4612-ba0c-9ed5bacc54c5"
 			}
 		},
 		"metadata": {
@@ -254,16 +254,12 @@
 					"          .mode(mode)\r\n",
 					"          .synapsesql(tableName))\r\n",
 					"    except Exception as e:\r\n",
-					"      # Get current system exception\r\n",
-					"      ex_type, ex_value, ex_traceback = sys.exc_info()\r\n",
-					"      print(\"Exception type : %s \" % ex_type.__name__)\r\n",
-					"      print(\"Exception message : %s\" %ex_value)\r\n",
-					"      print(\"Stack trace : %s\" %stack_trace)\r\n",
-					"\r\n",
+					"      print(\"Insert to {}.{} failed with exception:\".format(schema,table))\r\n",
+					"      raise e\r\n",
 					"    return\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",

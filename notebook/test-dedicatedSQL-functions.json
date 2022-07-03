@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "068d7671-e4ab-4ba3-877b-89f2cd75085a"
+				"spark.autotune.trackingId": "78ac4057-818d-421e-bf2c-976366cc93f9"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 				],
-				"execution_count": 9
+				"execution_count": 33
 			},
 			{
 				"cell_type": "markdown",
@@ -139,6 +139,7 @@
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
 					"insertSdpTable(df,schema,table,\"overwrite\")\r\n",
+					"\r\n",
 					"df =readSdpTable(schema,table,None,None,10)\r\n",
 					"display(df)\r\n",
 					""
@@ -156,19 +157,20 @@
 						"transient": {
 							"deleting": false
 						}
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"# Test Append\r\n",
-					"\r\n",
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
 					"insertSdpTable(df,schema,table,\"append\")\r\n",
+					"\r\n",
 					"df =readSdpTable(schema,table,None,None,10)\r\n",
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 8
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -185,13 +187,34 @@
 				},
 				"source": [
 					"# Test Error\r\n",
-					"\r\n",
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
 					"insertSdpTable(df,schema,table,\"error\")\r\n",
 					""
 				],
-				"execution_count": 10
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Test Ignore\r\n",
+					"schema =\"nyct\"\r\n",
+					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+					"insertSdpTable(df,schema,table,\"ignore\")\r\n",
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
