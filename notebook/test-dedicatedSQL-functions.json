@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "13e9194e-34b9-4721-8047-5600636998f6"
+				"spark.autotune.trackingId": "dc5418fd-73b2-4ec3-80ec-070839b8d77c"
 			}
 		},
 		"metadata": {
@@ -137,7 +137,7 @@
 				"source": [
 					"insertSdpTable(df,\"nyct\",\"nyc_tlc_yellow_trip\",\"overwrite\")"
 				],
-				"execution_count": 6
+				"execution_count": 7
 			}
 		]
 	}
