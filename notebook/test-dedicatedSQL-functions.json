@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "72e2af25-e1c3-47b6-b5ac-709953c33459"
+				"spark.autotune.trackingId": "efe13f6b-93ea-4230-be15-76bae410da76"
 			}
 		},
 		"metadata": {
@@ -62,7 +62,7 @@
 					}
 				},
 				"source": [
-					"# Test dedicatedSQL-functions"
+					"# Unit Test dedicatedSQL-functions"
 				]
 			},
 			{
