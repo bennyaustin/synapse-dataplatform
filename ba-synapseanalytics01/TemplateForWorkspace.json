@@ -3609,7 +3609,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "75402820-390f-4ccc-afef-36f98a317e9f"
+						"spark.autotune.trackingId": "f2b148f5-802e-413b-b8d8-5463d16d2b17"
 					}
 				},
 				"metadata": {
@@ -3639,6 +3639,19 @@
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Unit Test Datalake Functions"
+						]
+					},
 					{
 						"cell_type": "code",
 						"metadata": {
@@ -3719,7 +3732,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "72e2af25-e1c3-47b6-b5ac-709953c33459"
+						"spark.autotune.trackingId": "efe13f6b-93ea-4230-be15-76bae410da76"
 					}
 				},
 				"metadata": {
@@ -3759,7 +3772,7 @@
 							}
 						},
 						"source": [
-							"# Test dedicatedSQL-functions"
+							"# Unit Test dedicatedSQL-functions"
 						]
 					},
 					{
@@ -3949,7 +3962,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "d209b807-7e37-4740-8305-5c6c4cf7d83e"
+						"spark.autotune.trackingId": "d39c5cc4-d8d2-42e8-a023-716eddce2d71"
 					}
 				},
 				"metadata": {
@@ -3979,6 +3992,19 @@
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Unit Test Key Vault Functions"
+						]
+					},
 					{
 						"cell_type": "code",
 						"source": [
@@ -4270,12 +4296,12 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a900347f-0243-4115-b24e-2c845b2a4ac2"
+						"spark.autotune.trackingId": "2206e170-2302-4acc-898b-fe75f7d8939b"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"enableDebugMode": false,
+					"enableDebugMode": true,
 					"kernelspec": {
 						"name": "synapse_pyspark",
 						"display_name": "Synapse PySpark"
@@ -4295,18 +4321,53 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": true
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Unit Test Upsert Function"
+						]
+					},
+					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
 						],
 						"outputs": [],
-						"execution_count": 34
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+							"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
+						],
+						"outputs": [],
+						"execution_count": 2
 					}
 				]
 			},
@@ -4337,7 +4398,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "fcae3a90-0241-47bc-a285-628d8ab59cd5"
+						"spark.autotune.trackingId": "7a7cf23a-812d-47bb-842f-38df1412a906"
 					}
 				},
 				"metadata": {
@@ -4465,28 +4526,6 @@
 							}
 						},
 						"source": [
-							"sqlUidSecret = \"dw01-sqlusername\"\r\n",
-							"sqlPwdSecret = \"dw01-sqlpassword\"\r\n",
-							"server =\"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
-							"database = \"dw01\""
-						],
-						"outputs": [],
-						"execution_count": 13
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
 							"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
 							"# ##########################################################################################################################  \r\n",
 							"# Function: upsert\r\n",
@@ -4573,44 +4612,6 @@
 						],
 						"outputs": [],
 						"execution_count": 30
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)"
-						],
-						"outputs": [],
-						"execution_count": 28
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
-						],
-						"outputs": [],
-						"execution_count": 31
 					}
 				]
 			},
