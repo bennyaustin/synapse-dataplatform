@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "d1b4484b-1974-440d-a05d-4cff20334bf4"
+				"spark.autotune.trackingId": "dd3f7ed9-8087-417d-9d73-4d6cc6d0038c"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
