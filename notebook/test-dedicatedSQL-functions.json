@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "0a47d537-03d0-404f-b126-45d41f6fd89a"
+				"spark.autotune.trackingId": "8777a1ad-6bd7-41d7-bedc-a1ebeedf3c71"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 				],
-				"execution_count": 35
+				"execution_count": 40
 			},
 			{
 				"cell_type": "markdown",
@@ -106,7 +106,7 @@
 					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"display(df)"
 				],
-				"execution_count": 36
+				"execution_count": 41
 			},
 			{
 				"cell_type": "markdown",
@@ -145,7 +145,7 @@
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 37
+				"execution_count": 42
 			},
 			{
 				"cell_type": "code",
@@ -171,7 +171,7 @@
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 38
+				"execution_count": 43
 			},
 			{
 				"cell_type": "code",
@@ -187,13 +187,13 @@
 					}
 				},
 				"source": [
-					"# Test Error\r\n",
-					"schema =\"nyct\"\r\n",
-					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-					"insertSdpTable(df,schema,table,\"error\")\r\n",
+					"# # Test Error\r\n",
+					"# schema =\"nyct\"\r\n",
+					"# table = \"nyc_tlc_yellow_trip_copy\"\r\n",
+					"# insertSdpTable(df,schema,table,\"error\")\r\n",
 					""
 				],
-				"execution_count": 39
+				"execution_count": 44
 			},
 			{
 				"cell_type": "code",
@@ -215,7 +215,7 @@
 					"insertSdpTable(df,schema,table,\"ignore\")\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 45
 			}
 		]
 	}
