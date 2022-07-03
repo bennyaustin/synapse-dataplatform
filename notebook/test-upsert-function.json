@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0b2307e4-75fc-4766-937c-6fc6c14916da"
+				"spark.autotune.trackingId": "19682c96-4660-4308-b955-db2cbed7db02"
 			}
 		},
 		"metadata": {
@@ -55,9 +55,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					""
+					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
 				],
-				"execution_count": null
+				"execution_count": 32
 			}
 		]
 	}
