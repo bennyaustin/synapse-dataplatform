@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "709307ae-6f97-4a47-a026-b54da5d5993c"
+				"spark.autotune.trackingId": "13e9194e-34b9-4721-8047-5600636998f6"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 				],
-				"execution_count": 6
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
@@ -106,7 +106,7 @@
 					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"display(df)"
 				],
-				"execution_count": 7
+				"execution_count": 4
 			},
 			{
 				"cell_type": "markdown",
@@ -137,7 +137,7 @@
 				"source": [
 					"insertSdpTable(df,\"nyct\",\"nyc_tlc_yellow_trip\",\"overwrite\")"
 				],
-				"execution_count": 9
+				"execution_count": 6
 			}
 		]
 	}
