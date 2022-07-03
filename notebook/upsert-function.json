@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "9b538d6f-ee4d-4e76-86c8-9ecd575492b1"
+				"spark.autotune.trackingId": "77768d5e-cf1b-4995-a7e6-d38785b9ae48"
 			}
 		},
 		"metadata": {
@@ -69,6 +69,30 @@
 				"cell_type": "code",
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
+					"database = \"<DedicatedSQLPool>\"\r\n",
+					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
+					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
 				],
 				"execution_count": null
 			},
