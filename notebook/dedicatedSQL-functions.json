@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "298ddd64-5c8b-4a2a-bdf4-038db022bfe1"
+				"spark.autotune.trackingId": "9282c1ca-4188-460a-b97d-c1daa4d9311b"
 			}
 		},
 		"metadata": {
@@ -121,7 +121,8 @@
 				},
 				"source": [
 					"import com.microsoft.spark.sqlanalytics\r\n",
-					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
+					"from com.microsoft.spark.sqlanalytics.Constants import Constants\r\n",
+					"import sys"
 				],
 				"execution_count": 45
 			},
@@ -247,11 +248,17 @@
 					"    assert mode in [\"append\",\"overwrite\",\"error\",\"errorifexists\",\"ignore\"], \"Invalid mode specified. Mode should be either append,overwrite,error,errorifexists or ignore\"\r\n",
 					"\r\n",
 					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
-					"\r\n",
-					"    (df.write\r\n",
-					"        .option(Constants.SERVER, server)\r\n",
-					"        .mode(mode)\r\n",
-					"        .synapsesql(tableName))\r\n",
+					"    try:\r\n",
+					"      (df.write\r\n",
+					"          .option(Constants.SERVER, server)\r\n",
+					"          .mode(mode)\r\n",
+					"          .synapsesql(tableName))\r\n",
+					"    except Exception as e:\r\n",
+					"      # Get current system exception\r\n",
+					"      ex_type, ex_value, ex_traceback = sys.exc_info()\r\n",
+					"      print(\"Exception type : %s \" % ex_type.__name__)\r\n",
+					"      print(\"Exception message : %s\" %ex_value)\r\n",
+					"      print(\"Stack trace : %s\" %stack_trace)\r\n",
 					"\r\n",
 					"    return\r\n",
 					""

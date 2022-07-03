@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "94465f2b-7691-4ca2-a0a8-a033b19c1a9c"
+				"spark.autotune.trackingId": "068d7671-e4ab-4ba3-877b-89f2cd75085a"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\":\"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\" }"
 				],
-				"execution_count": 1
+				"execution_count": 9
 			},
 			{
 				"cell_type": "markdown",
@@ -168,7 +168,7 @@
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 4
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -191,7 +191,7 @@
 					"insertSdpTable(df,schema,table,\"error\")\r\n",
 					""
 				],
-				"execution_count": 5
+				"execution_count": 10
 			}
 		]
 	}
