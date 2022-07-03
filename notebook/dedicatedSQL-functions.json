@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "d7f500a4-a94a-4ee9-9021-6909e2de1079"
+				"spark.autotune.trackingId": "188816c2-7bef-4f3d-bbad-fb956dae270d"
 			}
 		},
 		"metadata": {
@@ -80,7 +80,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 43
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -278,10 +278,21 @@
 					}
 				},
 				"source": [
-					"# uid = getSecret(sqlUidSecret)\r\n",
-					"# pwd = getSecret(sqlPwdSecret)"
+					"sqlUidSecret = \"dw01-sqlusername\"\r\n",
+					"sqlPwdSecret = \"dw01-sqlpassword\"\r\n",
+					"server =\"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
+					"database = \"dw01\"\r\n",
+					"\r\n",
+					"uid = getSecret(sqlUidSecret)\r\n",
+					"pwd = getSecret(sqlPwdSecret)\r\n",
+					"\r\n",
+					"import pyodbc\r\n",
+					"cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+					"cursor = cnxn.cursor()\r\n",
+					"cnxn.autocommit = True\r\n",
+					""
 				],
-				"execution_count": 46
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -297,10 +308,7 @@
 					}
 				},
 				"source": [
-					"# import pyodbc\r\n",
-					"# cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
-					"# cursor = cnxn.cursor()\r\n",
-					"# cnxn.autocommit = True"
+					""
 				],
 				"execution_count": 49
 			}
