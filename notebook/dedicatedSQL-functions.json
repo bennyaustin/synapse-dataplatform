@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "d7f500a4-a94a-4ee9-9021-6909e2de1079"
+				"spark.autotune.trackingId": "cbfee924-8c77-458b-bb53-40edbf50ca4a"
 			}
 		},
 		"metadata": {
@@ -80,7 +80,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 43
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -100,9 +100,7 @@
 				},
 				"source": [
 					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<DedicatedSQLPool>\"\r\n",
-					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
-					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
+					"database = \"<DedicatedSQLPool>\""
 				],
 				"execution_count": 44
 			},
@@ -263,46 +261,6 @@
 					""
 				],
 				"execution_count": 1
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"# uid = getSecret(sqlUidSecret)\r\n",
-					"# pwd = getSecret(sqlPwdSecret)"
-				],
-				"execution_count": 46
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"# import pyodbc\r\n",
-					"# cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
-					"# cursor = cnxn.cursor()\r\n",
-					"# cnxn.autocommit = True"
-				],
-				"execution_count": 49
 			}
 		]
 	}

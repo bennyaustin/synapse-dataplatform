@@ -1,7 +1,7 @@
 {
 	"name": "test-keyvault-functions",
 	"properties": {
-		"description": "Notebook to test keyvault-functions",
+		"description": "Notebook for unit testing keyvault-functions",
 		"folder": {
 			"name": "tester"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "711e5464-e360-423f-8c3d-5f491d7cfc99"
+				"spark.autotune.trackingId": "d209b807-7e37-4740-8305-5c6c4cf7d83e"
 			}
 		},
 		"metadata": {
