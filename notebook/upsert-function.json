@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "967cc94b-d3cc-483a-84bc-c9a35181c008"
+				"spark.autotune.trackingId": "9b538d6f-ee4d-4e76-86c8-9ecd575492b1"
 			}
 		},
 		"metadata": {
@@ -53,9 +53,51 @@
 		},
 		"cells": [
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Re-usable Upsert function for Azure SQL Server and Azure Synapse Analytics SQL Dedicated Pool"
+				]
+			},
+			{
 				"cell_type": "code",
 				"source": [
-					""
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"sqlUidSecret = \"dw01-sqlusername\"\r\n",
+					"sqlPwdSecret = \"dw01-sqlpassword\"\r\n",
+					"server =\"ba-synapseanalytics01.sql.azuresynapse.net,1433\"\r\n",
+					"database = \"dw01\"\r\n",
+					"\r\n",
+					"uid = getSecret(sqlUidSecret)\r\n",
+					"pwd = getSecret(sqlPwdSecret)\r\n",
+					"\r\n",
+					"import pyodbc\r\n",
+					"cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+					"cursor = cnxn.cursor()\r\n",
+					"cnxn.autocommit = True"
 				],
 				"execution_count": null
 			}
