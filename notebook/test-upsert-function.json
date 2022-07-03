@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "19682c96-4660-4308-b955-db2cbed7db02"
+				"spark.autotune.trackingId": "d1b4484b-1974-440d-a05d-4cff20334bf4"
 			}
 		},
 		"metadata": {
@@ -55,9 +55,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
+					"%run /common/upsert-function{\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
 				],
-				"execution_count": 32
+				"execution_count": 33
 			}
 		]
 	}
