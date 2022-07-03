@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "50bc30c3-3675-4d36-b66c-86af792a0502"
+				"spark.autotune.trackingId": "d7f500a4-a94a-4ee9-9021-6909e2de1079"
 			}
 		},
 		"metadata": {
@@ -121,7 +121,8 @@
 				},
 				"source": [
 					"import com.microsoft.spark.sqlanalytics\r\n",
-					"from com.microsoft.spark.sqlanalytics.Constants import Constants"
+					"from com.microsoft.spark.sqlanalytics.Constants import Constants\r\n",
+					"import sys"
 				],
 				"execution_count": 45
 			},
@@ -179,21 +180,24 @@
 					"\r\n",
 					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
 					"   \r\n",
-					"    if server is not None and database is not None and schema is not None and table is not None:\r\n",
-					"        df = (spark.read\r\n",
-					"                    .option(Constants.SERVER,server)\r\n",
-					"                    .synapsesql(tableName)\r\n",
-					"            )\r\n",
+					"    try:\r\n",
+					"        if server is not None and database is not None and schema is not None and table is not None:\r\n",
+					"            df = (spark.read\r\n",
+					"                        .option(Constants.SERVER,server)\r\n",
+					"                        .synapsesql(tableName)\r\n",
+					"                )\r\n",
 					"\r\n",
-					"    if colList is not None:\r\n",
-					"        df = df.select(colList)\r\n",
-					"    \r\n",
-					"    if filterCondition is not None:\r\n",
-					"        df = df.filter(filterCondition)\r\n",
+					"        if colList is not None:\r\n",
+					"            df = df.select(colList)\r\n",
+					"        \r\n",
+					"        if filterCondition is not None:\r\n",
+					"            df = df.filter(filterCondition)\r\n",
 					"\r\n",
-					"    if limitRows is not None:\r\n",
-					"        df = df.limit(limitRows)\r\n",
-					"    \r\n",
+					"        if limitRows is not None:\r\n",
+					"            df = df.limit(limitRows)\r\n",
+					"    except Exception as e:\r\n",
+					"        print(\"Read from {}.{} failed with exception:\".format(schema,table))   \r\n",
+					"        raise e\r\n",
 					"    return df"
 				],
 				"execution_count": 47
@@ -247,16 +251,18 @@
 					"    assert mode in [\"append\",\"overwrite\",\"error\",\"errorifexists\",\"ignore\"], \"Invalid mode specified. Mode should be either append,overwrite,error,errorifexists or ignore\"\r\n",
 					"\r\n",
 					"    tableName = database + \".\" + schema+ \".\" + table\r\n",
-					"\r\n",
-					"    (df.write\r\n",
-					"        .option(Constants.SERVER, server)\r\n",
-					"        .mode(mode)\r\n",
-					"        .synapsesql(tableName))\r\n",
-					"\r\n",
+					"    try:\r\n",
+					"      (df.write\r\n",
+					"          .option(Constants.SERVER, server)\r\n",
+					"          .mode(mode)\r\n",
+					"          .synapsesql(tableName))\r\n",
+					"    except Exception as e:\r\n",
+					"      print(\"Insert to {}.{} failed with exception:\".format(schema,table))\r\n",
+					"      raise e\r\n",
 					"    return\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
