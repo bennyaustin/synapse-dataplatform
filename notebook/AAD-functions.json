@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "a604e0fc-36a7-4732-8588-aa2355b11f85"
+				"spark.autotune.trackingId": "523cfaad-9551-41ae-a5d0-024b5cd0bd5a"
 			}
 		},
 		"metadata": {
@@ -172,8 +172,8 @@
 					"    servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
 					"\r\n",
 					"    assert tenantId is not None, \"tenantId not specified\"\r\n",
-					"    assert clientId is not None, \"clientId not specified\"\r\n",
-					"    assert secret is not None, \"secret not specified\"\r\n",
+					"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\r\n",
+					"    assert servicePrincipal is not None, \"servicePrincipal not specified\"\r\n",
 					"    assert authUrl is not None, \"authUrl not specified\"\r\n",
 					"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
 					"\r\n",
