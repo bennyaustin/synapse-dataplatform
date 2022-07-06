@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b35a03ad-df1b-4d39-b72d-f8ef56b4346a"
+				"spark.autotune.trackingId": "24ad8aed-5cb6-4987-a34a-7b394600fa7f"
 			}
 		},
 		"metadata": {
@@ -124,11 +124,7 @@
 				"source": [
 					"import adal\r\n",
 					"\r\n",
-					"_tenantId = getSecret(tenandIdSecret)\r\n",
-					"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"_servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
-					"_authUrl = authUrl\r\n",
-					"_resourceUrl = resourceUrl"
+					""
 				],
 				"execution_count": 7
 			},
@@ -159,26 +155,36 @@
 					}
 				},
 				"source": [
-					"def getBearerToken(tenantId=_tenantId,clientId=_servicePrincipalId, secret=_servicePrincipal, authUrl=_authUrl, resourceUrl=_resourceUrl):\r\n",
+					"def getBearerToken():\r\n",
 					"    ############################################################################\r\n",
 					"    # getBearerToken\r\n",
 					"    # Returns a bearer token for a service principal AAD authentication\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
-					"    #       tenantId - Tenant ID of Azure Subscription\r\n",
-					"    #       clientId - Service Principal ID\r\n",
-					"    #       secret   - Service Principal Secret\r\n",
-					"    #       authUrl  - Authentication End Point\r\n",
-					"    #       resourceUrl - Resource URL\r\n",
+					"    #       None\r\n",
 					"    #\r\n",
 					"    # Returns:\r\n",
 					"    #     Bearer Token  \r\n",
 					"    ############################################################################\r\n",
 					"\r\n",
+					"    tenantId = getSecret(tenandIdSecret)\r\n",
+					"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+					"    secret = getSecret(servicePrincipalSecret)\r\n",
+					"\r\n",
+					"    assert tenantId is not None, \"tenantId not specified\"\r\n",
+					"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\r\n",
+					"    assert secret is not None, \"secret not specified\"\r\n",
+					"    assert authUrl is not None, \"authUrl not specified\"\r\n",
+					"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
+					"\r\n",
 					"    authority = authUrl + \"/\" + tenantId\r\n",
-					"    context = adal.AuthenticationContext(authority)\r\n",
-					"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
-					"    accessToken = token[\"accessToken\"]\r\n",
+					"    try:\r\n",
+					"        context = adal.AuthenticationContext(authority)\r\n",
+					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\r\n",
+					"        accessToken = token[\"accessToken\"]\r\n",
+					"    except Exception as e:\r\n",
+					"        print(\"getBearerToken failed with exception:\")\r\n",
+					"        raise e\r\n",
 					"    return accessToken"
 				],
 				"execution_count": 9

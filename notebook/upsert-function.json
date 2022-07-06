@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "7a7cf23a-812d-47bb-842f-38df1412a906"
+				"spark.autotune.trackingId": "28691378-6af9-4c5d-ac89-f9d48ebcdab1"
 			}
 		},
 		"metadata": {
@@ -82,8 +82,8 @@
 					]
 				},
 				"source": [
-					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<DedicatedSQLPool>\"\r\n",
+					"server=\"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server>\"\r\n",
+					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server database>\"\r\n",
 					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
 					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
 				],
@@ -110,7 +110,7 @@
 					}
 				},
 				"source": [
-					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
 				],
 				"execution_count": 12
 			},
