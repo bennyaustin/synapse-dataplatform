@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "5308167c-e940-4b5d-ab5b-ba0be45ee9b3"
+				"spark.autotune.trackingId": "ec78a77f-a063-4e3f-8d7e-644eca95bca2"
 			}
 		},
 		"metadata": {
@@ -102,7 +102,7 @@
 					"df = readTable (\"Person.Address\")\r\n",
 					"display(df)"
 				],
-				"execution_count": 4
+				"execution_count": 5
 			}
 		]
 	}

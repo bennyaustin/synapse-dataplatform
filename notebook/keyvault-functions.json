@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "aa4a6374-967d-48c8-b7a3-d52f77520771"
+				"spark.autotune.trackingId": "83d3d463-7bc1-4b84-a091-cb1ff4c7c0e8"
 			}
 		},
 		"metadata": {
@@ -154,7 +154,8 @@
 					"    try:\n",
 					"        return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook\n",
 					"    except Exception as e:\n",
-					"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")"
+					"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
+					"        raise e"
 				],
 				"execution_count": null
 			}
