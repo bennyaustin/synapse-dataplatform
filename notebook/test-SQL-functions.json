@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "33942580-33d1-4098-935e-bf7e31100d13"
+				"spark.autotune.trackingId": "81320214-7928-4536-9bad-98814a760263"
 			}
 		},
 		"metadata": {
@@ -68,9 +68,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1.database.windows.net\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
+					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 				],
-				"execution_count": 6
+				"execution_count": 10
 			},
 			{
 				"cell_type": "markdown",
@@ -96,13 +96,14 @@
 						"transient": {
 							"deleting": false
 						}
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"df = readTable (\"Person.Address\")\r\n",
 					"display(df)"
 				],
-				"execution_count": 7
+				"execution_count": 11
 			}
 		]
 	}
