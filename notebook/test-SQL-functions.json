@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "81320214-7928-4536-9bad-98814a760263"
+				"spark.autotune.trackingId": "8436cb8b-c435-43a3-8081-451dfd6fd995"
 			}
 		},
 		"metadata": {
@@ -104,6 +104,45 @@
 					"display(df)"
 				],
 				"execution_count": 11
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Test readQuery()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"query =(\"select Person.BusinessEntityAddress.AddressID, Person.AddressType.NAME\"\r\n",
+					"        + \" from Person.BusinessEntityAddress \"\r\n",
+					"        + \" inner join Person.AddressType \"\r\n",
+					"       + \" ON Person.AddressType.AddressTypeID = Person.BusinessEntityAddress.AddressTypeID\")\r\n",
+					"\r\n",
+					"df = readQuery(query)\r\n",
+					"display(df)\r\n",
+					""
+				],
+				"execution_count": 14
 			}
 		]
 	}
