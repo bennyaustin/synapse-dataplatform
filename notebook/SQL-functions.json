@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "352ce30b-3d8f-4aaf-b715-cda4b689acdc"
+				"spark.autotune.trackingId": "20c71986-afce-4567-8933-b05b1e046bc6"
 			}
 		},
 		"metadata": {
@@ -81,7 +81,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 1
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -106,7 +106,7 @@
 					"servicePrincipalIdSecret = \"Azure Key Vault Secret for Service Principal ID\"\r\n",
 					"servicePrincipalSecret = \"Azure Key Vault Secret for Service Principal secret\""
 				],
-				"execution_count": 2
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -124,13 +124,13 @@
 				"source": [
 					"import adal\r\n",
 					"\r\n",
-					"tenantId = getSecret(tenandIdSecret)\r\n",
-					"servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+					"_tenantId = getSecret(tenandIdSecret)\r\n",
+					"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
 					"servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
 					"resourceAppIdUrl = \"https://database.windows.net/\"\r\n",
 					"authUrl = \"https://login.windows.net\""
 				],
-				"execution_count": 3
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -179,11 +179,29 @@
 					"    context = adal.AuthenticationContext(authority)\r\n",
 					"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
 					"    accessToken = token[\"accessToken\"]\r\n",
-					"    \r\n",
+					"    print (\"Bearer Token : {}\".format(accessToken))\r\n",
 					"    return accessToken\r\n",
 					""
 				],
-				"execution_count": 4
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
