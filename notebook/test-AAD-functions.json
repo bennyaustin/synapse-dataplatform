@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "bdace386-c588-40ff-9f8e-2f11d92acacf"
+				"spark.autotune.trackingId": "bd02c098-1638-4533-9ae7-b5924c884271"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
 				],
-				"execution_count": 9
+				"execution_count": 11
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"bearerToken =getBearerToken()\r\n",
 					"print(bearerToken)"
 				],
-				"execution_count": 10
+				"execution_count": 12
 			}
 		]
 	}

@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b96cf68d-b3c8-4bd2-913b-e4d453439770"
+				"spark.autotune.trackingId": "a61a1fa6-7d22-4981-a436-a34b53d2fc28"
 			}
 		},
 		"metadata": {
@@ -169,18 +169,18 @@
 					"\r\n",
 					"    tenantId = getSecret(tenandIdSecret)\r\n",
 					"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"    servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
+					"    secret = getSecret(servicePrincipalSecret)\r\n",
 					"\r\n",
 					"    assert tenantId is not None, \"tenantId not specified\"\r\n",
 					"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\r\n",
-					"    assert servicePrincipal is not None, \"servicePrincipal not specified\"\r\n",
+					"    assert secret is not None, \"secret not specified\"\r\n",
 					"    assert authUrl is not None, \"authUrl not specified\"\r\n",
 					"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
 					"\r\n",
 					"    authority = authUrl + \"/\" + tenantId\r\n",
 					"    try:\r\n",
 					"        context = adal.AuthenticationContext(authority)\r\n",
-					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\r\n",
+					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, servicePrincipal)\r\n",
 					"        accessToken = token[\"accessToken\"]\r\n",
 					"    except Exception as e:\r\n",
 					"        print(\"getBearerToken failed with exception:\")\r\n",
