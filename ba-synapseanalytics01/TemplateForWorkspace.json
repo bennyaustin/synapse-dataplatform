@@ -2967,7 +2967,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "16ef4761-eca7-4e91-88c1-6cb6bb0f8244"
+						"spark.autotune.trackingId": "24ad8aed-5cb6-4987-a34a-7b394600fa7f"
 					}
 				},
 				"metadata": {
@@ -3007,7 +3007,7 @@
 							}
 						},
 						"source": [
-							"# Re-usable functions for Azure Synapse SQL Dedicated Pool"
+							"# Re-usable functions for Azure Active Directory"
 						]
 					},
 					{
@@ -3071,11 +3071,7 @@
 						"source": [
 							"import adal\r\n",
 							"\r\n",
-							"_tenantId = getSecret(tenandIdSecret)\r\n",
-							"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-							"_servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
-							"_authUrl = authUrl\r\n",
-							"_resourceUrl = resourceUrl"
+							""
 						],
 						"outputs": [],
 						"execution_count": 7
@@ -3107,26 +3103,36 @@
 							}
 						},
 						"source": [
-							"def getBearerToken(tenantId=_tenantId,clientId=_servicePrincipalId, secret=_servicePrincipal, authUrl=_authUrl, resourceUrl=_resourceUrl):\r\n",
+							"def getBearerToken():\r\n",
 							"    ############################################################################\r\n",
 							"    # getBearerToken\r\n",
 							"    # Returns a bearer token for a service principal AAD authentication\r\n",
 							"    #\r\n",
 							"    # Parameters:\r\n",
-							"    #       tenantId - Tenant ID of Azure Subscription\r\n",
-							"    #       clientId - Service Principal ID\r\n",
-							"    #       secret   - Service Principal Secret\r\n",
-							"    #       authUrl  - Authentication End Point\r\n",
-							"    #       resourceUrl - Resource URL\r\n",
+							"    #       None\r\n",
 							"    #\r\n",
 							"    # Returns:\r\n",
 							"    #     Bearer Token  \r\n",
 							"    ############################################################################\r\n",
 							"\r\n",
+							"    tenantId = getSecret(tenandIdSecret)\r\n",
+							"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+							"    secret = getSecret(servicePrincipalSecret)\r\n",
+							"\r\n",
+							"    assert tenantId is not None, \"tenantId not specified\"\r\n",
+							"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\r\n",
+							"    assert secret is not None, \"secret not specified\"\r\n",
+							"    assert authUrl is not None, \"authUrl not specified\"\r\n",
+							"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
+							"\r\n",
 							"    authority = authUrl + \"/\" + tenantId\r\n",
-							"    context = adal.AuthenticationContext(authority)\r\n",
-							"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
-							"    accessToken = token[\"accessToken\"]\r\n",
+							"    try:\r\n",
+							"        context = adal.AuthenticationContext(authority)\r\n",
+							"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\r\n",
+							"        accessToken = token[\"accessToken\"]\r\n",
+							"    except Exception as e:\r\n",
+							"        print(\"getBearerToken failed with exception:\")\r\n",
+							"        raise e\r\n",
 							"    return accessToken"
 						],
 						"outputs": [],
@@ -3180,7 +3186,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "45013315-70a3-4902-9b69-109ab7aa14dd"
+						"spark.autotune.trackingId": "4175693d-2610-470e-a3d2-cfa7c5ea10b6"
 					}
 				},
 				"metadata": {
@@ -3220,7 +3226,7 @@
 							}
 						},
 						"source": [
-							"# Re-usable functions for Azure Synapse SQL Dedicated Pool"
+							"# Re-usable functions for Azure SQL and SQL Server"
 						]
 					},
 					{
@@ -3253,44 +3259,23 @@
 								"transient": {
 									"deleting": false
 								}
-							}
-						},
-						"source": [
-							"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
-						],
-						"outputs": [],
-						"execution_count": 13
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
 							},
 							"tags": [
 								"parameters"
 							]
 						},
 						"source": [
-							"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-							"database = \"<Azure SQL Server/ SQL Server>\""
+							"server=\"<Azure SQL Server/ SQL Server>\"\r\n",
+							"database = \"<Database Name>\"\r\n",
+							"usernameSecret = \"<Azure Key Vault Secret for SQL User>\"\r\n",
+							"passwordSecret = \"<Azure Key Vault Secret for SQL User Password>\""
 						],
 						"outputs": [],
 						"execution_count": 14
 					},
 					{
-						"cell_type": "code",
+						"cell_type": "markdown",
 						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
 							"nteract": {
 								"transient": {
 									"deleting": false
@@ -3298,11 +3283,8 @@
 							}
 						},
 						"source": [
-							"bearerToken = getBearerToken()\r\n",
-							"print(bearerToken)"
-						],
-						"outputs": [],
-						"execution_count": 16
+							"# getJdbcUrl()"
+						]
 					},
 					{
 						"cell_type": "code",
@@ -3318,10 +3300,234 @@
 							}
 						},
 						"source": [
-							""
+							"def getJdbcUrl():\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  # Function: getJdbcUrl\r\n",
+							"  # Creates the JDBC Connection String from the input parameters to this notebook\r\n",
+							"  # \r\n",
+							"  # Parameters:\r\n",
+							"  # None\r\n",
+							"  #\r\n",
+							"  # Returns:\r\n",
+							"  # JDBC Connection String\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"    assert server is not None, \"server not specified\"\r\n",
+							"    assert database is not None, \"database not specified\"\r\n",
+							"    assert usernameSecret is not None, \"usernameSecret not specified\"\r\n",
+							"    assert passwordSecret is not None, \"passwordSecret not specified\"\r\n",
+							"\r\n",
+							"    user =  getSecret(usernameSecret)\r\n",
+							"    password = getSecret(passwordSecret)\r\n",
+							"    jdbcUrl = \"jdbc:sqlserver://\" + server + \".database.windows.net:1433;database=\" + database + \";user=\" + user + \"@\" + server + \";password=\" + password + \";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\"\r\n",
+							"    return jdbcUrl"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 2
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# readTable()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def readTable(table):\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  # Function: readTable\r\n",
+							"  # Reads all the rows and columns of an Azure SQL table/view and returns the records as dataframe\r\n",
+							"  # \r\n",
+							"  # Parameters:\r\n",
+							"  # table = Input Table/View including the schema name. E.g soccer.goalpost, afl.goalpost\r\n",
+							"  #\r\n",
+							"  # Returns:\r\n",
+							"  # Dataframe containing all rows and columns of a table/view in Azure SQL\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"    assert table is not None, \"table not specified\"\r\n",
+							"\r\n",
+							"    jdbcUrl = getJdbcUrl()\r\n",
+							"    df = (spark.read\r\n",
+							"            .format(\"jdbc\")\r\n",
+							"            .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"            .option(\"url\",jdbcUrl)\r\n",
+							"            .option(\"dbtable\",table)\r\n",
+							"            .load()\r\n",
+							"        )\r\n",
+							"\r\n",
+							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+							"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+							"    #   df = (spark.read\r\n",
+							"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+							"    #           .option(\"url\",jdbcUrl)\r\n",
+							"    #           .option(\"dbtable\",table)\r\n",
+							"    #           .load()\r\n",
+							"    #       )\r\n",
+							"    return df"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# readQuery()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def readQuery(query):\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  # Function: readQuery\r\n",
+							"  # Executes the input query at Azure SQL and returns the records as dataframe\r\n",
+							"  # \r\n",
+							"  # Parameters:\r\n",
+							"  # query = A valid input query\r\n",
+							"  #\r\n",
+							"  # Returns:\r\n",
+							"  # Dataframe containing all rows and columns returned by query from Azure SQL\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  assert query is not None, \"query not specified\"\r\n",
+							"\r\n",
+							"  jdbcUrl = getJdbcUrl()\r\n",
+							"  df = (spark.read\r\n",
+							"          .format(\"jdbc\")\r\n",
+							"          .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"          .option(\"url\",jdbcUrl)\r\n",
+							"          .option(\"query\",query)\r\n",
+							"          .load()\r\n",
+							"      )\r\n",
+							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+							"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+							"    #   df = (spark.read\r\n",
+							"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+							"    #           .option(\"url\",jdbcUrl)\r\n",
+							"    #           .option(\"dbtable\",table)\r\n",
+							"    #           .load()\r\n",
+							"    #       )\r\n",
+							"  return df"
+						],
+						"outputs": [],
+						"execution_count": 5
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# insertTable()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def insertTable(df,table,writeMode,preserveSchema = None):\r\n",
+							"  # ##########################################################################################################################  \r\n",
+							"  # Function: insertTable\r\n",
+							"  # Inserts a dataframe to a Azure SQL\r\n",
+							"  # \r\n",
+							"  # Parameters:\r\n",
+							"  # df = Input dataframe\r\n",
+							"  # table = Target table where the datafframe is loaded\r\n",
+							"  # writeMode = Describes how data from dataframe is inserted to datawarehouse table. Allowed values are - append/overwrite/ignore/error/errorifexists\r\n",
+							"  # preserveSchema = True/False. Applicable only in overwrite mode when schema needs to be preserved\r\n",
+							"  # Returns:\r\n",
+							"  # None\r\n",
+							"  # ########################################################################################################################## \r\n",
+							"  assert table is not None, \"query not specified\"\r\n",
+							"  assert writeMode is not None, \"writeMode not specified\"\r\n",
+							"  assert writeMode in [\"append\",\"overwrite\",\"ignore\",\"error\",\"errorifexists\"] , \"writeMode not specified\"\r\n",
+							"\r\n",
+							"  jdbcUrl = getJdbcUrl()\r\n",
+							"  \r\n",
+							"  if writeMode == \"overwrite\" and preserveSchema == True :\r\n",
+							"    #Truncate and Append instead of overwrite to preserve table schema\r\n",
+							"    (df.write\r\n",
+							"     .format(\"jdbc\")\r\n",
+							"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"     .option(\"url\",jdbcUrl)\r\n",
+							"     .mode(\"append\")\r\n",
+							"     .option(\"truncate\", \"true\") # Must be string \"true\" and not boolean True\r\n",
+							"     .option(\"dbtable\",table)\r\n",
+							"     .save()\r\n",
+							"    )\r\n",
+							"  else:\r\n",
+							"    (df.write\r\n",
+							"     .format(\"jdbc\")\r\n",
+							"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"     .option(\"url\",jdbcUrl)\r\n",
+							"     .mode(writeMode)\r\n",
+							"     .option(\"dbtable\",table)\r\n",
+							"     .save()\r\n",
+							"    ) \r\n",
+							"  print(\"Insert into {} completed\".format(table))  \r\n",
+							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+							"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+							"    #   df = (spark.read\r\n",
+							"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+							"    #           .option(\"url\",jdbcUrl)\r\n",
+							"    #           .option(\"dbtable\",table)\r\n",
+							"    #           .load()\r\n",
+							"    #       )"
+						],
+						"outputs": [],
+						"execution_count": 7
 					}
 				]
 			},
@@ -3352,7 +3558,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "7ce70921-b1d5-48ca-b0e4-8aeb95c74561"
+						"spark.autotune.trackingId": "fdaa8188-85d6-44bb-b31c-f2f5148009c9"
 					}
 				},
 				"metadata": {
@@ -3393,7 +3599,7 @@
 						},
 						"source": [
 							"# What is CommonTransforms and how to use them in your notebooks ?  \r\n",
-							"https://github.com/bennyaustin/pyspark-utils/blob/main/CommonTransforms/README.md"
+							"CommonTransforms is a Python class that uses PySpark libraries to apply common transformations to a Spark dataframe. https://github.com/bennyaustin/pyspark-utils/blob/main/CommonTransforms/README.md"
 						]
 					},
 					{
@@ -4089,7 +4295,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "e9a3e502-20c7-4bce-af47-f6c1ee045d4a"
+						"spark.autotune.trackingId": "83d3d463-7bc1-4b84-a091-cb1ff4c7c0e8"
 					}
 				},
 				"metadata": {
@@ -4220,10 +4426,12 @@
 							"# Returns:\n",
 							"# The value of secret stored in Azure Key Vault\n",
 							"# ##########################################################################################################################\n",
+							"    assert secretName is not None, \"secretName not specified\"\n",
 							"    try:\n",
 							"        return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook\n",
 							"    except Exception as e:\n",
-							"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")"
+							"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
+							"        raise e"
 						],
 						"outputs": [],
 						"execution_count": null
@@ -4257,7 +4465,122 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "e501639e-7974-4144-a1d3-26ba74482efa"
+						"spark.autotune.trackingId": "1bf7ade4-911f-4d4b-8215-fc6a64cbd49b"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
+						"name": "medium31",
+						"type": "Spark",
+						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": true
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Unit Test AAD-functions"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## Test getBearerToken()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"bearerToken =getBearerToken()\r\n",
+							"print(bearerToken)"
+						],
+						"outputs": [],
+						"execution_count": 14
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/test-SQL-functions')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook to unit test SQL-functions",
+				"folder": {
+					"name": "unit tests"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "medium31",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 1,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "true",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "4",
+						"spark.autotune.trackingId": "a956729a-f3fc-44ea-a5f4-b84abda20603"
 					}
 				},
 				"metadata": {
@@ -4297,13 +4620,13 @@
 							}
 						},
 						"source": [
-							"# Unit Test AAD-functions"
+							"# Unit Test SQL-functions"
 						]
 					},
 					{
 						"cell_type": "code",
 						"source": [
-							"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
+							"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 						],
 						"outputs": [],
 						"execution_count": 10
@@ -4318,7 +4641,81 @@
 							}
 						},
 						"source": [
-							"## Test getBearerToken()"
+							"## Test readTable()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"df = readTable (\"Person.Address\")\r\n",
+							"display(df)"
+						],
+						"outputs": [],
+						"execution_count": 11
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## Test readQuery()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"query =(\"select Person.BusinessEntityAddress.AddressID, Person.AddressType.NAME\"\r\n",
+							"        + \" from Person.BusinessEntityAddress \"\r\n",
+							"        + \" inner join Person.AddressType \"\r\n",
+							"       + \" ON Person.AddressType.AddressTypeID = Person.BusinessEntityAddress.AddressTypeID\")\r\n",
+							"\r\n",
+							"df = readQuery(query)\r\n",
+							"display(df)\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 14
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## Test insertTable()"
 						]
 					},
 					{
@@ -4335,11 +4732,51 @@
 							}
 						},
 						"source": [
-							"bearerToken =getBearerToken(tenantId,servicePrincipalId, servicePrincipal, authUrl, resourceAppIdUrl)\r\n",
-							"print(bearerToken)"
+							"# Overwrite, Create new table if doesn't exist\r\n",
+							"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = False)"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 15
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Overwrite, Preserve schema if table exists\r\n",
+							"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = True)"
+						],
+						"outputs": [],
+						"execution_count": 16
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Append\r\n",
+							"insertTable(df,\"dbo.test\",\"append\")"
+						],
+						"outputs": [],
+						"execution_count": 17
 					}
 				]
 			},
@@ -5415,7 +5852,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "7a7cf23a-812d-47bb-842f-38df1412a906"
+						"spark.autotune.trackingId": "28691378-6af9-4c5d-ac89-f9d48ebcdab1"
 					}
 				},
 				"metadata": {
@@ -5475,8 +5912,8 @@
 							]
 						},
 						"source": [
-							"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-							"database = \"<DedicatedSQLPool>\"\r\n",
+							"server=\"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server>\"\r\n",
+							"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server database>\"\r\n",
 							"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
 							"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
 						],
@@ -5505,7 +5942,7 @@
 							}
 						},
 						"source": [
-							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
+							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
 						],
 						"outputs": [],
 						"execution_count": 12
@@ -5654,6 +6091,7 @@
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"customLibraries": [],
 				"annotations": []
 			},
 			"dependsOn": [],
@@ -5679,6 +6117,7 @@
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"customLibraries": [],
 				"annotations": []
 			},
 			"dependsOn": [],
