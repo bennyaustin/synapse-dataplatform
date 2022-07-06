@@ -2943,6 +2943,269 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/commonTransforms')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "A collection of reusable Python classes that extends out of box PySpark capabilities",
+				"folder": {
+					"name": "common"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "small31",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 1,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "true",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "1",
+						"spark.autotune.trackingId": "7ce70921-b1d5-48ca-b0e4-8aeb95c74561"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/small31",
+						"name": "small31",
+						"type": "Spark",
+						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/small31",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# What is CommonTransforms and how to use them in your notebooks ?  \r\n",
+							"https://github.com/bennyaustin/pyspark-utils/blob/main/CommonTransforms/README.md"
+						]
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# CommonTransforms Class"
+						]
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"from pyspark.sql.functions import trim,when,isnull,lit,col,from_utc_timestamp,to_utc_timestamp,concat_ws,sha1,length,substring,lit,concat,date_add,expr,year,datediff\r\n",
+							"from pyspark.sql import functions as F \r\n",
+							"import datetime"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"class CommonTransforms:\r\n",
+							"  inputDf=None\r\n",
+							"  inputSchema=None\r\n",
+							"  inputColums=None\r\n",
+							"  \r\n",
+							"#   Constructor\r\n",
+							"  def __init__(self, input):\r\n",
+							"    self.inputDf=input\r\n",
+							"    self.inputSchema=self.inputDf.schema\r\n",
+							"    self.inputColumns=self.inputDf.schema.fieldNames()\r\n",
+							"    \r\n",
+							"#  Remove Leading and Trailing Spaces \r\n",
+							"  def trim(self):\r\n",
+							"    stringCol= (col for col in self.inputSchema if str(col.dataType)==\"StringType\")\r\n",
+							"    for col in stringCol:\r\n",
+							"        self.inputDf = self.inputDf.withColumn(col.name,trim(col.name))\r\n",
+							"    return self.inputDf\r\n",
+							"  \r\n",
+							"#   Replace Null values with Default values based on datatypes\r\n",
+							"  def replaceNull(self,value, subset=None):\r\n",
+							"    isDate=False\r\n",
+							"    isTimestamp =False\r\n",
+							"    \r\n",
+							"    try:\r\n",
+							"      if isinstance(value, str):\r\n",
+							"        date_obj = datetime.datetime.strptime(value, \"%Y-%m-%d\") #YYYY-MM-DD format e.g \"2020-10-01\"\r\n",
+							"        isDate= True\r\n",
+							"    except ValueError:\r\n",
+							"      isDate=False\r\n",
+							"      \r\n",
+							"    try:\r\n",
+							"      if isinstance(value, str):\r\n",
+							"        date_obj = datetime.datetime.strptime(value, \"%Y-%m-%dT%H:%M:%S\") #YYYY-MM-DDThh:mm:ss format e.g \"2020-10-01T19:50:06\"\r\n",
+							"        isTimestamp= True\r\n",
+							"    except ValueError:\r\n",
+							"      isTimestamp=False\r\n",
+							"      \r\n",
+							"    if isDate and subset is not None:\r\n",
+							"      dateCol = (x for x in self.inputSchema if str(x.dataType)==\"DateType\" and x.nullable==True and x.name in subset)\r\n",
+							"      for x in dateCol:\r\n",
+							"        self.inputDf = self.inputDf.withColumn(x.name, when(isnull(col(x.name)),lit(value)).otherwise(col(x.name)))\r\n",
+							"    elif isDate and subset is None:\r\n",
+							"      dateCol = (x for x in self.inputSchema if str(x.dataType)==\"DateType\" and x.nullable==True)\r\n",
+							"      for x in dateCol:\r\n",
+							"        self.inputDf = self.inputDf.withColumn(x.name, when(isnull(col(x.name)),lit(value)).otherwise(col(x.name)))\r\n",
+							"    elif isTimestamp and subset is not None:\r\n",
+							"      tsCol = (x for x in self.inputSchema if str(x.dataType)==\"TimestampType\" and x.nullable==True and x.name in subset)\r\n",
+							"      for x in tsCol:\r\n",
+							"        self.inputDf = self.inputDf.withColumn(x.name, when(isnull(col(x.name)),lit(value)).otherwise(col(x.name)))\r\n",
+							"    elif isTimestamp and subset is None:\r\n",
+							"      tsCol = (x for x in self.inputSchema if str(x.dataType)==\"TimestampType\" and x.nullable==True)\r\n",
+							"      for x in tsCol:\r\n",
+							"        self.inputDf = self.inputDf.withColumn(x.name, when(isnull(col(x.name)),lit(value)).otherwise(col(x.name)))        \r\n",
+							"    else:\r\n",
+							"      self.inputDf = self.inputDf.fillna(value,subset)\r\n",
+							"      \r\n",
+							"    return self.inputDf\r\n",
+							"\r\n",
+							"#  Remove duplicates\r\n",
+							"  def deDuplicate(self, subset=None):\r\n",
+							"    self.inputDf = self.inputDf.dropDuplicates(subset)\r\n",
+							"    return self.inputDf\r\n",
+							"  \r\n",
+							"#   Convert UTC timestamp to local\r\n",
+							"  def utc_to_local(self,localTimeZone,subset=None):\r\n",
+							"    if subset is not None:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\" and x.name in subset)\r\n",
+							"    else:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\")\r\n",
+							"      \r\n",
+							"    for x in tsCol:\r\n",
+							"      self.inputDf = self.inputDf.withColumn(x.name,from_utc_timestamp(col(x.name),localTimeZone))\r\n",
+							"    return self.inputDf\r\n",
+							"\r\n",
+							"#   Convert timestamp in local timezone to UTC\r\n",
+							"  def local_to_utc(self,localTimeZone,subset=None):\r\n",
+							"    if subset is not None:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\" and x.name in subset)\r\n",
+							"    else:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\")\r\n",
+							"      \r\n",
+							"    for x in tsCol:\r\n",
+							"      self.inputDf = self.inputDf.withColumn(x.name,to_utc_timestamp(col(x.name),localTimeZone))\r\n",
+							"    return self.inputDf\r\n",
+							"  \r\n",
+							"#   Change Timezone\r\n",
+							"  def changeTimezone(self,fromTimezone,toTimezone,subset=None):\r\n",
+							"    if subset is not None:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\" and x.name in subset)\r\n",
+							"    else:\r\n",
+							"      tsCol = (x for x in  self.inputSchema if str(x.dataType)==\"TimestampType\")\r\n",
+							"    \r\n",
+							"    for x in tsCol:\r\n",
+							"      self.inputDf = self.inputDf.withColumn(x.name,to_utc_timestamp(col(x.name),fromTimezone))\r\n",
+							"      self.inputDf = self.inputDf.withColumn(x.name,from_utc_timestamp(col(x.name),toTimezone))\r\n",
+							"    return self.inputDf\r\n",
+							"\r\n",
+							"#   Drop System/Non-Business Columns\r\n",
+							"  def dropSysColumns(self,columns):\r\n",
+							"    self.inputDf = self.inputDf.drop(columns)\r\n",
+							"    return self.inputDf \r\n",
+							"  \r\n",
+							"#  Create Checksum Column \r\n",
+							"  def addChecksumCol(self,colName):\r\n",
+							"    self.inputDf = self.inputDf.withColumn(colName,sha1(concat_ws(\"~~\", *self.inputDf.columns)))\r\n",
+							"    return self.inputDf\r\n",
+							"\r\n",
+							"# Convert Julian Date to Calendar Date  \r\n",
+							"  def julian_to_calendar(self,subset):\r\n",
+							"    julCol = (x for x in self.inputSchema if str(x.dataType)==\"IntegerType\" and x.name in subset)\r\n",
+							"    for x in julCol:\r\n",
+							"      self.inputDf = (self.inputDf.withColumn(x.name,col(x.name).cast(\"string\"))\r\n",
+							"                                 .withColumn(x.name+\"_year\",\r\n",
+							"                                             when((length(col(x.name))==5) & (substring(col(x.name),1,2) <=50),concat(lit('20'),substring(col(x.name),1,2)))\r\n",
+							"                                             .when((length(col(x.name))==5) & (substring(col(x.name),1,2) >50),concat(lit('19'),substring(col(x.name),1,2)))\r\n",
+							"                                             .when(length(col(x.name))==7,substring(col(x.name),1,4))\r\n",
+							"                                             .otherwise(lit(0))\r\n",
+							"                                            )\r\n",
+							"                                 .withColumn(x.name+\"_days\",\r\n",
+							"                                             when(length(col(x.name))==5,substring(col(x.name),3,3).cast(\"int\"))\r\n",
+							"                                             .when(length(col(x.name))==7,substring(col(x.name),5,3).cast(\"int\"))\r\n",
+							"                                             .otherwise(lit(0))\r\n",
+							"                                            )\r\n",
+							"                                 .withColumn(x.name+\"_ref_year\",concat(col(x.name+\"_year\"),lit(\"-01\"),lit(\"-01\")).cast(\"date\"))\r\n",
+							"                                 .withColumn(x.name+\"_calendar\",expr(\"date_add(\" + x.name+\"_ref_year\"+\",\"+ x.name+\"_days)-1\"))\r\n",
+							"                                 .drop(x.name, x.name+\"_year\",x.name+\"_days\",x.name+\"_ref_year\")\r\n",
+							"                                 .withColumnRenamed(x.name+\"_calendar\",x.name)\r\n",
+							"                                 \r\n",
+							"                     )\r\n",
+							"    return self.inputDf \r\n",
+							"  \r\n",
+							"# Convert Calendar Date to Julian Date \r\n",
+							"  def calendar_to_julian(self, subset):\r\n",
+							"    calCol = (x for x in self.inputSchema if ((str(x.dataType)==\"DateType\" or str(x.dataType)==\"TimestampType\") and x.name in subset))\r\n",
+							"\r\n",
+							"    for x in calCol:\r\n",
+							"      self.inputDf = (self.inputDf.withColumn(x.name+\"_ref_year\", concat(year(col(x.name)).cast(\"string\"),lit(\"-01\"),lit(\"-01\")))\r\n",
+							"                                  .withColumn(x.name+\"_datediff\", datediff(col(x.name),col(x.name+\"_ref_year\"))+1)\r\n",
+							"                                  .withColumn(x.name+\"_julian\", concat(substring(year(col(x.name)).cast(\"string\"),3,2),col(x.name+\"_datediff\")).cast(\"int\"))\r\n",
+							"                                  .drop(x.name,x.name+\"_ref_year\",x.name+\"_datediff\")\r\n",
+							"                                  .withColumnRenamed(x.name+\"_julian\",x.name)\r\n",
+							"                     )\r\n",
+							"    return self.inputDf\r\n",
+							"\r\n",
+							"# Add a set of literal value columns to dataframe, pass as dictionary parameter  \r\n",
+							"  def addLitCols(self,colDict):\r\n",
+							"    for x in colDict.items():\r\n",
+							"      self.inputDf = self.inputDf.withColumn(x[0],lit(x[1]))\r\n",
+							"    return self.inputDf"
+						],
+						"outputs": [],
+						"execution_count": 2
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/datalake-functions')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -3144,7 +3407,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/dedicatedSQL-functions')]",
+			"name": "[concat(parameters('workspaceName'), '/dedicatedSQLPool-functions')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -3167,7 +3430,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "cbfee924-8c77-458b-bb53-40edbf50ca4a"
+						"spark.autotune.trackingId": "19342704-c4a4-4247-b1f9-c331cebf9686"
 					}
 				},
 				"metadata": {
@@ -3300,9 +3563,9 @@
 							}
 						},
 						"source": [
-							"def readSdpTable(schema,table,colList=None,filterCondition=None,limitRows=None):\r\n",
+							"def readDspTable(schema,table,colList=None,filterCondition=None,limitRows=None):\r\n",
 							"  # ##########################################################################################################################  \r\n",
-							"  # Function: readSdpTable\r\n",
+							"  # Function: readDspTable\r\n",
 							"  # Reads records from the Azure Synapse Dedicated Pool table/view and returns as dataframe\r\n",
 							"  # \r\n",
 							"  # Parameters:\r\n",
@@ -3377,9 +3640,9 @@
 							}
 						},
 						"source": [
-							"def insertSdpTable(df, schema,table, mode):\r\n",
+							"def insertDspTable(df, schema,table, mode):\r\n",
 							"  # ##########################################################################################################################  \r\n",
-							"  # Function: insertSdpTable\r\n",
+							"  # Function: insertDspTable\r\n",
 							"  # Writes a dataframe to an Azure Synapse Dedicated Pool table\r\n",
 							"  # \r\n",
 							"  # Parameters:\r\n",
@@ -3585,13 +3848,13 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/test-datalake-functions')]",
+			"name": "[concat(parameters('workspaceName'), '/test-commonTransforms')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"description": "Notebook for unit testing test datalake-functions",
+				"description": "Notebook to unit test commonTransforms class",
 				"folder": {
-					"name": "tester"
+					"name": "unit tests"
 				},
 				"nbformat": 4,
 				"nbformat_minor": 2,
@@ -3609,7 +3872,265 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "f2b148f5-802e-413b-b8d8-5463d16d2b17"
+						"spark.autotune.trackingId": "d49ef055-9c02-4bea-8e60-527637a12d82"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
+						"name": "medium31",
+						"type": "Spark",
+						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"from pyspark.sql import DataFrame,Column,functions,types"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run /common/commonTransforms"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run /common/datalake-functions"
+						],
+						"outputs": [],
+						"execution_count": 5
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"# Test File\r\n",
+							"file = \"abfss://raw-bronze@bastoragedatalake01.dfs.core.windows.net/nyc-yellowtaxi-trip/yellow_tripdata_2020-01.csv\"\r\n",
+							"# Config schema explicitly for testing purposes\r\n",
+							"dataSchema=\"VendorID STRING,tpep_pickup_datetime TIMESTAMP,tpep_dropoff_datetime TIMESTAMP,passenger_count INT,trip_distance DOUBLE,RatecodeID STRING,store_and_fwd_flag STRING,PULocationID INT,DOLocationID INT,payment_type INT,fare_amount DOUBLE,extra DOUBLE,mta_tax DOUBLE,tip_amount DOUBLE,tolls_amount DOUBLE,improvement_surcharge DOUBLE,total_amount DOUBLE,congestion_surcharge DOUBLE\"\r\n",
+							"input=spark.read.csv(path=file,schema=dataSchema,header=True)\r\n",
+							"display(input)"
+						],
+						"outputs": [],
+						"execution_count": 7
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"input = input.withColumn(\"sys_date1\",lit(20275)) #Date in Julian Format\r\n",
+							"input = input.withColumn(\"sys_date2\",lit(\"2020-10-01\").cast(\"date\")) #Date in Gregorian Format"
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"display(input)"
+						],
+						"outputs": [],
+						"execution_count": 9
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"ct=CommonTransforms(input)\r\n",
+							"\r\n",
+							"# Remove duplicates\r\n",
+							"output=ct.deDuplicate()\r\n",
+							"\r\n",
+							"# Remove duplicates based on key columns\r\n",
+							"output=ct.deDuplicate([\"VendorID\",\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+							"\r\n",
+							"# Remove leading and trailing spaces from all string columns\r\n",
+							"output=ct.trim()\r\n",
+							"\r\n",
+							"# Replace Null Value with generic values\r\n",
+							"output = ct.replaceNull(0)\r\n",
+							"output = ct.replaceNull(\"NA\")\r\n",
+							"output = ct.replaceNull(\"2020-01-01\")\r\n",
+							"\r\n",
+							"# Replace Null value in Timestamp columns\r\n",
+							"output = ct.replaceNull(\"1900-01-01T00:00:00\",\"tpep_pickup_datetime\")\r\n",
+							"output = ct.replaceNull(\"9999-12-31T23:59:59\",\"tpep_dropoff_datetime\")\r\n",
+							"\r\n",
+							"# Replace Null Values with custom defaults\r\n",
+							"output = ct.replaceNull({\"passenger_count\":1,\"store_and_fwd_flag\":\"N\",\"tip_amount\":0,\"tolls_amount\":0, \"improvement_surcharge\":0,\"congestion_surcharge\":0})\r\n",
+							"\r\n",
+							"# Convert UTC timestamps to local\r\n",
+							"output = ct.utc_to_local(\"Australia/Sydney\")\r\n",
+							"output = ct.utc_to_local(\"Australia/Sydney\",[\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+							"\r\n",
+							"\r\n",
+							"# Convert local timestamps to UTC\r\n",
+							"output = ct.local_to_utc(\"Australia/Sydney\")\r\n",
+							"output = ct.local_to_utc(\"Australia/Sydney\",[\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+							"\r\n",
+							"# Convert time from one Timezone to another\r\n",
+							"output = ct.changeTimezone(\"Australia/Sydney\",\"America/New_York\")\r\n",
+							"\r\n",
+							"# Drop system/non-business columns\r\n",
+							"output = ct.dropSysColumns(\"store_and_fwd_flag\")\r\n",
+							"\r\n",
+							"# Add Checksum\r\n",
+							"output = ct.addChecksumCol(\"checksum\")\r\n",
+							"\r\n",
+							"# Convert Julian date to Calendar date\r\n",
+							"output = ct.julian_to_calendar(\"sys_date1\")\r\n",
+							"\r\n",
+							"# Convert Calendar date to Julian\r\n",
+							"output =ct.calendar_to_julian(\"sys_date2\")\r\n",
+							"\r\n",
+							"# Add literal value columns for e.g audit columns\r\n",
+							"audit={\"audit_key\":66363,\"pipeline_id\":\"56f63394bb06dd7f6945f636f1d4018bd50f1850\", \"start_datetime\": \"2020-10-01 10:00:00\", \"end_datetime\": \"2020-10-01 10:02:05\"}\r\n",
+							"output = ct.addLitCols(audit)"
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"display(output)"
+						],
+						"outputs": [],
+						"execution_count": 11
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/test-datalake-functions')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook for unit testing test datalake-functions",
+				"folder": {
+					"name": "unit tests"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "medium31",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 1,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "true",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "4",
+						"spark.autotune.trackingId": "42832aa4-aa7c-46bf-8637-ceec7724e60e"
 					}
 				},
 				"metadata": {
@@ -3714,7 +4235,7 @@
 			"properties": {
 				"description": "Notebook for unit testing dedicatedSQL-functions",
 				"folder": {
-					"name": "tester"
+					"name": "unit tests"
 				},
 				"nbformat": 4,
 				"nbformat_minor": 2,
@@ -3732,7 +4253,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "efe13f6b-93ea-4230-be15-76bae410da76"
+						"spark.autotune.trackingId": "8b4051bf-159b-46d2-b6e0-9bb5c62eab5d"
 					}
 				},
 				"metadata": {
@@ -3781,7 +4302,7 @@
 							"collapsed": false
 						},
 						"source": [
-							"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 						],
 						"outputs": [],
 						"execution_count": 40
@@ -3814,7 +4335,7 @@
 							"collapsed": false
 						},
 						"source": [
-							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+							"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 							"display(df)"
 						],
 						"outputs": [],
@@ -3851,9 +4372,9 @@
 							"# Test Overwrite\r\n",
 							"schema =\"nyct\"\r\n",
 							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-							"insertSdpTable(df,schema,table,\"overwrite\")\r\n",
+							"insertDspTable(df,schema,table,\"overwrite\")\r\n",
 							"\r\n",
-							"df =readSdpTable(schema,table,None,None,10)\r\n",
+							"df =readDspTable(schema,table,None,None,10)\r\n",
 							"display(df)\r\n",
 							""
 						],
@@ -3878,9 +4399,9 @@
 							"# Test Append\r\n",
 							"schema =\"nyct\"\r\n",
 							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-							"insertSdpTable(df,schema,table,\"append\")\r\n",
+							"insertDspTable(df,schema,table,\"append\")\r\n",
 							"\r\n",
-							"df =readSdpTable(schema,table,None,None,10)\r\n",
+							"df =readDspTable(schema,table,None,None,10)\r\n",
 							"display(df)\r\n",
 							""
 						],
@@ -3904,7 +4425,7 @@
 							"# # Test Error\r\n",
 							"# schema =\"nyct\"\r\n",
 							"# table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-							"# insertSdpTable(df,schema,table,\"error\")\r\n",
+							"# insertDspTable(df,schema,table,\"error\")\r\n",
 							""
 						],
 						"outputs": [],
@@ -3927,7 +4448,7 @@
 							"# Test Ignore\r\n",
 							"schema =\"nyct\"\r\n",
 							"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-							"insertSdpTable(df,schema,table,\"ignore\")\r\n",
+							"insertDspTable(df,schema,table,\"ignore\")\r\n",
 							""
 						],
 						"outputs": [],
@@ -3944,7 +4465,7 @@
 			"properties": {
 				"description": "Notebook for unit testing keyvault-functions",
 				"folder": {
-					"name": "tester"
+					"name": "unit tests"
 				},
 				"nbformat": 4,
 				"nbformat_minor": 2,
@@ -4042,7 +4563,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"folder": {
-					"name": "tester"
+					"name": "unit tests"
 				},
 				"nbformat": 4,
 				"nbformat_minor": 2,
@@ -4278,7 +4799,7 @@
 			"properties": {
 				"description": "Notebook for unit testing upsert-function",
 				"folder": {
-					"name": "tester"
+					"name": "unit tests"
 				},
 				"nbformat": 4,
 				"nbformat_minor": 2,
@@ -4296,7 +4817,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "467e4641-3261-446c-a6f8-8121eb81dce6"
+						"spark.autotune.trackingId": "667935b8-fbc8-48a6-8cba-d91c3570df9e"
 					}
 				},
 				"metadata": {
@@ -4321,8 +4842,7 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": true
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -4342,7 +4862,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
 						],
@@ -4363,7 +4882,7 @@
 							}
 						},
 						"source": [
-							"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+							"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 							"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 						],
 						"outputs": [],
@@ -4616,56 +5135,6 @@
 				]
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/small')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 30
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 5,
-					"minNodeCount": 3
-				},
-				"nodeCount": 3,
-				"nodeSize": "Small",
-				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "2.4",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": true,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/medium')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 30
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 10,
-					"minNodeCount": 3
-				},
-				"nodeCount": 10,
-				"nodeSize": "Medium",
-				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "2.4",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/small31')]",
