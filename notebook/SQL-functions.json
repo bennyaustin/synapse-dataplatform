@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b45b728a-890d-4736-b5bd-8f85b110143d"
+				"spark.autotune.trackingId": "45013315-70a3-4902-9b69-109ab7aa14dd"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -81,7 +81,25 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 6
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
+				],
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -101,12 +119,9 @@
 				},
 				"source": [
 					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<Azure SQL Server/ SQL Server>\"\r\n",
-					"tenandIdSecret = \"<Azure Key Vault Secret for TenantID>\"\r\n",
-					"servicePrincipalIdSecret = \"<Azure Key Vault Secret for Service Principal ID>\"\r\n",
-					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\""
+					"database = \"<Azure SQL Server/ SQL Server>\""
 				],
-				"execution_count": 7
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
@@ -122,66 +137,10 @@
 					}
 				},
 				"source": [
-					"import adal\r\n",
-					"\r\n",
-					"tenantId = getSecret(tenandIdSecret)\r\n",
-					"servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
-					"resourceAppIdUrl = \"https://database.windows.net/\"\r\n",
-					"authUrl = \"https://login.windows.net\""
+					"bearerToken = getBearerToken()\r\n",
+					"print(bearerToken)"
 				],
-				"execution_count": 8
-			},
-			{
-				"cell_type": "markdown",
-				"metadata": {
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"# getBearerToken()"
-				]
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"def getBearerToken(tenantId,clientId, secret, authUrl, resourceUrl):\r\n",
-					"    ############################################################################\r\n",
-					"    # getBearerToken\r\n",
-					"    # Returns a bearer token for a service principal AAD authentication\r\n",
-					"    #\r\n",
-					"    # Parameters:\r\n",
-					"    #       tenantId - Tenant ID of Azure Subscription\r\n",
-					"    #       clientId - Service Principal ID\r\n",
-					"    #       secret   - Service Principal Secret\r\n",
-					"    #       authUrl  - Authentication End Point\r\n",
-					"    #       resourceUrl - Resource URL\r\n",
-					"    #\r\n",
-					"    # Returns:\r\n",
-					"    #     Bearer Token  \r\n",
-					"    ############################################################################\r\n",
-					"\r\n",
-					"    authority = authUrl + \"/\" + tenantId\r\n",
-					"    context = adal.AuthenticationContext(authority)\r\n",
-					"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
-					"    accessToken = token[\"accessToken\"]\r\n",
-					"    return accessToken"
-				],
-				"execution_count": 9
+				"execution_count": 16
 			},
 			{
 				"cell_type": "code",
