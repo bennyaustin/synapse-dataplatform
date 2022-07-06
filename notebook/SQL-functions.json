@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "849f5eb2-6982-4fef-aee4-a375a13a2616"
+				"spark.autotune.trackingId": "2a5518c8-26a5-435b-b762-b8dcbe8199e7"
 			}
 		},
 		"metadata": {
@@ -150,8 +150,8 @@
 					"    assert usernameSecret is not None, \"usernameSecret not specified\"\r\n",
 					"    assert passwordSecret is not None, \"passwordSecret not specified\"\r\n",
 					"\r\n",
-					"    user =  getSecret(\"usernameSecret\")\r\n",
-					"    password = getSecret(\"passwordSecret\")\r\n",
+					"    user =  getSecret(usernameSecret)\r\n",
+					"    password = getSecret(passwordSecret)\r\n",
 					"    jdbcUrl = \"jdbc:sqlserver://\" + server + \".database.windows.net:1433;database=\" + database + \";user=\" + user + \"@\" + server + \";password=\" + password + \";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\"\r\n",
 					"    return jdbcUrl"
 				],
