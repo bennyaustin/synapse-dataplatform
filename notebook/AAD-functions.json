@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "9a0f83c7-d9e3-4dbd-930e-182423afe262"
+				"spark.autotune.trackingId": "a604e0fc-36a7-4732-8588-aa2355b11f85"
 			}
 		},
 		"metadata": {
@@ -124,11 +124,7 @@
 				"source": [
 					"import adal\r\n",
 					"\r\n",
-					"_tenantId = getSecret(tenandIdSecret)\r\n",
-					"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"_servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
-					"_authUrl = authUrl\r\n",
-					"_resourceUrl = resourceUrl"
+					""
 				],
 				"execution_count": 7
 			},
@@ -159,21 +155,21 @@
 					}
 				},
 				"source": [
-					"def getBearerToken(tenantId=_tenantId,clientId=_servicePrincipalId, secret=_servicePrincipal, authUrl=_authUrl, resourceUrl=_resourceUrl):\r\n",
+					"def getBearerToken():\r\n",
 					"    ############################################################################\r\n",
 					"    # getBearerToken\r\n",
 					"    # Returns a bearer token for a service principal AAD authentication\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
-					"    #       tenantId - Tenant ID of Azure Subscription\r\n",
-					"    #       clientId - Service Principal ID\r\n",
-					"    #       secret   - Service Principal Secret\r\n",
-					"    #       authUrl  - Authentication End Point\r\n",
-					"    #       resourceUrl - Resource URL\r\n",
+					"    #       None\r\n",
 					"    #\r\n",
 					"    # Returns:\r\n",
 					"    #     Bearer Token  \r\n",
 					"    ############################################################################\r\n",
+					"\r\n",
+					"    tenantId = getSecret(tenandIdSecret)\r\n",
+					"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+					"    servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
 					"\r\n",
 					"    assert tenantId is not None, \"tenantId not specified\"\r\n",
 					"    assert clientId is not None, \"clientId not specified\"\r\n",
