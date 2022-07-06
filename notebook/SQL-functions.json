@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "4637e1a4-12c5-47e2-bfc1-8d0a28926631"
+				"spark.autotune.trackingId": "b45b728a-890d-4736-b5bd-8f85b110143d"
 			}
 		},
 		"metadata": {
@@ -102,9 +102,9 @@
 				"source": [
 					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
 					"database = \"<Azure SQL Server/ SQL Server>\"\r\n",
-					"tenandIdSecret = \"Azure Key Vault Secret for TenantID\"\r\n",
-					"servicePrincipalIdSecret = \"Azure Key Vault Secret for Service Principal ID\"\r\n",
-					"servicePrincipalSecret = \"Azure Key Vault Secret for Service Principal secret\""
+					"tenandIdSecret = \"<Azure Key Vault Secret for TenantID>\"\r\n",
+					"servicePrincipalIdSecret = \"<Azure Key Vault Secret for Service Principal ID>\"\r\n",
+					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\""
 				],
 				"execution_count": 7
 			},
