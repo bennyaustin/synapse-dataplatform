@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "485873c2-a1aa-4447-ae8e-c8bf381c0c71"
+				"spark.autotune.trackingId": "dc8bec78-c854-4e04-8ce3-f6aa0b046682"
 			}
 		},
 		"metadata": {
@@ -179,6 +179,8 @@
 					"  # Returns:\r\n",
 					"  # Dataframe containing all rows and columns of a table/view in Azure SQL\r\n",
 					"  # ##########################################################################################################################  \r\n",
+					"    assert table is not None, \"table not specified\"\r\n",
+					"\r\n",
 					"    bearerToken = getBearerToken()\r\n",
 					"\r\n",
 					"    df = (spark.read    \r\n",
