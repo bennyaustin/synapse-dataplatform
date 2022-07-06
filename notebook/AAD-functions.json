@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "703408f0-9b11-4372-b96c-20f4e3449398"
+				"spark.autotune.trackingId": "9a0f83c7-d9e3-4dbd-930e-182423afe262"
 			}
 		},
 		"metadata": {
@@ -182,9 +182,13 @@
 					"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
 					"\r\n",
 					"    authority = authUrl + \"/\" + tenantId\r\n",
-					"    context = adal.AuthenticationContext(authority)\r\n",
-					"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
-					"    accessToken = token[\"accessToken\"]\r\n",
+					"    try:\r\n",
+					"        context = adal.AuthenticationContext(authority)\r\n",
+					"        token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
+					"        accessToken = token[\"accessToken\"]\r\n",
+					"    except Exception as e:\r\n",
+					"        print(\"getBearerToken failed with exception:\")\r\n",
+					"        raise e\r\n",
 					"    return accessToken"
 				],
 				"execution_count": 9
