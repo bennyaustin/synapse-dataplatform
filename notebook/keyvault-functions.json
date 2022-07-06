@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "e9a3e502-20c7-4bce-af47-f6c1ee045d4a"
+				"spark.autotune.trackingId": "aa4a6374-967d-48c8-b7a3-d52f77520771"
 			}
 		},
 		"metadata": {
@@ -150,6 +150,7 @@
 					"# Returns:\n",
 					"# The value of secret stored in Azure Key Vault\n",
 					"# ##########################################################################################################################\n",
+					"    assert secretName is not None, \"secretName not specified\"\n",
 					"    try:\n",
 					"        return mssparkutils.credentials.getSecretWithLS(kvLinkedService,secretName) #kvLinkedService is a notebook parameter set by the calling notebook\n",
 					"    except Exception as e:\n",
