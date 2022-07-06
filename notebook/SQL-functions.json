@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "20c71986-afce-4567-8933-b05b1e046bc6"
+				"spark.autotune.trackingId": "4e17077d-4c13-485c-952e-4e7d1dc5da39"
 			}
 		},
 		"metadata": {
@@ -179,9 +179,7 @@
 					"    context = adal.AuthenticationContext(authority)\r\n",
 					"    token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
 					"    accessToken = token[\"accessToken\"]\r\n",
-					"    print (\"Bearer Token : {}\".format(accessToken))\r\n",
-					"    return accessToken\r\n",
-					""
+					"    return accessToken"
 				],
 				"execution_count": null
 			},
