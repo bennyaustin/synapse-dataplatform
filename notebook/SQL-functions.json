@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "c75c8b8a-3546-478d-a6a5-59ccf547574a"
+				"spark.autotune.trackingId": "0066f81b-e2e1-4a7e-a169-f0ea475ef920"
 			}
 		},
 		"metadata": {
@@ -197,7 +197,6 @@
 					"  # ##########################################################################################################################  \r\n",
 					"    assert table is not None, \"table not specified\"\r\n",
 					"\r\n",
-					"\r\n",
 					"    jdbcUrl = getJdbcUrl()\r\n",
 					"    df = (spark.read\r\n",
 					"            .format(\"jdbc\")\r\n",
@@ -219,6 +218,146 @@
 					"    return df"
 				],
 				"execution_count": 4
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# readQuery()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def readQuery(query):\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: readQuery\r\n",
+					"  # Executes the input query at Azure SQL and returns the records as dataframe\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  # query = A valid input query\r\n",
+					"  #\r\n",
+					"  # Returns:\r\n",
+					"  # Dataframe containing all rows and columns returned by query from Azure SQL\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  assert query is not None, \"query not specified\"\r\n",
+					"\r\n",
+					"  jdbcUrl = getJdbcUrl()\r\n",
+					"  df = (spark.read\r\n",
+					"          .format(\"jdbc\")\r\n",
+					"          .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+					"          .option(\"url\",jdbcUrl)\r\n",
+					"          .option(\"query\",query)\r\n",
+					"          .load()\r\n",
+					"      )\r\n",
+					"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+					"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+					"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+					"    #   df = (spark.read\r\n",
+					"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+					"    #           .option(\"url\",jdbcUrl)\r\n",
+					"    #           .option(\"dbtable\",table)\r\n",
+					"    #           .load()\r\n",
+					"    #       )\r\n",
+					"  return df"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"insertTable()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def insertTable(df,table,writeMode,preserveSchema = None):\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: insertTable\r\n",
+					"  # Inserts a dataframe to a Azure SQL\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  # df = Input dataframe\r\n",
+					"  # table = Target table where the datafframe is loaded\r\n",
+					"  # writeMode = Describes how data from dataframe is inserted to datawarehouse table. Allowed values are - append/overwrite/ignore/error/errorifexists\r\n",
+					"  # preserveSchema = True/False. Applicable only in overwrite mode when schema needs to be preserved\r\n",
+					"  # Returns:\r\n",
+					"  # None\r\n",
+					"  # ########################################################################################################################## \r\n",
+					"  assert table is not None, \"query not specified\"\r\n",
+					"  assert writeMode is not None, \"writeMode not specified\"\r\n",
+					"  assert writeMode in [\"append\",\"overwrite\",\"ignore\",\"error\",\"errorifexists\"] , \"writeMode not specified\"\r\n",
+					"\r\n",
+					"  jdbcUrl = getJdbcUrl()\r\n",
+					"  \r\n",
+					"  if writeMode == \"overwrite\" and preserveSchema == True :\r\n",
+					"    #Truncate and Append instead of overwrite to preserve table schema\r\n",
+					"    (df.write\r\n",
+					"     .format(\"jdbc\")\r\n",
+					"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+					"     .option(\"url\",jdbcUrl)\r\n",
+					"     .mode(\"append\")\r\n",
+					"     .option(\"truncate\", \"true\") # Must be string \"true\" and not boolean True\r\n",
+					"     .option(\"dbtable\",table)\r\n",
+					"     .save()\r\n",
+					"    )\r\n",
+					"  else:\r\n",
+					"    (df.write\r\n",
+					"     .format(\"jdbc\")\r\n",
+					"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+					"     .option(\"url\",jdbcUrl)\r\n",
+					"     .mode(writeMode)\r\n",
+					"     .option(\"dbtable\",table)\r\n",
+					"     .save()\r\n",
+					"    ) \r\n",
+					"  print(\"Inert into {} completed\".format(table))  \r\n",
+					"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+					"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+					"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+					"    #   df = (spark.read\r\n",
+					"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+					"    #           .option(\"url\",jdbcUrl)\r\n",
+					"    #           .option(\"dbtable\",table)\r\n",
+					"    #           .load()\r\n",
+					"    #       )"
+				],
+				"execution_count": 7
 			}
 		]
 	}
