@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "a6a1e87d-255d-476f-8231-4fa5b4c38f0c"
+				"spark.autotune.trackingId": "a956729a-f3fc-44ea-a5f4-b84abda20603"
 			}
 		},
 		"metadata": {
@@ -194,6 +194,25 @@
 					"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = True)"
 				],
 				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Append\r\n",
+					"insertTable(df,\"dbo.test\",\"append\")"
+				],
+				"execution_count": 17
 			}
 		]
 	}
