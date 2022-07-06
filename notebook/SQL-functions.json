@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b97e2d7c-b504-4949-b1fc-06ff53ce908b"
+				"spark.autotune.trackingId": "485873c2-a1aa-4447-ae8e-c8bf381c0c71"
 			}
 		},
 		"metadata": {
@@ -184,7 +184,7 @@
 					"    df = (spark.read    \r\n",
 					"                .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
 					"                .option(\"url\",url)\r\n",
-					"                .option(\"dbtable\", dbtable) \r\n",
+					"                .option(\"dbtable\", table) \r\n",
 					"                .option(\"accessToken\", bearerToken)\r\n",
 					"                .option(\"encrypt\", \"true\") #Note: String \"true\" not boolean True\r\n",
 					"                .option(\"hostNameInCertificate\", \"*.database.windows.net\")\r\n",
