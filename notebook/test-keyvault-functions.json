@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Notebook for unit testing keyvault-functions",
 		"folder": {
-			"name": "tester"
+			"name": "unit tests"
 		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -46,8 +46,7 @@
 				"sparkVersion": "3.1",
 				"nodeCount": 10,
 				"cores": 8,
-				"memory": 56,
-				"automaticScaleJobs": true
+				"memory": 56
 			},
 			"sessionKeepAliveTimeout": 30
 		},
