@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "6f536a01-8a6a-4c70-a3dd-644350987c28"
+				"spark.autotune.trackingId": "16ef4761-eca7-4e91-88c1-6cb6bb0f8244"
 			}
 		},
 		"metadata": {
@@ -81,7 +81,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 6
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -100,13 +100,13 @@
 					]
 				},
 				"source": [
-					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<Azure SQL Server/ SQL Server>\"\r\n",
 					"tenandIdSecret = \"<Azure Key Vault Secret for TenantID>\"\r\n",
 					"servicePrincipalIdSecret = \"<Azure Key Vault Secret for Service Principal ID>\"\r\n",
-					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\""
+					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\"\r\n",
+					"authUrl = \"https://login.windows.net\"\r\n",
+					"resourceUrl = \"https://database.windows.net/\""
 				],
-				"execution_count": 7
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -124,13 +124,13 @@
 				"source": [
 					"import adal\r\n",
 					"\r\n",
-					"tenantId = getSecret(tenandIdSecret)\r\n",
-					"servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
-					"resourceAppIdUrl = \"https://database.windows.net/\"\r\n",
-					"authUrl = \"https://login.windows.net\""
+					"_tenantId = getSecret(tenandIdSecret)\r\n",
+					"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+					"_servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
+					"_authUrl = authUrl\r\n",
+					"_resourceUrl = resourceUrl"
 				],
-				"execution_count": 8
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -159,7 +159,7 @@
 					}
 				},
 				"source": [
-					"def getBearerToken(tenantId,clientId, secret, authUrl, resourceUrl):\r\n",
+					"def getBearerToken(tenantId=_tenantId,clientId=_servicePrincipalId, secret=_servicePrincipal, authUrl=_authUrl, resourceUrl=_resourceUrl):\r\n",
 					"    ############################################################################\r\n",
 					"    # getBearerToken\r\n",
 					"    # Returns a bearer token for a service principal AAD authentication\r\n",
