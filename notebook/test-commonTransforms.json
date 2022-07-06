@@ -1,0 +1,248 @@
+{
+	"name": "test-commonTransforms",
+	"properties": {
+		"description": "Notebook to unit test commonTransforms class",
+		"folder": {
+			"name": "unit tests"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "medium31",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 1,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "true",
+				"spark.dynamicAllocation.minExecutors": "1",
+				"spark.dynamicAllocation.maxExecutors": "4",
+				"spark.autotune.trackingId": "d49ef055-9c02-4bea-8e60-527637a12d82"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
+				"name": "medium31",
+				"type": "Spark",
+				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": true
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql import DataFrame,Column,functions,types"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/commonTransforms"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/datalake-functions"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# Test File\r\n",
+					"file = \"abfss://raw-bronze@bastoragedatalake01.dfs.core.windows.net/nyc-yellowtaxi-trip/yellow_tripdata_2020-01.csv\"\r\n",
+					"# Config schema explicitly for testing purposes\r\n",
+					"dataSchema=\"VendorID STRING,tpep_pickup_datetime TIMESTAMP,tpep_dropoff_datetime TIMESTAMP,passenger_count INT,trip_distance DOUBLE,RatecodeID STRING,store_and_fwd_flag STRING,PULocationID INT,DOLocationID INT,payment_type INT,fare_amount DOUBLE,extra DOUBLE,mta_tax DOUBLE,tip_amount DOUBLE,tolls_amount DOUBLE,improvement_surcharge DOUBLE,total_amount DOUBLE,congestion_surcharge DOUBLE\"\r\n",
+					"input=spark.read.csv(path=file,schema=dataSchema,header=True)\r\n",
+					"display(input)"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"input = input.withColumn(\"sys_date1\",lit(20275)) #Date in Julian Format\r\n",
+					"input = input.withColumn(\"sys_date2\",lit(\"2020-10-01\").cast(\"date\")) #Date in Gregorian Format"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(input)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ct=CommonTransforms(input)\r\n",
+					"\r\n",
+					"# Remove duplicates\r\n",
+					"output=ct.deDuplicate()\r\n",
+					"\r\n",
+					"# Remove duplicates based on key columns\r\n",
+					"output=ct.deDuplicate([\"VendorID\",\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+					"\r\n",
+					"# Remove leading and trailing spaces from all string columns\r\n",
+					"output=ct.trim()\r\n",
+					"\r\n",
+					"# Replace Null Value with generic values\r\n",
+					"output = ct.replaceNull(0)\r\n",
+					"output = ct.replaceNull(\"NA\")\r\n",
+					"output = ct.replaceNull(\"2020-01-01\")\r\n",
+					"\r\n",
+					"# Replace Null value in Timestamp columns\r\n",
+					"output = ct.replaceNull(\"1900-01-01T00:00:00\",\"tpep_pickup_datetime\")\r\n",
+					"output = ct.replaceNull(\"9999-12-31T23:59:59\",\"tpep_dropoff_datetime\")\r\n",
+					"\r\n",
+					"# Replace Null Values with custom defaults\r\n",
+					"output = ct.replaceNull({\"passenger_count\":1,\"store_and_fwd_flag\":\"N\",\"tip_amount\":0,\"tolls_amount\":0, \"improvement_surcharge\":0,\"congestion_surcharge\":0})\r\n",
+					"\r\n",
+					"# Convert UTC timestamps to local\r\n",
+					"output = ct.utc_to_local(\"Australia/Sydney\")\r\n",
+					"output = ct.utc_to_local(\"Australia/Sydney\",[\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+					"\r\n",
+					"\r\n",
+					"# Convert local timestamps to UTC\r\n",
+					"output = ct.local_to_utc(\"Australia/Sydney\")\r\n",
+					"output = ct.local_to_utc(\"Australia/Sydney\",[\"tpep_pickup_datetime\",\"tpep_dropoff_datetime\"])\r\n",
+					"\r\n",
+					"# Convert time from one Timezone to another\r\n",
+					"output = ct.changeTimezone(\"Australia/Sydney\",\"America/New_York\")\r\n",
+					"\r\n",
+					"# Drop system/non-business columns\r\n",
+					"output = ct.dropSysColumns(\"store_and_fwd_flag\")\r\n",
+					"\r\n",
+					"# Add Checksum\r\n",
+					"output = ct.addChecksumCol(\"checksum\")\r\n",
+					"\r\n",
+					"# Convert Julian date to Calendar date\r\n",
+					"output = ct.julian_to_calendar(\"sys_date1\")\r\n",
+					"\r\n",
+					"# Convert Calendar date to Julian\r\n",
+					"output =ct.calendar_to_julian(\"sys_date2\")\r\n",
+					"\r\n",
+					"# Add literal value columns for e.g audit columns\r\n",
+					"audit={\"audit_key\":66363,\"pipeline_id\":\"56f63394bb06dd7f6945f636f1d4018bd50f1850\", \"start_datetime\": \"2020-10-01 10:00:00\", \"end_datetime\": \"2020-10-01 10:02:05\"}\r\n",
+					"output = ct.addLitCols(audit)"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(output)"
+				],
+				"execution_count": 11
+			}
+		]
+	}
+}

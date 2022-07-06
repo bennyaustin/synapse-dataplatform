@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Notebook for unit testing dedicatedSQL-functions",
 		"folder": {
-			"name": "tester"
+			"name": "unit tests"
 		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "efe13f6b-93ea-4230-be15-76bae410da76"
+				"spark.autotune.trackingId": "8b4051bf-159b-46d2-b6e0-9bb5c62eab5d"
 			}
 		},
 		"metadata": {
@@ -71,7 +71,7 @@
 					"collapsed": false
 				},
 				"source": [
-					"%run /common/dedicatedSQL-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
 				"execution_count": 40
 			},
@@ -103,7 +103,7 @@
 					"collapsed": false
 				},
 				"source": [
-					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"display(df)"
 				],
 				"execution_count": 41
@@ -139,9 +139,9 @@
 					"# Test Overwrite\r\n",
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-					"insertSdpTable(df,schema,table,\"overwrite\")\r\n",
+					"insertDspTable(df,schema,table,\"overwrite\")\r\n",
 					"\r\n",
-					"df =readSdpTable(schema,table,None,None,10)\r\n",
+					"df =readDspTable(schema,table,None,None,10)\r\n",
 					"display(df)\r\n",
 					""
 				],
@@ -165,9 +165,9 @@
 					"# Test Append\r\n",
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-					"insertSdpTable(df,schema,table,\"append\")\r\n",
+					"insertDspTable(df,schema,table,\"append\")\r\n",
 					"\r\n",
-					"df =readSdpTable(schema,table,None,None,10)\r\n",
+					"df =readDspTable(schema,table,None,None,10)\r\n",
 					"display(df)\r\n",
 					""
 				],
@@ -190,7 +190,7 @@
 					"# # Test Error\r\n",
 					"# schema =\"nyct\"\r\n",
 					"# table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-					"# insertSdpTable(df,schema,table,\"error\")\r\n",
+					"# insertDspTable(df,schema,table,\"error\")\r\n",
 					""
 				],
 				"execution_count": 44
@@ -212,7 +212,7 @@
 					"# Test Ignore\r\n",
 					"schema =\"nyct\"\r\n",
 					"table = \"nyc_tlc_yellow_trip_copy\"\r\n",
-					"insertSdpTable(df,schema,table,\"ignore\")\r\n",
+					"insertDspTable(df,schema,table,\"ignore\")\r\n",
 					""
 				],
 				"execution_count": 45

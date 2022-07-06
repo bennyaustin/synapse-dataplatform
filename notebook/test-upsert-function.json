@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Notebook for unit testing upsert-function",
 		"folder": {
-			"name": "tester"
+			"name": "unit tests"
 		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1f78efd8-3c7c-498d-8337-805527da8fcb"
+				"spark.autotune.trackingId": "667935b8-fbc8-48a6-8cba-d91c3570df9e"
 			}
 		},
 		"metadata": {
@@ -86,7 +86,7 @@
 					}
 				},
 				"source": [
-					"df =readSdpTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
+					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
 				"execution_count": 2
