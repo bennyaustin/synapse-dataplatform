@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "7ce70921-b1d5-48ca-b0e4-8aeb95c74561"
+				"spark.autotune.trackingId": "fdaa8188-85d6-44bb-b31c-f2f5148009c9"
 			}
 		},
 		"metadata": {
@@ -63,7 +63,7 @@
 				},
 				"source": [
 					"# What is CommonTransforms and how to use them in your notebooks ?  \r\n",
-					"https://github.com/bennyaustin/pyspark-utils/blob/main/CommonTransforms/README.md"
+					"CommonTransforms is a Python class that uses PySpark libraries to apply common transformations to a Spark dataframe. https://github.com/bennyaustin/pyspark-utils/blob/main/CommonTransforms/README.md"
 				]
 			},
 			{
