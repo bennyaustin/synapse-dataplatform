@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "dc8bec78-c854-4e04-8ce3-f6aa0b046682"
+				"spark.autotune.trackingId": "c75c8b8a-3546-478d-a6a5-59ccf547574a"
 			}
 		},
 		"metadata": {
@@ -94,32 +94,16 @@
 						"transient": {
 							"deleting": false
 						}
-					}
-				},
-				"source": [
-					"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
-				],
-				"execution_count": 13
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
 					},
 					"tags": [
 						"parameters"
 					]
 				},
 				"source": [
-					"server=\"<SynapseWorkspaceName>.sql.azuresynapse.net,1433\"\r\n",
-					"database = \"<Azure SQL Server/ SQL Server>\""
+					"server=\"<Azure SQL Server/ SQL Server>\"\r\n",
+					"database = \"<Database Name>\"\r\n",
+					"usernameSecret = \"<Azure Key Vault Secret for SQL User>\"\r\n",
+					"passwordSecret = \"<Azure Key Vault Secret for SQL User Password>\""
 				],
 				"execution_count": 14
 			},
@@ -133,7 +117,7 @@
 					}
 				},
 				"source": [
-					"## Initialize Variables"
+					"# getJdbcUrl()"
 				]
 			},
 			{
@@ -150,9 +134,41 @@
 					}
 				},
 				"source": [
-					"url = server+ \";\" + \"databaseName=\" + database + \";\""
+					"def getJdbcUrl():\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: getJdbcUrl\r\n",
+					"  # Creates the JDBC Connection String from the input parameters to this notebook\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  # None\r\n",
+					"  #\r\n",
+					"  # Returns:\r\n",
+					"  # JDBC Connection String\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"    assert server is not None, \"server not specified\"\r\n",
+					"    assert database is not None, \"database not specified\"\r\n",
+					"    assert usernameSecret is not None, \"usernameSecret not specified\"\r\n",
+					"    assert passwordSecret is not None, \"passwordSecret not specified\"\r\n",
+					"\r\n",
+					"    user =  GetSecret(\"usernameSecret\")\r\n",
+					"    password = GetSecret(\"passwordSecret\")\r\n",
+					"    jdbcUrl = \"jdbc:sqlserver://\" + server + \".database.windows.net:1433;database=\" + database + \";user=\" + user + \"@\" + server + \";password=\" + password + \";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\"\r\n",
+					"    return jdbcUrl"
 				],
-				"execution_count": 16
+				"execution_count": 2
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# readTable()"
+				]
 			},
 			{
 				"cell_type": "code",
@@ -181,20 +197,28 @@
 					"  # ##########################################################################################################################  \r\n",
 					"    assert table is not None, \"table not specified\"\r\n",
 					"\r\n",
-					"    bearerToken = getBearerToken()\r\n",
 					"\r\n",
-					"    df = (spark.read    \r\n",
-					"                .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
-					"                .option(\"url\",url)\r\n",
-					"                .option(\"dbtable\", table) \r\n",
-					"                .option(\"accessToken\", bearerToken)\r\n",
-					"                .option(\"encrypt\", \"true\") #Note: String \"true\" not boolean True\r\n",
-					"                .option(\"hostNameInCertificate\", \"*.database.windows.net\")\r\n",
-					"                .load()\r\n",
+					"    jdbcUrl = getJdbcUrl()\r\n",
+					"    df = (spark.read\r\n",
+					"            .format(\"jdbc\")\r\n",
+					"            .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+					"            .option(\"url\",jdbcUrl)\r\n",
+					"            .option(\"dbtable\",table)\r\n",
+					"            .load()\r\n",
 					"        )\r\n",
+					"\r\n",
+					"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
+					"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
+					"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
+					"    #   df = (spark.read\r\n",
+					"    #           .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+					"    #           .option(\"url\",jdbcUrl)\r\n",
+					"    #           .option(\"dbtable\",table)\r\n",
+					"    #           .load()\r\n",
+					"    #       )\r\n",
 					"    return df"
 				],
-				"execution_count": null
+				"execution_count": 4
 			}
 		]
 	}
