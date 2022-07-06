@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "8436cb8b-c435-43a3-8081-451dfd6fd995"
+				"spark.autotune.trackingId": "a6a1e87d-255d-476f-8231-4fa5b4c38f0c"
 			}
 		},
 		"metadata": {
@@ -143,6 +143,57 @@
 					""
 				],
 				"execution_count": 14
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Test insertTable()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Overwrite, Create new table if doesn't exist\r\n",
+					"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = False)"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Overwrite, Preserve schema if table exists\r\n",
+					"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = True)"
+				],
+				"execution_count": 16
 			}
 		]
 	}

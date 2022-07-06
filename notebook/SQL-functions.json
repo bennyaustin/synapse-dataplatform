@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "00464702-f47d-4c53-8737-c9640e711bf9"
+				"spark.autotune.trackingId": "4175693d-2610-470e-a3d2-cfa7c5ea10b6"
 			}
 		},
 		"metadata": {
@@ -346,7 +346,7 @@
 					"     .option(\"dbtable\",table)\r\n",
 					"     .save()\r\n",
 					"    ) \r\n",
-					"  print(\"Inert into {} completed\".format(table))  \r\n",
+					"  print(\"Insert into {} completed\".format(table))  \r\n",
 					"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
 					"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
 					"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
