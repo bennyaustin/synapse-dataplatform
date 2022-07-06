@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "523cfaad-9551-41ae-a5d0-024b5cd0bd5a"
+				"spark.autotune.trackingId": "b96cf68d-b3c8-4bd2-913b-e4d453439770"
 			}
 		},
 		"metadata": {
@@ -180,7 +180,7 @@
 					"    authority = authUrl + \"/\" + tenantId\r\n",
 					"    try:\r\n",
 					"        context = adal.AuthenticationContext(authority)\r\n",
-					"        token = context.acquire_token_with_client_credentials(resourceUrl, clientId, secret)\r\n",
+					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\r\n",
 					"        accessToken = token[\"accessToken\"]\r\n",
 					"    except Exception as e:\r\n",
 					"        print(\"getBearerToken failed with exception:\")\r\n",
