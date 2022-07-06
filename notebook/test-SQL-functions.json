@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "ef20c8be-1889-4d72-ba45-34bdeaeaaad7"
+				"spark.autotune.trackingId": "5e2f55db-82d4-4729-8cd5-e75c469305fe"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,20 @@
 				"source": [
 					"%run /common/SQL-functions {\"server\": \"ba-sqlserver1.database.windows.net\",\"database\": \"AdventureWorks\",\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\"  }"
 				],
-				"execution_count": 5
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Test getBearerToken()"
+				]
 			},
 			{
 				"cell_type": "code",
@@ -95,7 +108,7 @@
 					"bearerToken =getBearerToken(tenantId,servicePrincipalId, servicePrincipal, authUrl, resourceAppIdUrl)\r\n",
 					"print(bearerToken)"
 				],
-				"execution_count": 6
+				"execution_count": 8
 			}
 		]
 	}

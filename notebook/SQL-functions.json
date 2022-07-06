@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "4e17077d-4c13-485c-952e-4e7d1dc5da39"
+				"spark.autotune.trackingId": "4637e1a4-12c5-47e2-bfc1-8d0a28926631"
 			}
 		},
 		"metadata": {
@@ -106,7 +106,7 @@
 					"servicePrincipalIdSecret = \"Azure Key Vault Secret for Service Principal ID\"\r\n",
 					"servicePrincipalSecret = \"Azure Key Vault Secret for Service Principal secret\""
 				],
-				"execution_count": null
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
@@ -124,13 +124,13 @@
 				"source": [
 					"import adal\r\n",
 					"\r\n",
-					"_tenantId = getSecret(tenandIdSecret)\r\n",
-					"_servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
+					"tenantId = getSecret(tenandIdSecret)\r\n",
+					"servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
 					"servicePrincipal = getSecret(servicePrincipalSecret)\r\n",
 					"resourceAppIdUrl = \"https://database.windows.net/\"\r\n",
 					"authUrl = \"https://login.windows.net\""
 				],
-				"execution_count": null
+				"execution_count": 8
 			},
 			{
 				"cell_type": "markdown",
@@ -181,7 +181,7 @@
 					"    accessToken = token[\"accessToken\"]\r\n",
 					"    return accessToken"
 				],
-				"execution_count": null
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
