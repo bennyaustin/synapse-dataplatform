@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "0370699f-09d8-4da5-ae6e-ddc29abe6f67"
+				"spark.autotune.trackingId": "5308167c-e940-4b5d-ab5b-ba0be45ee9b3"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1.database.windows.net\", \"database\": \"AdventureWorks\"}"
 				],
-				"execution_count": 1
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"df = readTable (\"Person.Address\")\r\n",
 					"display(df)"
 				],
-				"execution_count": 2
+				"execution_count": 4
 			}
 		]
 	}
