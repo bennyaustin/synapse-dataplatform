@@ -1,7 +1,7 @@
 {
-	"name": "test-SQL-functions",
+	"name": "test-AAD-functions",
 	"properties": {
-		"description": "Notebook to unit test SQL-functions",
+		"description": "Notebook to unit test AAD-functions",
 		"folder": {
 			"name": "unit tests"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "5e2f55db-82d4-4729-8cd5-e75c469305fe"
+				"spark.autotune.trackingId": "e501639e-7974-4144-a1d3-26ba74482efa"
 			}
 		},
 		"metadata": {
@@ -62,15 +62,15 @@
 					}
 				},
 				"source": [
-					"# Unit Test SQL-functions"
+					"# Unit Test AAD-functions"
 				]
 			},
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/SQL-functions {\"server\": \"ba-sqlserver1.database.windows.net\",\"database\": \"AdventureWorks\",\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\"  }"
+					"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
 				],
-				"execution_count": 7
+				"execution_count": 10
 			},
 			{
 				"cell_type": "markdown",
@@ -99,16 +99,10 @@
 					}
 				},
 				"source": [
-					"tenantId = getSecret(\"TenantID\")\r\n",
-					"servicePrincipalId = getSecret(\"ba-automation-spn-clientID\")\r\n",
-					"servicePrincipal = getSecret(\"ba-automation-spn\")\r\n",
-					"resourceAppIdUrl = \"https://database.windows.net/\"\r\n",
-					"authUrl = \"https://login.windows.net\"\r\n",
-					"\r\n",
 					"bearerToken =getBearerToken(tenantId,servicePrincipalId, servicePrincipal, authUrl, resourceAppIdUrl)\r\n",
 					"print(bearerToken)"
 				],
-				"execution_count": 8
+				"execution_count": 11
 			}
 		]
 	}
