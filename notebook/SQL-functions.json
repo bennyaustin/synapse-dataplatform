@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "45013315-70a3-4902-9b69-109ab7aa14dd"
+				"spark.autotune.trackingId": "b97e2d7c-b504-4949-b1fc-06ff53ce908b"
 			}
 		},
 		"metadata": {
@@ -124,6 +124,19 @@
 				"execution_count": 14
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Initialize Variables"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -137,8 +150,7 @@
 					}
 				},
 				"source": [
-					"bearerToken = getBearerToken()\r\n",
-					"print(bearerToken)"
+					"url = server+ \";\" + \"databaseName=\" + database + \";\""
 				],
 				"execution_count": 16
 			},
@@ -156,7 +168,29 @@
 					}
 				},
 				"source": [
-					""
+					"def readTable(table):\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"  # Function: readTable\r\n",
+					"  # Reads all the rows and columns of an Azure SQL table/view and returns the records as dataframe\r\n",
+					"  # \r\n",
+					"  # Parameters:\r\n",
+					"  # table = Input Table/View including the schema name. E.g soccer.goalpost, afl.goalpost\r\n",
+					"  #\r\n",
+					"  # Returns:\r\n",
+					"  # Dataframe containing all rows and columns of a table/view in Azure SQL\r\n",
+					"  # ##########################################################################################################################  \r\n",
+					"    bearerToken = getBearerToken()\r\n",
+					"\r\n",
+					"    df = (spark.read    \r\n",
+					"                .format(\"com.microsoft.sqlserver.jdbc.spark\")\r\n",
+					"                .option(\"url\",url)\r\n",
+					"                .option(\"dbtable\", dbtable) \r\n",
+					"                .option(\"accessToken\", bearerToken)\r\n",
+					"                .option(\"encrypt\", \"true\") #Note: String \"true\" not boolean True\r\n",
+					"                .option(\"hostNameInCertificate\", \"*.database.windows.net\")\r\n",
+					"                .load()\r\n",
+					"        )\r\n",
+					"    return df"
 				],
 				"execution_count": null
 			}
