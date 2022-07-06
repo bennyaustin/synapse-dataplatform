@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "0066f81b-e2e1-4a7e-a169-f0ea475ef920"
+				"spark.autotune.trackingId": "07794f51-be4a-45eb-8b79-608a52564775"
 			}
 		},
 		"metadata": {
@@ -290,7 +290,7 @@
 					}
 				},
 				"source": [
-					"insertTable()"
+					"# insertTable()"
 				]
 			},
 			{
