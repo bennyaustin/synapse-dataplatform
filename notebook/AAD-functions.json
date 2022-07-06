@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "16ef4761-eca7-4e91-88c1-6cb6bb0f8244"
+				"spark.autotune.trackingId": "b35a03ad-df1b-4d39-b72d-f8ef56b4346a"
 			}
 		},
 		"metadata": {
@@ -62,7 +62,7 @@
 					}
 				},
 				"source": [
-					"# Re-usable functions for Azure Synapse SQL Dedicated Pool"
+					"# Re-usable functions for Azure Active Directory"
 				]
 			},
 			{
