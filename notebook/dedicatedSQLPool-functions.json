@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "19342704-c4a4-4247-b1f9-c331cebf9686"
+				"spark.autotune.trackingId": "fa73353c-3603-49c1-b04c-30e48a1f212e"
 			}
 		},
 		"metadata": {
@@ -227,9 +227,9 @@
 					}
 				},
 				"source": [
-					"def insertDspTable(df, schema,table, mode):\r\n",
+					"def insertSdpTable(df, schema,table, mode):\r\n",
 					"  # ##########################################################################################################################  \r\n",
-					"  # Function: insertDspTable\r\n",
+					"  # Function: insertSdpTable\r\n",
 					"  # Writes a dataframe to an Azure Synapse Dedicated Pool table\r\n",
 					"  # \r\n",
 					"  # Parameters:\r\n",
