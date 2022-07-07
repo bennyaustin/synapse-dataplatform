@@ -3186,7 +3186,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "4175693d-2610-470e-a3d2-cfa7c5ea10b6"
+						"spark.autotune.trackingId": "9344da00-805f-4e71-b910-01a01e28e763"
 					}
 				},
 				"metadata": {
@@ -3365,13 +3365,19 @@
 							"    assert table is not None, \"table not specified\"\r\n",
 							"\r\n",
 							"    jdbcUrl = getJdbcUrl()\r\n",
-							"    df = (spark.read\r\n",
-							"            .format(\"jdbc\")\r\n",
-							"            .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
-							"            .option(\"url\",jdbcUrl)\r\n",
-							"            .option(\"dbtable\",table)\r\n",
-							"            .load()\r\n",
-							"        )\r\n",
+							"\r\n",
+							"    try:\r\n",
+							"      df = (spark.read\r\n",
+							"              .format(\"jdbc\")\r\n",
+							"              .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"              .option(\"url\",jdbcUrl)\r\n",
+							"              .option(\"dbtable\",table)\r\n",
+							"              .load()\r\n",
+							"          )\r\n",
+							"    except Exception as e:\r\n",
+							"        print(\"readTable({}) failed with exception:\".format(table))\r\n",
+							"        raise e\r\n",
+							"\r\n",
 							"\r\n",
 							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
 							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
@@ -3428,13 +3434,17 @@
 							"  assert query is not None, \"query not specified\"\r\n",
 							"\r\n",
 							"  jdbcUrl = getJdbcUrl()\r\n",
-							"  df = (spark.read\r\n",
-							"          .format(\"jdbc\")\r\n",
-							"          .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
-							"          .option(\"url\",jdbcUrl)\r\n",
-							"          .option(\"query\",query)\r\n",
-							"          .load()\r\n",
-							"      )\r\n",
+							"  try:\r\n",
+							"    df = (spark.read\r\n",
+							"            .format(\"jdbc\")\r\n",
+							"            .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"            .option(\"url\",jdbcUrl)\r\n",
+							"            .option(\"query\",query)\r\n",
+							"            .load()\r\n",
+							"        )\r\n",
+							"  except Exception as e:\r\n",
+							"        print(\"readQuery({}) failed with exception:\".format(query))\r\n",
+							"        raise e\r\n",
 							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
 							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
 							"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
@@ -3495,27 +3505,30 @@
 							"\r\n",
 							"  jdbcUrl = getJdbcUrl()\r\n",
 							"  \r\n",
-							"  if writeMode == \"overwrite\" and preserveSchema == True :\r\n",
-							"    #Truncate and Append instead of overwrite to preserve table schema\r\n",
-							"    (df.write\r\n",
-							"     .format(\"jdbc\")\r\n",
-							"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
-							"     .option(\"url\",jdbcUrl)\r\n",
-							"     .mode(\"append\")\r\n",
-							"     .option(\"truncate\", \"true\") # Must be string \"true\" and not boolean True\r\n",
-							"     .option(\"dbtable\",table)\r\n",
-							"     .save()\r\n",
-							"    )\r\n",
-							"  else:\r\n",
-							"    (df.write\r\n",
-							"     .format(\"jdbc\")\r\n",
-							"     .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
-							"     .option(\"url\",jdbcUrl)\r\n",
-							"     .mode(writeMode)\r\n",
-							"     .option(\"dbtable\",table)\r\n",
-							"     .save()\r\n",
-							"    ) \r\n",
-							"  print(\"Insert into {} completed\".format(table))  \r\n",
+							"  try:\r\n",
+							"    if writeMode == \"overwrite\" and preserveSchema == True :\r\n",
+							"      #Truncate and Append instead of overwrite to preserve table schema\r\n",
+							"      (df.write\r\n",
+							"      .format(\"jdbc\")\r\n",
+							"      .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"      .option(\"url\",jdbcUrl)\r\n",
+							"      .mode(\"append\")\r\n",
+							"      .option(\"truncate\", \"true\") # Must be string \"true\" and not boolean True\r\n",
+							"      .option(\"dbtable\",table)\r\n",
+							"      .save()\r\n",
+							"      )\r\n",
+							"    else:\r\n",
+							"      (df.write\r\n",
+							"      .format(\"jdbc\")\r\n",
+							"      .option(\"driver\",\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\r\n",
+							"      .option(\"url\",jdbcUrl)\r\n",
+							"      .mode(writeMode)\r\n",
+							"      .option(\"dbtable\",table)\r\n",
+							"      .save()\r\n",
+							"      ) \r\n",
+							"  except Exception as e:\r\n",
+							"        print(\"insertTable({}) failed with exception:\".format(query))\r\n",
+							"        raise e \r\n",
 							"    ## Use Apache Spark Connector in Future instead of JDBC connector for faster execution. At the moment Apache Spark Connector is not available on newer Spark Runtime\r\n",
 							"    ## Have to install a library from maven coordinates:com.microsoft.azure:spark-mssql-connector_2.12:1.2.0\r\n",
 							"    ## https://docs.microsoft.com/en-us/sql/connect/spark/connector?view=sql-server-ver16\r\n",
@@ -4465,7 +4478,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "1bf7ade4-911f-4d4b-8215-fc6a64cbd49b"
+						"spark.autotune.trackingId": "9ab9a03e-2d18-44cb-b36b-a4efb402ff10"
 					}
 				},
 				"metadata": {
@@ -4490,8 +4503,7 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": true
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -4511,7 +4523,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"%run /common/AAD-functions {\"tenandIdSecret\":\"TenantID\", \"servicePrincipalIdSecret\": \"ba-automation-spn-clientID\",\"servicePrincipalSecret\": \"ba-automation-spn\",\"authUrl\": \"https://login.windows.net\",\"resourceUrl\": \"https://database.windows.net/\"}"
 						],
@@ -4580,7 +4591,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "4",
-						"spark.autotune.trackingId": "a956729a-f3fc-44ea-a5f4-b84abda20603"
+						"spark.autotune.trackingId": "d1fb54c6-726c-4f54-8071-9ed7de911bf6"
 					}
 				},
 				"metadata": {
@@ -4629,7 +4640,7 @@
 							"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 						],
 						"outputs": [],
-						"execution_count": 10
+						"execution_count": 1
 					},
 					{
 						"cell_type": "markdown",
@@ -4663,7 +4674,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 2
 					},
 					{
 						"cell_type": "markdown",
@@ -4703,7 +4714,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -4736,7 +4747,7 @@
 							"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = False)"
 						],
 						"outputs": [],
-						"execution_count": 15
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -4756,7 +4767,7 @@
 							"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = True)"
 						],
 						"outputs": [],
-						"execution_count": 16
+						"execution_count": 5
 					},
 					{
 						"cell_type": "code",
@@ -4776,7 +4787,7 @@
 							"insertTable(df,\"dbo.test\",\"append\")"
 						],
 						"outputs": [],
-						"execution_count": 17
+						"execution_count": 6
 					}
 				]
 			},
@@ -5852,7 +5863,7 @@
 						"spark.dynamicAllocation.enabled": "true",
 						"spark.dynamicAllocation.minExecutors": "1",
 						"spark.dynamicAllocation.maxExecutors": "1",
-						"spark.autotune.trackingId": "28691378-6af9-4c5d-ac89-f9d48ebcdab1"
+						"spark.autotune.trackingId": "bd46133d-827f-4c67-8c53-7c8f49434672"
 					}
 				},
 				"metadata": {
@@ -6016,7 +6027,7 @@
 							"    # INSERT and UPDATE part of MERGE\r\n",
 							"    for col in df.schema.fieldNames():\r\n",
 							"        insertCols = insertCols + col + \",\"\r\n",
-							"        if col not in KeyColumns: # Do not include key columns in update statement\r\n",
+							"        if col not in KeyColumns: # Exclude key columns in update statement\r\n",
 							"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 							"\r\n",
 							"    #Tidy up insertCols and remove last \",\"\r\n",
