@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "893f4106-5d4c-4611-bc71-b37747c50d21"
+				"spark.autotune.trackingId": "4390dfac-b7fe-4311-9038-d925c94e4b55"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 				],
-				"execution_count": 9
+				"execution_count": 12
 			},
 			{
 				"cell_type": "markdown",
@@ -245,7 +245,7 @@
 					"\r\n",
 					"upsert(df,\"dbo\",\"AddressStage\", \"dbo\", \"AddressMerge\", [\"AddressID\"], [\"AddressID\"],\"ModifiedDate\") "
 				],
-				"execution_count": 11
+				"execution_count": 14
 			}
 		]
 	}
