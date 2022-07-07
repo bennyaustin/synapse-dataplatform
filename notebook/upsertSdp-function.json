@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "91c523a3-cdff-48ae-a54e-4d2aac502b6a"
+				"spark.autotune.trackingId": "5937fd0a-65da-4908-8645-044d8b63813a"
 			}
 		},
 		"metadata": {
@@ -131,6 +131,24 @@
 					"import pyodbc"
 				],
 				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
