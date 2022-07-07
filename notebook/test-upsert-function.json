@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "667935b8-fbc8-48a6-8cba-d91c3570df9e"
+				"spark.autotune.trackingId": "7c621419-b0ec-4918-93a2-7eacb4d2bebd"
 			}
 		},
 		"metadata": {
@@ -68,9 +68,22 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
+					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
 				"execution_count": 1
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# upsert Synapse Dedicated SQL Pool Table"
+				]
 			},
 			{
 				"cell_type": "code",
