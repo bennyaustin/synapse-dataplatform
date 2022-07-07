@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "214ab93b-54fe-4604-8c57-1f9b2056ce78"
+				"spark.autotune.trackingId": "933ec39a-728e-49cc-8356-265cb2ba6413"
 			}
 		},
 		"metadata": {
@@ -62,7 +62,7 @@
 					}
 				},
 				"source": [
-					"# Re-usable Upsert function for Azure SQL Server/Azure Synapse Analytics SQL Dedicated Pool"
+					"# Re-usable Upsert function for Azure Synapse Analytics SQL Dedicated Pool"
 				]
 			},
 			{
@@ -82,11 +82,10 @@
 					]
 				},
 				"source": [
-					"server=\"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server>\"\r\n",
-					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server database>\"\r\n",
+					"server=\"<Azure Synapse DedicatedSQLPool>\"\r\n",
+					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL>\"\r\n",
 					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
-					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\"\r\n",
-					"sinkType = \"Synapse\" #Allowed values are Synapse or SQL"
+					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
 				],
 				"execution_count": 1
 			},
@@ -129,30 +128,24 @@
 					}
 				},
 				"source": [
-					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
-				],
-				"execution_count": 4
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					"import pyodbc\r\n",
-					"assert sinkType in [\"Synapse\",\"SQL\"], \"Invalid sinkType. Allowed values are Synapse, SQL.\""
+					"import pyodbc"
 				],
 				"execution_count": 5
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# upsertDsp()"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -166,7 +159,7 @@
 					}
 				},
 				"source": [
-					"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"def upsertDsp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
 					"# ##########################################################################################################################  \r\n",
 					"# Function: upsert\r\n",
 					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
@@ -183,12 +176,7 @@
 					"# Returns:\r\n",
 					"# None\r\n",
 					"# ##########################################################################################################################  \r\n",
-					"    if sinkType == \"Synapse\":\r\n",
-					"        insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
-					"\r\n",
-					"    if sinkType == \"SQL\":\r\n",
-					"        insertTable(df,SchemaStagingTable,\"overwrite\",False)\r\n",
-					"        server = server + \".database.windows.net\"\r\n",
+					"    insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
 					"\r\n",
 					"    insertCols=\"\"\r\n",
 					"    updateCols=\"\"\r\n",
