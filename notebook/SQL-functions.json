@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "e6ebd17c-8a4d-4f14-a41d-b8e76c0b6a7c"
+				"spark.autotune.trackingId": "377772d3-c9b5-4b7f-866f-c09f7600e734"
 			}
 		},
 		"metadata": {
@@ -435,7 +435,7 @@
 					"# None\r\n",
 					"# ##########################################################################################################################  \r\n",
 					"\r\n",
-					"    insertTable(df,SchemaStagingTable,\"overwrite\",False)\r\n",
+					"    insertTable(df,SchemaStagingTable + \".\" + StagingTable ,\"overwrite\")\r\n",
 					"    \r\n",
 					"\r\n",
 					"    insertCols=\"\"\r\n",
