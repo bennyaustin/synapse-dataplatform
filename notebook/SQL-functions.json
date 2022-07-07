@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "1ceff4a3-fbea-4fea-b5a3-da3f222824fd"
+				"spark.autotune.trackingId": "e6ebd17c-8a4d-4f14-a41d-b8e76c0b6a7c"
 			}
 		},
 		"metadata": {
@@ -488,8 +488,8 @@
 					"    mergeSQL = mergeSQL +\";\"\r\n",
 					"    \r\n",
 					"    #Execute Merge Statement using Pyodbc\r\n",
-					"    uid = getSecret(sqlUidSecret)\r\n",
-					"    pwd = getSecret(sqlPwdSecret)\r\n",
+					"    uid = getSecret(usernameSecret)\r\n",
+					"    pwd = getSecret(passwordSecret)\r\n",
 					" \r\n",
 					"    try:\r\n",
 					"        cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \".database.windows.net\" + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
