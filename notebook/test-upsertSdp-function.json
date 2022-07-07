@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "407793cb-b18f-4b2e-8e79-3697fdeb39f6"
+				"spark.autotune.trackingId": "10de01ab-203b-47c8-a236-358cb25871b4"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 13
+				"execution_count": 15
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"upsertDsp(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 14
+				"execution_count": 16
 			}
 		]
 	}
