@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "9344da00-805f-4e71-b910-01a01e28e763"
+				"spark.autotune.trackingId": "22967608-38fc-4690-be78-c9b734c2739f"
 			}
 		},
 		"metadata": {
@@ -332,7 +332,7 @@
 					"  # ########################################################################################################################## \r\n",
 					"  assert table is not None, \"query not specified\"\r\n",
 					"  assert writeMode is not None, \"writeMode not specified\"\r\n",
-					"  assert writeMode in [\"append\",\"overwrite\",\"ignore\",\"error\",\"errorifexists\"] , \"writeMode not specified\"\r\n",
+					"  assert writeMode in [\"append\",\"overwrite\",\"ignore\",\"error\",\"errorifexists\"] , \"writeMode is invalid. Allowed values are append,overwrite,ignore,error,errorifexists\"\r\n",
 					"\r\n",
 					"  jdbcUrl = getJdbcUrl()\r\n",
 					"  \r\n",

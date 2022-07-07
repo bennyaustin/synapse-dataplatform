@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "bd46133d-827f-4c67-8c53-7c8f49434672"
+				"spark.autotune.trackingId": "226d5204-b4e8-4d31-ba61-8f776acfe6e6"
 			}
 		},
 		"metadata": {
@@ -85,7 +85,8 @@
 					"server=\"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server>\"\r\n",
 					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server database>\"\r\n",
 					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
-					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
+					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\"\r\n",
+					"sinkType = \"Synapse\" #Allowed values are Synapse or SQL"
 				],
 				"execution_count": 10
 			},
@@ -128,7 +129,8 @@
 					}
 				},
 				"source": [
-					"import pyodbc"
+					"import pyodbc\r\n",
+					"assert sinkType in [\"Synapse\",\"SQL\"]"
 				],
 				"execution_count": null
 			},
