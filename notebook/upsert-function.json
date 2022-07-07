@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "226d5204-b4e8-4d31-ba61-8f776acfe6e6"
+				"spark.autotune.trackingId": "cc982423-7647-4ab9-a839-c541f5bfc2d1"
 			}
 		},
 		"metadata": {
@@ -129,8 +129,26 @@
 					}
 				},
 				"source": [
+					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
 					"import pyodbc\r\n",
-					"assert sinkType in [\"Synapse\",\"SQL\"]"
+					"assert sinkType in [\"Synapse\",\"SQL\"], \"Invalid sinkType. Allowed values are Synapse, SQL.\""
 				],
 				"execution_count": null
 			},
@@ -165,7 +183,12 @@
 					"# Returns:\r\n",
 					"# None\r\n",
 					"# ##########################################################################################################################  \r\n",
-					"    insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
+					"    if sinkType = \"Synapse\":\r\n",
+					"        insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
+					"\r\n",
+					"    if sinkType = \"SQL\":\r\n",
+					"        insertTable(df,SchemaStagingTable,\"overwrite\",False)\r\n",
+					"\r\n",
 					"    insertCols=\"\"\r\n",
 					"    updateCols=\"\"\r\n",
 					"    whereCols =\"\"\r\n",
