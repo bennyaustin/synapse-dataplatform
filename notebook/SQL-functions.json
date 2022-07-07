@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "4504fdf6-b4b5-4447-961a-4c02b7ef9ada"
+				"spark.autotune.trackingId": "d1563366-0f0f-49b2-afc7-6ae03ec11eba"
 			}
 		},
 		"metadata": {
@@ -457,9 +457,9 @@
 					"    # INSERT and UPDATE part of MERGE\r\n",
 					"    for col in df.schema.fieldNames():\r\n",
 					"        if col not in IdentityColumns: # Exclude Identity columns in Insert statement\r\n",
-					"        insertCols = insertCols + col + \",\"\r\n",
+					"            insertCols = insertCols + col + \",\"\r\n",
 					"        if col not in KeyColumns and col not in IdentityColumns: # Exclude key and Identity columns in update statement\r\n",
-					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
+					"            updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 					"\r\n",
 					"    #Tidy up insertCols and remove last \",\"\r\n",
 					"    remove=\",\"\r\n",
