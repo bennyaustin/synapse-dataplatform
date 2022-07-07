@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "b1c9dfb6-ca12-45c2-8ed0-57ddc72abe05"
+				"spark.autotune.trackingId": "214ab93b-54fe-4604-8c57-1f9b2056ce78"
 			}
 		},
 		"metadata": {
@@ -88,14 +88,14 @@
 					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\"\r\n",
 					"sinkType = \"Synapse\" #Allowed values are Synapse or SQL"
 				],
-				"execution_count": 10
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 11
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -113,7 +113,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
 				],
-				"execution_count": 12
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -131,7 +131,7 @@
 				"source": [
 					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -150,7 +150,7 @@
 					"import pyodbc\r\n",
 					"assert sinkType in [\"Synapse\",\"SQL\"], \"Invalid sinkType. Allowed values are Synapse, SQL.\""
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -188,6 +188,7 @@
 					"\r\n",
 					"    if sinkType == \"SQL\":\r\n",
 					"        insertTable(df,SchemaStagingTable,\"overwrite\",False)\r\n",
+					"        server = server + \".database.windows.net\"\r\n",
 					"\r\n",
 					"    insertCols=\"\"\r\n",
 					"    updateCols=\"\"\r\n",
@@ -255,7 +256,7 @@
 					"    print(\"Upsert statement executed successfully : {} \".format(mergeSQL))\r\n",
 					"    return"
 				],
-				"execution_count": 30
+				"execution_count": 6
 			}
 		]
 	}
