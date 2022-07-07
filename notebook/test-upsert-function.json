@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "7c621419-b0ec-4918-93a2-7eacb4d2bebd"
+				"spark.autotune.trackingId": "40f1694a-5340-4310-88f4-f5b3c6fd8e68"
 			}
 		},
 		"metadata": {
@@ -102,7 +102,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 2
+				"execution_count": null
 			}
 		]
 	}
