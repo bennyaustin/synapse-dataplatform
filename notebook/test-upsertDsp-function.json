@@ -1,7 +1,7 @@
 {
-	"name": "test-upsert-function",
+	"name": "test-upsertDsp-function",
 	"properties": {
-		"description": "Notebook for unit testing upsert-function",
+		"description": "Notebook for unit testing upsertDsp-function",
 		"folder": {
 			"name": "unit tests"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4b507b3b-2469-4dfd-81e0-a4f88edf9f08"
+				"spark.autotune.trackingId": "85b8e478-41bc-4d2b-85b6-bd1c26caa623"
 			}
 		},
 		"metadata": {
@@ -100,7 +100,7 @@
 				},
 				"source": [
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
-					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
+					"upsertDsp(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
 				"execution_count": 3
 			}
