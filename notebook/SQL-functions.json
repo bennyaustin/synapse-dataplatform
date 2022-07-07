@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "12bb77b9-be91-463d-94d7-fed5e675efcd"
+				"spark.autotune.trackingId": "4504fdf6-b4b5-4447-961a-4c02b7ef9ada"
 			}
 		},
 		"metadata": {
@@ -417,7 +417,7 @@
 					}
 				},
 				"source": [
-					"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns,IdentityColumns=None, DeltaColumn=None) :\r\n",
 					"# ##########################################################################################################################  \r\n",
 					"# Function: upsert\r\n",
 					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
@@ -429,6 +429,7 @@
 					"# SchemaTargetTable = Database schema of target table\r\n",
 					"# TargetTable  = Name of Target Table\r\n",
 					"# KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					"# IdentityColumns = List of Identity Columns that needs to be excluded from Inserts and Updates\r\n",
 					"# DeltaColumn = Name of watermark column in input dataframe\r\n",
 					"#\r\n",
 					"# Returns:\r\n",
@@ -455,8 +456,9 @@
 					"\r\n",
 					"    # INSERT and UPDATE part of MERGE\r\n",
 					"    for col in df.schema.fieldNames():\r\n",
+					"        if col not in IdentityColumns: # Exclude Identity columns in Insert statement\r\n",
 					"        insertCols = insertCols + col + \",\"\r\n",
-					"        if col not in KeyColumns: # Exclude key columns in update statement\r\n",
+					"        if col not in KeyColumns and col not in IdentityColumns: # Exclude key and Identity columns in update statement\r\n",
 					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 					"\r\n",
 					"    #Tidy up insertCols and remove last \",\"\r\n",
