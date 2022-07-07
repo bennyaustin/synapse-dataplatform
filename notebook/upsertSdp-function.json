@@ -1,5 +1,5 @@
 {
-	"name": "upsert-function",
+	"name": "upsertSdp-function",
 	"properties": {
 		"description": "Notebook that implements upsert function using PyOdbc",
 		"folder": {
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "933ec39a-728e-49cc-8356-265cb2ba6413"
+				"spark.autotune.trackingId": "91c523a3-cdff-48ae-a54e-4d2aac502b6a"
 			}
 		},
 		"metadata": {
@@ -142,7 +142,7 @@
 					}
 				},
 				"source": [
-					"# upsertDsp()"
+					"# upsertSdp()"
 				]
 			},
 			{
@@ -159,9 +159,9 @@
 					}
 				},
 				"source": [
-					"def upsertDsp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"def upsertSdp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
 					"# ##########################################################################################################################  \r\n",
-					"# Function: upsert\r\n",
+					"# Function: upsertSdp\r\n",
 					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
 					"# \r\n",
 					"# Parameters:\r\n",

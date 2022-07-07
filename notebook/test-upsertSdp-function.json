@@ -1,7 +1,7 @@
 {
-	"name": "test-upsertDsp-function",
+	"name": "test-upsertSdp-function",
 	"properties": {
-		"description": "Notebook for unit testing upsertDsp-function",
+		"description": "Notebook for unit testing upsertSdp-function",
 		"folder": {
 			"name": "unit tests"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "85b8e478-41bc-4d2b-85b6-bd1c26caa623"
+				"spark.autotune.trackingId": "cdea1aeb-c5c2-4747-863c-555dd5a78b0c"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 2
+				"execution_count": 4
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"upsertDsp(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 3
+				"execution_count": 5
 			}
 		]
 	}
