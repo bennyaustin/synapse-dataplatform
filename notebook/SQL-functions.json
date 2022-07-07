@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "22967608-38fc-4690-be78-c9b734c2739f"
+				"spark.autotune.trackingId": "611a0873-34e3-4f57-bf36-c91a21bd1d93"
 			}
 		},
 		"metadata": {
@@ -106,6 +106,24 @@
 					"passwordSecret = \"<Azure Key Vault Secret for SQL User Password>\""
 				],
 				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import pyodbc"
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -371,6 +389,122 @@
 					"    #       )"
 				],
 				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# upsert()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"# ##########################################################################################################################  \r\n",
+					"# Function: upsert\r\n",
+					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
+					"# \r\n",
+					"# Parameters:\r\n",
+					"# df = Input dataframe\r\n",
+					"# StagingTable = Name of Table used to temporarily stage the input data frame\r\n",
+					"# SchemaStagingTable = Database schema of staging table\r\n",
+					"# SchemaTargetTable = Database schema of target table\r\n",
+					"# TargetTable  = Name of Target Table\r\n",
+					"# KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					"# DeltaColumn = Name of watermark column in input dataframe\r\n",
+					"#\r\n",
+					"# Returns:\r\n",
+					"# None\r\n",
+					"# ##########################################################################################################################  \r\n",
+					"\r\n",
+					"    insertTable(df,SchemaStagingTable,\"overwrite\",False)\r\n",
+					"    \r\n",
+					"\r\n",
+					"    insertCols=\"\"\r\n",
+					"    updateCols=\"\"\r\n",
+					"    whereCols =\"\"\r\n",
+					"    keyCols = \"\"\r\n",
+					"\r\n",
+					"    # MATCHED Clause of MERGE\r\n",
+					"    for keyCol in KeyColumns:\r\n",
+					"        keyCols = keyCols + \"source.\" + keyCol + \" = \" + \"target.\" + keyCol + \" and \"\r\n",
+					"\r\n",
+					"    whereClause = keyCols\r\n",
+					"    #Tidy up where clause and remove last \"and\"\r\n",
+					"    remove=\"and\"\r\n",
+					"    reverse_remove=remove[::-1]\r\n",
+					"    whereClause = whereClause[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"\r\n",
+					"    # INSERT and UPDATE part of MERGE\r\n",
+					"    for col in df.schema.fieldNames():\r\n",
+					"        insertCols = insertCols + col + \",\"\r\n",
+					"        if col not in KeyColumns: # Exclude key columns in update statement\r\n",
+					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
+					"\r\n",
+					"    #Tidy up insertCols and remove last \",\"\r\n",
+					"    remove=\",\"\r\n",
+					"    reverse_remove=remove[::-1]\r\n",
+					"    insertCols = insertCols[::-1].replace(reverse_remove,\"\",1)[::-1]  \r\n",
+					"\r\n",
+					"    #Tidy up insertCols and remove last \",\"\r\n",
+					"    remove=\",\"\r\n",
+					"    reverse_remove=remove[::-1]\r\n",
+					"    updateCols = updateCols[::-1].replace(reverse_remove,\"\",1)[::-1]   \r\n",
+					"\r\n",
+					"    # MERGE Statement in full\r\n",
+					"    mergeSQL= \"MERGE INTO \" + SchemaTargetTable +\".\" + TargetTable + \" AS target\" +  \" USING \" + SchemaStagingTable + \".\" + StagingTable + \" AS source\" + \" ON \"\r\n",
+					"    mergeSQL = mergeSQL + whereClause\r\n",
+					"\r\n",
+					"    # WHEN MATCHED\r\n",
+					"    if DeltaColumn != None:\r\n",
+					"        mergeSQL =  mergeSQL + \" WHEN MATCHED AND \" + \"source.\" + DeltaColumn + \" > \" + \"target.\" + DeltaColumn \r\n",
+					"    else:\r\n",
+					"        mergeSQL =  mergeSQL + \" WHEN MATCHED\"\r\n",
+					"\r\n",
+					"    mergeSQL = mergeSQL + \" THEN UPDATE SET \" + updateCols\r\n",
+					"\r\n",
+					"    # WHEN NOT MATCHED BY TARGET\r\n",
+					"    mergeSQL = mergeSQL + \" WHEN NOT MATCHED BY TARGET \" # including BY TARGET clause for Synapse requires the table to be Hash Distributed\r\n",
+					"    mergeSQL = mergeSQL + \" THEN INSERT \" +  \"(\"+ insertCols +\")\" + \" VALUES \" + \" ( \"+ insertCols +\" ) \"\r\n",
+					"\r\n",
+					"    mergeSQL = mergeSQL +\";\"\r\n",
+					"    \r\n",
+					"    #Execute Merge Statement using Pyodbc\r\n",
+					"    uid = getSecret(sqlUidSecret)\r\n",
+					"    pwd = getSecret(sqlPwdSecret)\r\n",
+					" \r\n",
+					"    try:\r\n",
+					"        cnxn = pyodbc.connect(\"DRIVER={ODBC Driver 17 for SQL Server};SERVER=\" + server + \".database.windows.net\" + \";DATABASE=\" + database + \";UID=\" + uid + \";PWD=\" + pwd )\r\n",
+					"        cursor = cnxn.cursor()\r\n",
+					"        cnxn.autocommit = True\r\n",
+					"\r\n",
+					"        cursor.execute(mergeSQL)\r\n",
+					"    except Exception as e:\r\n",
+					"        print(\"Upsert to {}.{} failed with exception:\".format(SchemaTargetTable,TargetTable))\r\n",
+					"        raise e\r\n",
+					"\r\n",
+					"    print(\"Upsert statement executed successfully : {} \".format(mergeSQL))\r\n",
+					"    return"
+				],
+				"execution_count": null
 			}
 		]
 	}
