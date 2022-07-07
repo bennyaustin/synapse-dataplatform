@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "d1fb54c6-726c-4f54-8071-9ed7de911bf6"
+				"spark.autotune.trackingId": "4390dfac-b7fe-4311-9038-d925c94e4b55"
 			}
 		},
 		"metadata": {
@@ -70,7 +70,7 @@
 				"source": [
 					"%run /common/SQL-functions {\"server\":\"ba-sqlserver1\", \"database\": \"AdventureWorks\",\"usernameSecret\": \"ba-sqlserver1-sqlusername\", \"passwordSecret\": \"ba-sqlserver1-password\"}"
 				],
-				"execution_count": 1
+				"execution_count": 12
 			},
 			{
 				"cell_type": "markdown",
@@ -174,7 +174,7 @@
 					"# Overwrite, Create new table if doesn't exist\r\n",
 					"insertTable(df,\"dbo.test\",\"overwrite\",preserveSchema = False)"
 				],
-				"execution_count": 4
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -213,6 +213,39 @@
 					"insertTable(df,\"dbo.test\",\"append\")"
 				],
 				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Test Upsert()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df = readTable (\"Person.Address\")\r\n",
+					"\r\n",
+					"upsert(df,\"dbo\",\"AddressStage\", \"dbo\", \"AddressMerge\", [\"AddressID\"], [\"AddressID\"],\"ModifiedDate\") "
+				],
+				"execution_count": 14
 			}
 		]
 	}

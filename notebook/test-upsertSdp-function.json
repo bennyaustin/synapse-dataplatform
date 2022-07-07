@@ -1,7 +1,7 @@
 {
-	"name": "test-upsert-function",
+	"name": "test-upsertSdp-function",
 	"properties": {
-		"description": "Notebook for unit testing upsert-function",
+		"description": "Notebook for unit testing upsertSdp-function",
 		"folder": {
 			"name": "unit tests"
 		},
@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "667935b8-fbc8-48a6-8cba-d91c3570df9e"
+				"spark.autotune.trackingId": "10de01ab-203b-47c8-a236-358cb25871b4"
 			}
 		},
 		"metadata": {
@@ -68,9 +68,22 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\"}"
+					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 1
+				"execution_count": 15
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# upsert Synapse Dedicated SQL Pool Table"
+				]
 			},
 			{
 				"cell_type": "code",
@@ -87,9 +100,9 @@
 				},
 				"source": [
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
-					"upsert(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
+					"upsertDsp(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 2
+				"execution_count": 16
 			}
 		]
 	}

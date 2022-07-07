@@ -1,5 +1,5 @@
 {
-	"name": "upsert-function",
+	"name": "upsertSdp-function",
 	"properties": {
 		"description": "Notebook that implements upsert function using PyOdbc",
 		"folder": {
@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "bd46133d-827f-4c67-8c53-7c8f49434672"
+				"spark.autotune.trackingId": "92669405-9221-48bf-aaae-94da680aa3f9"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -62,7 +62,7 @@
 					}
 				},
 				"source": [
-					"# Re-usable Upsert function for Azure SQL Server/Azure Synapse Analytics SQL Dedicated Pool"
+					"# Re-usable Upsert function for Azure Synapse Analytics SQL Dedicated Pool"
 				]
 			},
 			{
@@ -82,19 +82,19 @@
 					]
 				},
 				"source": [
-					"server=\"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server>\"\r\n",
-					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL/ SQL Server database>\"\r\n",
+					"server=\"<Azure Synapse DedicatedSQLPool>\"\r\n",
+					"database = \"<Azure Synapse DedicatedSQLPool/Azure SQL>\"\r\n",
 					"sqlUidSecret = \"Azure Key Vault Secret for DedicatedSQLPool user name\"\r\n",
 					"sqlPwdSecret = \"Azure Key Vault Secret for DedicatedSQLPool password\""
 				],
-				"execution_count": 10
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 11
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -112,7 +112,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
 				],
-				"execution_count": 12
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -130,7 +130,7 @@
 				"source": [
 					"import pyodbc"
 				],
-				"execution_count": null
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -146,9 +146,40 @@
 					}
 				},
 				"source": [
-					"def upsert(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# upsertSdp()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def upsertSdp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
 					"# ##########################################################################################################################  \r\n",
-					"# Function: upsert\r\n",
+					"# Function: upsertSdp\r\n",
 					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
 					"# \r\n",
 					"# Parameters:\r\n",
@@ -164,6 +195,7 @@
 					"# None\r\n",
 					"# ##########################################################################################################################  \r\n",
 					"    insertSdpTable(df, SchemaStagingTable,StagingTable, \"overwrite\")\r\n",
+					"\r\n",
 					"    insertCols=\"\"\r\n",
 					"    updateCols=\"\"\r\n",
 					"    whereCols =\"\"\r\n",
@@ -182,7 +214,7 @@
 					"    # INSERT and UPDATE part of MERGE\r\n",
 					"    for col in df.schema.fieldNames():\r\n",
 					"        insertCols = insertCols + col + \",\"\r\n",
-					"        if col not in KeyColumns: # Exclude key columns in update statement\r\n",
+					"        if col not in KeyColumns: # Exclude identity columns in update statement\r\n",
 					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 					"\r\n",
 					"    #Tidy up insertCols and remove last \",\"\r\n",
@@ -230,7 +262,7 @@
 					"    print(\"Upsert statement executed successfully : {} \".format(mergeSQL))\r\n",
 					"    return"
 				],
-				"execution_count": 30
+				"execution_count": 12
 			}
 		]
 	}
