@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "cdea1aeb-c5c2-4747-863c-555dd5a78b0c"
+				"spark.autotune.trackingId": "279fb4ec-8443-4c33-8b74-2858b07db939"
 			}
 		},
 		"metadata": {
@@ -68,9 +68,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/upsert-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
+					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 4
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"upsertDsp(df,\"nyct\",\"nyc_tlc_yellow_trip_stage\", \"nyct\", \"nyc_tlc_yellow_trip_merge\", [\"vendorID\",\"tpepPickupDateTime\",\"tpepDropoffDateTime\"], DeltaColumn=None) "
 				],
-				"execution_count": 5
+				"execution_count": 8
 			}
 		]
 	}
