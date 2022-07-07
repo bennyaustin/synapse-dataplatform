@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "ce1ce898-d186-4cb5-9e89-339b275a164b"
+				"spark.autotune.trackingId": "14e1d844-4fd1-4ed6-99ba-a145c77df6a3"
 			}
 		},
 		"metadata": {
@@ -106,7 +106,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"display(df)"
 				],
-				"execution_count": null
+				"execution_count": 2
 			},
 			{
 				"cell_type": "markdown",
