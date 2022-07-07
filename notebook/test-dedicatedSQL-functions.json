@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "499cffcd-eb60-4ed6-a899-4e009f0be56c"
+				"spark.autotune.trackingId": "95f8297a-b6d0-4c9c-a393-90813b7d1309"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
-				"execution_count": 1
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -106,7 +106,7 @@
 					"df =readDspTable(\"nyct\",\"nyc_tlc_yellow_trip\",None,None,10)\r\n",
 					"display(df)"
 				],
-				"execution_count": 2
+				"execution_count": 8
 			},
 			{
 				"cell_type": "markdown",
@@ -145,7 +145,7 @@
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 3
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -171,7 +171,7 @@
 					"display(df)\r\n",
 					""
 				],
-				"execution_count": 4
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -193,7 +193,7 @@
 					"# insertDspTable(df,schema,table,\"error\")\r\n",
 					""
 				],
-				"execution_count": 5
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -215,7 +215,7 @@
 					"insertDspTable(df,schema,table,\"ignore\")\r\n",
 					""
 				],
-				"execution_count": 6
+				"execution_count": null
 			}
 		]
 	}
