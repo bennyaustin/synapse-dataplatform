@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "55014a39-9782-4f66-a333-3596c8d518cf"
+				"spark.autotune.trackingId": "72486d3b-0de6-4bf1-8760-e1f0722e6fbb"
 			}
 		},
 		"metadata": {
@@ -177,7 +177,7 @@
 					}
 				},
 				"source": [
-					"def upsertSdp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns, DeltaColumn=None) :\r\n",
+					"def upsertSdp(df,SchemaStagingTable,StagingTable, SchemaTargetTable, TargetTable, KeyColumns,IdentityColumns=None, DeltaColumn=None) :\r\n",
 					"# ##########################################################################################################################  \r\n",
 					"# Function: upsertSdp\r\n",
 					"# Performs a Merge/Upsert action on a Azure SQL table\r\n",
@@ -189,6 +189,7 @@
 					"# SchemaTargetTable = Database schema of target table\r\n",
 					"# TargetTable  = Name of Target Table\r\n",
 					"# KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					"# IdentityColumns = List of identity columns that will not be supplied values from the dataframe\r\n",
 					"# DeltaColumn = Name of watermark column in input dataframe\r\n",
 					"#\r\n",
 					"# Returns:\r\n",
@@ -213,8 +214,9 @@
 					"\r\n",
 					"    # INSERT and UPDATE part of MERGE\r\n",
 					"    for col in df.schema.fieldNames():\r\n",
-					"        insertCols = insertCols + col + \",\"\r\n",
-					"        if col not in KeyColumns: # Exclude key columns in update statement\r\n",
+					"        if col not in IdentityColumns: # Exclude identity columns in insert statement\r\n",
+					"            insertCols = insertCols + col + \",\"\r\n",
+					"        if col not in KeyColumns and col not in IdentityColumns: # Exclude key columns and identity columns in update statement\r\n",
 					"         updateCols =  updateCols + \"target.\" + col + \" = \" + \"source.\" + col + \",\"\r\n",
 					"\r\n",
 					"    #Tidy up insertCols and remove last \",\"\r\n",
