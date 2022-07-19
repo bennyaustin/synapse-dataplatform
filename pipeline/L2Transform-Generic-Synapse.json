@@ -1,0 +1,9 @@
+{
+	"name": "L2Transform-Generic-Synapse",
+	"properties": {
+		"folder": {
+			"name": "Transform Pipelines"
+		},
+		"annotations": []
+	}
+}
