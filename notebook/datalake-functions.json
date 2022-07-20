@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "1",
-				"spark.autotune.trackingId": "821b3d1a-f02b-4c1d-8a50-8b78c31f0f04"
+				"spark.autotune.trackingId": "01492b95-11a4-49a3-b300-a4698ba1b3e8"
 			}
 		},
 		"metadata": {
@@ -72,6 +72,27 @@
 				"execution_count": null
 			},
 			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"storageAccount = '<Storage Account Name>'"
+				],
+				"execution_count": null
+			},
+			{
 				"cell_type": "markdown",
 				"metadata": {
 					"nteract": {
@@ -99,7 +120,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"def readFile(storageAccount, container, path, colSeparator, headerFlag):\r\n",
+					"def readFile(container, path, colSeparator, headerFlag):\r\n",
 					"  # ##########################################################################################################################  \r\n",
 					"  # Function: readFile\r\n",
 					"  # Reads a file from Azure Gen2 Storage and returns as dataframe\r\n",
@@ -114,6 +135,8 @@
 					"  # Returns:\r\n",
 					"  # A dataframe of the raw file\r\n",
 					"  # ##########################################################################################################################    \r\n",
+					"\r\n",
+					"    assert storageAccount is not None, \"Storage Account not specified\"   \r\n",
 					"\r\n",
 					"    filePath = \"abfss://\" + container + \"@\"+ storageAccount + \".dfs.core.windows.net/\" + path\r\n",
 					"    if \".csv\" in path or \".txt\" in path:\r\n",
@@ -159,7 +182,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"def writeFile(df,storageAccount, container, path, writeMode=\"overwrite\", colSeparator=\",\"):\r\n",
+					"def writeFile(df,container, path, writeMode=\"overwrite\", colSeparator=\",\"):\r\n",
 					"  # ##########################################################################################################################  \r\n",
 					"  # Function: writeFile\r\n",
 					"  # Writes the input dataframe to a file in Azure Gen2 Storage\r\n",
@@ -175,6 +198,7 @@
 					"  # Returns:\r\n",
 					"  # A dataframe of the raw file\r\n",
 					"  # ##########################################################################################################################     \r\n",
+					"    assert storageAccount is not None, \"Storage Account not specified\"   \r\n",
 					"    filePath = \"abfss://\" + container + \"@\"+ storageAccount + \".dfs.core.windows.net/\" + path\r\n",
 					"    if \"csv\" in path or 'txt' in path:\r\n",
 					"        df.write.csv(filePath,mode=writeMode,sep=colSeparator,header=\"true\")\r\n",

@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "992e1268-36d4-4425-b212-9806096cff3b"
+				"spark.autotune.trackingId": "1cd0207b-1470-4000-92f4-c9c8e8fb343e"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 					}
 				},
 				"source": [
-					"%run /common/datalake-functions"
+					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
 				],
 				"execution_count": 5
 			},

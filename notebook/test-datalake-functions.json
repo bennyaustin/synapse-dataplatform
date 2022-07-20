@@ -8,7 +8,7 @@
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
-			"referenceName": "medium31",
+			"referenceName": "small31",
 			"type": "BigDataPoolReference"
 		},
 		"sessionProperties": {
@@ -20,8 +20,8 @@
 			"conf": {
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
-				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "42832aa4-aa7c-46bf-8637-ceec7724e60e"
+				"spark.dynamicAllocation.maxExecutors": "1",
+				"spark.autotune.trackingId": "d178e71e-6cb9-471a-847b-5a30d83f8e86"
 			}
 		},
 		"metadata": {
@@ -35,10 +35,10 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
-				"name": "medium31",
+				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/small31",
+				"name": "small31",
 				"type": "Spark",
-				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
+				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/small31",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
@@ -71,7 +71,7 @@
 					"collapsed": false
 				},
 				"source": [
-					"%run /common/datalake-functions"
+					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
 				],
 				"execution_count": 1
 			},
@@ -90,7 +90,7 @@
 					"collapsed": false
 				},
 				"source": [
-					"df = readFile(\"bastoragedatalake01\", \"raw-bronze\", \"nyc-yellowtaxi-trip/yellow_tripdata_2020-01.csv\", \",\", True)\r\n",
+					"df = readFile(\"raw-bronze\", \"nyc-yellowtaxi-trip/yellow_tripdata_2020-01.csv\", \",\", True)\r\n",
 					"display(df)"
 				],
 				"execution_count": 2
@@ -109,7 +109,7 @@
 					}
 				},
 				"source": [
-					"writeFile(df,\"bastoragedatalake01\", \"curated-silver\", \"test/nyc-yellowtaxi-trip/yellow_tripdata_2020-01.parquet\", \"overwrite\")"
+					"writeFile(df,\"curated-silver\", \"test/nyc-yellowtaxi-trip/yellow_tripdata_2020-01.parquet\", \"overwrite\")"
 				],
 				"execution_count": 3
 			}
