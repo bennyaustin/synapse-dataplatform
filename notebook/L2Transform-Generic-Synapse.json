@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "99d20957-fc39-46e4-aed1-4a72a5c6f027"
+				"spark.autotune.trackingId": "209be5e0-09a0-44b3-95d8-3579ed4beaf0"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 				"source": [
 					"%run /common/commonTransforms"
 				],
-				"execution_count": 56
+				"execution_count": 72
 			},
 			{
 				"cell_type": "code",
@@ -75,7 +75,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
 				],
-				"execution_count": 57
+				"execution_count": 73
 			},
 			{
 				"cell_type": "code",
@@ -93,7 +93,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
-				"execution_count": 58
+				"execution_count": 74
 			},
 			{
 				"cell_type": "code",
@@ -111,7 +111,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 59
+				"execution_count": 75
 			},
 			{
 				"cell_type": "markdown",
@@ -166,7 +166,7 @@
 					"DeltaName = None\r\n",
 					""
 				],
-				"execution_count": 60
+				"execution_count": 76
 			},
 			{
 				"cell_type": "code",
@@ -182,29 +182,30 @@
 					}
 				},
 				"source": [
-					"L1TransformInstanceID = 3\r\n",
-					"L1TransformID = 2\r\n",
-					"IngestID = 2\r\n",
-					"CustomParameters = None\r\n",
-					"InputRawFileSystem = 'raw-bronze'\r\n",
-					"InputRawFileFolder = 'purview/collections/2022-07'\r\n",
-					"InputRawFile = 'collections_20220720.parquet'\r\n",
-					"InputRawFileDelimiter = None\r\n",
-					"InputFileHeaderFlag = 1\r\n",
-					"OutputL1CurateFileSystem = 'curated-silver'\r\n",
-					"OutputL1CuratedFolder = 'purview/collections/1900-01'\r\n",
-					"OutputL1CuratedFile = 'standardized_collections_19000101.parquet'\r\n",
-					"OutputL1CuratedFileDelimiter = None\r\n",
-					"OutputL1CuratedFileFormat = 'parquet'\r\n",
-					"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-					"OutputDWStagingTable = 'stg.merge_Purview_collections'\r\n",
-					"LookupColumns = ['name']\r\n",
-					"OutputDWTable = 'Purview.collections'\r\n",
-					"OutputDWTableWriteMode = 'append'\r\n",
-					"ReRunL1TransformFlag = None\r\n",
-					"DeltaName = 'lastModifiedAt'"
+					"# # Parameters for Testing only, should be commeted off\r\n",
+					"# L1TransformInstanceID = 1\r\n",
+					"# L1TransformID = 3\r\n",
+					"# IngestID = 3\r\n",
+					"# CustomParameters = None\r\n",
+					"# InputRawFileSystem = 'raw-bronze'\r\n",
+					"# InputRawFileFolder = 'purview/operations/2022-07'\r\n",
+					"# InputRawFile = 'operations_20220720.parquet'\r\n",
+					"# InputRawFileDelimiter = None\r\n",
+					"# InputFileHeaderFlag = 1\r\n",
+					"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
+					"# OutputL1CuratedFolder = 'purview/operations/1900-01'\r\n",
+					"# OutputL1CuratedFile = 'standardized_operations_19000101.parquet'\r\n",
+					"# OutputL1CuratedFileDelimiter = None\r\n",
+					"# OutputL1CuratedFileFormat = 'parquet'\r\n",
+					"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+					"# OutputDWStagingTable = 'stg.merge_Azure_operations'\r\n",
+					"# LookupColumns = ['name']\r\n",
+					"# OutputDWTable = 'Azure.operations'\r\n",
+					"# OutputDWTableWriteMode = 'append'\r\n",
+					"# ReRunL1TransformFlag = None\r\n",
+					"# DeltaName = None"
 				],
-				"execution_count": 61
+				"execution_count": 77
 			},
 			{
 				"cell_type": "markdown",
@@ -252,7 +253,7 @@
 					"audit={\"WorkspaceName\": mssparkutils.env.getWorkspaceName(), \"SparkJobId\":mssparkutils.env.getJobId(), \"SparkPool\" : mssparkutils.env.getPoolName(), \"SparkClusterId\" :mssparkutils.env.getClusterId()}\r\n",
 					"df = ct.addLitCols(audit)"
 				],
-				"execution_count": 62
+				"execution_count": 78
 			},
 			{
 				"cell_type": "code",
@@ -281,7 +282,7 @@
 					"else:\r\n",
 					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": 63
+				"execution_count": 79
 			}
 		]
 	}
