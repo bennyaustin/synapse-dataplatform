@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "1cd0207b-1470-4000-92f4-c9c8e8fb343e"
+				"spark.autotune.trackingId": "40be49e1-69fd-4ece-bdf4-1b7bac24db66"
 			}
 		},
 		"metadata": {
@@ -75,7 +75,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
 				],
-				"execution_count": 5
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -93,7 +93,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
-				"execution_count": 2
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -111,7 +111,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 3
+				"execution_count": 4
 			},
 			{
 				"cell_type": "markdown",
@@ -166,7 +166,95 @@
 					"DeltaName = None\r\n",
 					""
 				],
-				"execution_count": 4
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"L1TransformInstanceID = 2\r\n",
+					"L1TransformID = 1\r\n",
+					"IngestID = 1\r\n",
+					"CustomParameters = None\r\n",
+					"InputRawFileSystem = 'raw-bronze'\r\n",
+					"InputRawFileFolder = 'purview/datasources/2022-07'\r\n",
+					"InputRawFile = 'datasources_20220720.parquet'\r\n",
+					"InputRawFileDelimiter = None\r\n",
+					"InputFileHeaderFlag = 1\r\n",
+					"OutputL1CurateFileSystem = 'curated-silver'\r\n",
+					"OutputL1CuratedFolder = 'purview/datasources/1900-01'\r\n",
+					"OutputL1CuratedFile = 'standardized_datasources_19000101.parquet'\r\n",
+					"OutputL1CuratedFileDelimiter = None\r\n",
+					"OutputL1CuratedFileFormat = 'parquet'\r\n",
+					"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+					"OutputDWStagingTable = 'stg.merge_Purview_datasources'\r\n",
+					"LookupColumns = ['resourceName']\r\n",
+					"OutputDWTable = 'Purview.datasources'\r\n",
+					"OutputDWTableWriteMode = 'append'\r\n",
+					"ReRunL1TransformFlag = None\r\n",
+					"DeltaName = 'lastModifiedAt'"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Read Raw file and apply basic data cleansing and data enrichments"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df = readFile(container=InputRawFileSystem, path= InputRawFileFolder + '/' + InputRawFile, colSeparator=InputRawFileDelimiter, headerFlag=InputFileHeaderFlag)\r\n",
+					"ct=CommonTransforms(df)\r\n",
+					"\r\n",
+					"# Remove duplicates\r\n",
+					"df=ct.deDuplicate()\r\n",
+					"\r\n",
+					"# Remove leading and trailing spaces from all string columns\r\n",
+					"df=ct.trim()\r\n",
+					"\r\n",
+					"# Replace Null Value with generic values\r\n",
+					"df = ct.replaceNull(0)\r\n",
+					"df = ct.replaceNull(\"NA\")\r\n",
+					"df = ct.replaceNull(\"2020-01-01\")\r\n",
+					"\r\n",
+					"# Add literal value columns for e.g SparkJobId\r\n",
+					"audit={\"WorkspaceName\": mssparkutils.env.getWorkspaceName(), \"SparkJobId\":mssparkutils.env.getJobId(), \"SparkPool\" : mssparkutils.env.getPoolName(), \"SparkClusterId\" :mssparkutils.env.getClusterId()}\r\n",
+					"df = ct.addLitCols(audit)\r\n",
+					"\r\n",
+					"display(df)"
+				],
+				"execution_count": 19
 			}
 		]
 	}
