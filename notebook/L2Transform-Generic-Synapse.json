@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "true",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "4",
-				"spark.autotune.trackingId": "f8894736-356f-4625-ae27-ea1e5c89f717"
+				"spark.autotune.trackingId": "99d20957-fc39-46e4-aed1-4a72a5c6f027"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 				"source": [
 					"%run /common/commonTransforms"
 				],
-				"execution_count": 40
+				"execution_count": 56
 			},
 			{
 				"cell_type": "code",
@@ -75,7 +75,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
 				],
-				"execution_count": 41
+				"execution_count": 57
 			},
 			{
 				"cell_type": "code",
@@ -93,7 +93,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
 				],
-				"execution_count": 42
+				"execution_count": 58
 			},
 			{
 				"cell_type": "code",
@@ -111,7 +111,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 43
+				"execution_count": 59
 			},
 			{
 				"cell_type": "markdown",
@@ -166,7 +166,7 @@
 					"DeltaName = None\r\n",
 					""
 				],
-				"execution_count": 44
+				"execution_count": 60
 			},
 			{
 				"cell_type": "code",
@@ -182,29 +182,29 @@
 					}
 				},
 				"source": [
-					"L1TransformInstanceID = 2\r\n",
-					"L1TransformID = 1\r\n",
-					"IngestID = 1\r\n",
+					"L1TransformInstanceID = 3\r\n",
+					"L1TransformID = 2\r\n",
+					"IngestID = 2\r\n",
 					"CustomParameters = None\r\n",
 					"InputRawFileSystem = 'raw-bronze'\r\n",
-					"InputRawFileFolder = 'purview/datasources/2022-07'\r\n",
-					"InputRawFile = 'datasources_20220720.parquet'\r\n",
+					"InputRawFileFolder = 'purview/collections/2022-07'\r\n",
+					"InputRawFile = 'collections_20220720.parquet'\r\n",
 					"InputRawFileDelimiter = None\r\n",
 					"InputFileHeaderFlag = 1\r\n",
 					"OutputL1CurateFileSystem = 'curated-silver'\r\n",
-					"OutputL1CuratedFolder = 'purview/datasources/1900-01'\r\n",
-					"OutputL1CuratedFile = 'standardized_datasources_19000101.parquet'\r\n",
+					"OutputL1CuratedFolder = 'purview/collections/1900-01'\r\n",
+					"OutputL1CuratedFile = 'standardized_collections_19000101.parquet'\r\n",
 					"OutputL1CuratedFileDelimiter = None\r\n",
 					"OutputL1CuratedFileFormat = 'parquet'\r\n",
 					"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-					"OutputDWStagingTable = 'stg.merge_Purview_datasources'\r\n",
-					"LookupColumns = ['resourceName']\r\n",
-					"OutputDWTable = 'Purview.datasources'\r\n",
+					"OutputDWStagingTable = 'stg.merge_Purview_collections'\r\n",
+					"LookupColumns = ['name']\r\n",
+					"OutputDWTable = 'Purview.collections'\r\n",
 					"OutputDWTableWriteMode = 'append'\r\n",
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = 'lastModifiedAt'"
 				],
-				"execution_count": 45
+				"execution_count": 61
 			},
 			{
 				"cell_type": "markdown",
@@ -252,7 +252,7 @@
 					"audit={\"WorkspaceName\": mssparkutils.env.getWorkspaceName(), \"SparkJobId\":mssparkutils.env.getJobId(), \"SparkPool\" : mssparkutils.env.getPoolName(), \"SparkClusterId\" :mssparkutils.env.getClusterId()}\r\n",
 					"df = ct.addLitCols(audit)"
 				],
-				"execution_count": 46
+				"execution_count": 62
 			},
 			{
 				"cell_type": "code",
@@ -281,7 +281,7 @@
 					"else:\r\n",
 					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": 47
+				"execution_count": 63
 			}
 		]
 	}
