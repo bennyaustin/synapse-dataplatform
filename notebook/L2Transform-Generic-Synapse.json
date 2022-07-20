@@ -1,0 +1,289 @@
+{
+	"name": "L2Transform-Generic-Synapse",
+	"properties": {
+		"description": "Generic Level 1 Transform Notebook for Synapse Dedicated SQL Pool Target",
+		"folder": {
+			"name": "L1Transform"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "medium31",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 1,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "true",
+				"spark.dynamicAllocation.minExecutors": "1",
+				"spark.dynamicAllocation.maxExecutors": "4",
+				"spark.autotune.trackingId": "209be5e0-09a0-44b3-95d8-3579ed4beaf0"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/medium31",
+				"name": "medium31",
+				"type": "Spark",
+				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/medium31",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": true
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"%run /common/commonTransforms"
+				],
+				"execution_count": 72
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/datalake-functions {\"storageAccount\": \"bastoragedatalake01\" }"
+				],
+				"execution_count": 73
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+				],
+				"execution_count": 74
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/upsertSdp-function {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\",\"sqlUidSecret\": \"dw01-sqlusername\",\"sqlPwdSecret\":\"dw01-sqlpassword\", \"sinkType\": \"Synapse\"}"
+				],
+				"execution_count": 75
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Notebook Parameters"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"L1TransformInstanceID = None\r\n",
+					"L1TransformID = None\r\n",
+					"IngestID = None\r\n",
+					"CustomParameters = None\r\n",
+					"InputRawFileSystem = None\r\n",
+					"InputRawFileFolder = None\r\n",
+					"InputRawFile = None\r\n",
+					"InputRawFileDelimiter = None\r\n",
+					"InputFileHeaderFlag = None\r\n",
+					"OutputL1CurateFileSystem = None\r\n",
+					"OutputL1CuratedFolder = None\r\n",
+					"OutputL1CuratedFile = None\r\n",
+					"OutputL1CuratedFileDelimiter = None\r\n",
+					"OutputL1CuratedFileFormat = None\r\n",
+					"OutputL1CuratedFileWriteMode = None\r\n",
+					"OutputDWStagingTable = None\r\n",
+					"LookupColumns = None\r\n",
+					"OutputDWTable = None\r\n",
+					"OutputDWTableWriteMode = None\r\n",
+					"ReRunL1TransformFlag = None\r\n",
+					"DeltaName = None\r\n",
+					""
+				],
+				"execution_count": 76
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# # Parameters for Testing only, should be commeted off\r\n",
+					"# L1TransformInstanceID = 1\r\n",
+					"# L1TransformID = 3\r\n",
+					"# IngestID = 3\r\n",
+					"# CustomParameters = None\r\n",
+					"# InputRawFileSystem = 'raw-bronze'\r\n",
+					"# InputRawFileFolder = 'purview/operations/2022-07'\r\n",
+					"# InputRawFile = 'operations_20220720.parquet'\r\n",
+					"# InputRawFileDelimiter = None\r\n",
+					"# InputFileHeaderFlag = 1\r\n",
+					"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
+					"# OutputL1CuratedFolder = 'purview/operations/1900-01'\r\n",
+					"# OutputL1CuratedFile = 'standardized_operations_19000101.parquet'\r\n",
+					"# OutputL1CuratedFileDelimiter = None\r\n",
+					"# OutputL1CuratedFileFormat = 'parquet'\r\n",
+					"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+					"# OutputDWStagingTable = 'stg.merge_Azure_operations'\r\n",
+					"# LookupColumns = ['name']\r\n",
+					"# OutputDWTable = 'Azure.operations'\r\n",
+					"# OutputDWTableWriteMode = 'append'\r\n",
+					"# ReRunL1TransformFlag = None\r\n",
+					"# DeltaName = None"
+				],
+				"execution_count": 77
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Read Raw file and apply basic data cleansing and data enrichments"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df = readFile(container=InputRawFileSystem, path= InputRawFileFolder + '/' + InputRawFile, colSeparator=InputRawFileDelimiter, headerFlag=InputFileHeaderFlag)\r\n",
+					"ct=CommonTransforms(df)\r\n",
+					"\r\n",
+					"# Remove duplicates\r\n",
+					"df=ct.deDuplicate()\r\n",
+					"\r\n",
+					"# Remove leading and trailing spaces from all string columns\r\n",
+					"df=ct.trim()\r\n",
+					"\r\n",
+					"# Replace Null Value with generic values\r\n",
+					"df = ct.replaceNull(0)\r\n",
+					"df = ct.replaceNull(\"NA\")\r\n",
+					"df = ct.replaceNull(\"2020-01-01\")\r\n",
+					"\r\n",
+					"# Add literal value columns for e.g SparkJobId\r\n",
+					"audit={\"WorkspaceName\": mssparkutils.env.getWorkspaceName(), \"SparkJobId\":mssparkutils.env.getJobId(), \"SparkPool\" : mssparkutils.env.getPoolName(), \"SparkClusterId\" :mssparkutils.env.getClusterId()}\r\n",
+					"df = ct.addLitCols(audit)"
+				],
+				"execution_count": 78
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"pos = OutputDWTable.find(\".\")\r\n",
+					"schemaName = OutputDWTable[0:pos]\r\n",
+					"tableName = OutputDWTable[pos+1:]\r\n",
+					"\r\n",
+					"posStg = OutputDWStagingTable.find(\".\")\r\n",
+					"stgSchemaName = OutputDWStagingTable[0:posStg]\r\n",
+					"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
+					"\r\n",
+					"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
+					"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
+					"else:\r\n",
+					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
+				],
+				"execution_count": 79
+			}
+		]
+	}
+}
