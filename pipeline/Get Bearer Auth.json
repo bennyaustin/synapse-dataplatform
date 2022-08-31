@@ -61,8 +61,7 @@
 				"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
 			},
 			"ClientSecret": {
-				"type": "string",
-				"defaultValue": "nzh7cA-~MBl0OA9_rQK62-i4r14e_tZ_j-"
+				"type": "string"
 			}
 		},
 		"variables": {
