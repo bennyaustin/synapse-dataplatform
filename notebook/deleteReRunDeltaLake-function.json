@@ -1,0 +1,104 @@
+{
+	"name": "deleteReRunDeltaLake-function",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sdpdev01",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "535d621e-ebf2-4ebd-b423-c15d705f6219"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/f6a17236-97ab-492e-ac2e-bb5080d2dd15/resourceGroups/rg-etluplift-dev-01/providers/Microsoft.Synapse/workspaces/syn-etluplift-dev01/bigDataPools/sdpdev01",
+				"name": "sdpdev01",
+				"type": "Spark",
+				"endpoint": "https://syn-etluplift-dev01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sdpdev01",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from pyspark.sql.functions import *\r\n",
+					"import datetime\r\n",
+					"from pyspark.sql.window import *\r\n",
+					"from delta.Tables import *"
+				],
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"def deleteReRunDeltaLake(Table, ColumnName, TransformInstanceID):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: deleteReRunDeltaLake\r\n",
+					"    # Deletes records on Delta Table for a ReRun\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # Table = Name of Target Table\r\n",
+					"    # ColumnName = ColumnName of TransformInstanceID\r\n",
+					"    # TransformInstanceID = TransformInstanceID passed from Framework\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    TableExist = False\r\n",
+					"    try:\r\n",
+					"        deltaZone = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccount\")\r\n",
+					"        deltaZoneKey = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccessKey\")\r\n",
+					"        spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",  deltaZoneKey)\r\n",
+					"        spark.read.table(Table)\r\n",
+					"        TableExist = True\r\n",
+					"        deltaTable = DeltaTable.forName(spark, Table)\r\n",
+					"        deltaStatement = (ColumnName + ' = ' + str(TransformInstanceID))\r\n",
+					"        deltaTable.delete(deltaStatement)\r\n",
+					"        print(\"Records deleted: \" + Table)\r\n",
+					"    except:\r\n",
+					"        print(\"Table does not exist: \" + Table)"
+				],
+				"execution_count": 62
+			}
+		]
+	}
+}
