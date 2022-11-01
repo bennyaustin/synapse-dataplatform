@@ -1,6 +1,9 @@
 {
 	"name": "deleteReRunDeltaLake-function",
 	"properties": {
+		"folder": {
+			"name": "common"
+		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
@@ -42,8 +45,7 @@
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 8,
-				"memory": 56,
-				"automaticScaleJobs": false
+				"memory": 56
 			},
 			"sessionKeepAliveTimeout": 30
 		},
