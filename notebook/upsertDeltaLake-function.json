@@ -103,7 +103,7 @@
 					"    spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",   deltaZoneKey)\r\n",
 					"\r\n",
 					"    #Read Columns Names from Dataframe\r\n",
-					"    deltaPath = \"abfss://\" + Container + \"@\"+ storageAccount + \".dfs.core.windows.net/\" + Folder\r\n",
+					"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + \".dfs.core.windows.net/\" + Folder\r\n",
 					"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
 					"\r\n",
 					"    uniqueCols = KeyColumns.split(\"|\")\r\n",
