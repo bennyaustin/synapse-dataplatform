@@ -26,6 +26,8 @@
     <Folder Include="Security" />
     <Folder Include="stg" />
     <Folder Include="stg\Tables" />
+    <Folder Include="ExternalResources\External Data Sources" />
+    <Folder Include="ExternalResources\External File Format" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
@@ -49,12 +51,6 @@
     <Build Include="dbo\Tables\Numbers.sql" />
     <Build Include="dbo\Tables\nyc_taxi.sql" />
     <Build Include="dbo\Tables\nyc_taxi_tip_aml_model.sql" />
-    <Build Include="ExternalResources\nyctlc_azureopendatastorage_blob_core_windows_net.sql" />
-    <Build Include="ExternalResources\public-datasets_bastoragedatalake01_dfs_core_windows_net.sql" />
-    <Build Include="ExternalResources\SQLAnalyticsConnectorDataSource_se6kCyaRQdt.sql" />
-    <Build Include="ExternalResources\SQLAnalyticsConnectorFileFormat_se6kCyaRQdt.sql" />
-    <Build Include="ExternalResources\SynapseDelimitedTextFormat.sql" />
-    <Build Include="ExternalResources\SynapseParquetFormat.sql" />
     <Build Include="nyct\Tables\nyc_tlc_yellow_trip.sql" />
     <Build Include="nyct\Tables\nyc_tlc_yellow_trip_copy.sql" />
     <Build Include="nyct\Tables\nyc_tlc_yellow_trip_merge.sql" />
@@ -82,6 +78,18 @@
     <Build Include="stg\Tables\merge_Purview_collections.sql" />
     <Build Include="stg\Tables\merge_Purview_datasources.sql" />
     <Build Include="stg\Tables\nyc_tlc_yellow_trip.sql" />
+    <Build Include="ExternalResources\External Data Sources\nyctlc_azureopendatastorage_blob_core_windows_net.sql" />
+    <Build Include="ExternalResources\External Data Sources\public-datasets_bastoragedatalake01_dfs_core_windows_net.sql" />
+    <Build Include="ExternalResources\External Data Sources\SQLAnalyticsConnectorDataSource_se6kCyaRQdt.sql" />
+    <Build Include="ExternalResources\External File Format\SQLAnalyticsConnectorFileFormat_se6kCyaRQdt.sql" />
+    <Build Include="ExternalResources\External File Format\SynapseDelimitedTextFormat.sql" />
+    <Build Include="ExternalResources\External File Format\SynapseParquetFormat.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="DatalakeEndpoint">
+      <DefaultValue>bastoragedatalake01.dfs.core.windows.net</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
   </ItemGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
