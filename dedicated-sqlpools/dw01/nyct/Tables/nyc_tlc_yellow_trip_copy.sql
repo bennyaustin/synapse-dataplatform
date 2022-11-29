@@ -30,3 +30,9 @@ GO
 
 GO
 
+
+GRANT INSERT
+    ON OBJECT::[nyct].[nyc_tlc_yellow_trip_copy] TO [ba-synapseanalytics01]
+    AS [dbo];
+GO
+
