@@ -1,0 +1,6 @@
+CREATE SCHEMA [Purview]
+    AUTHORIZATION [dbo];
+
+
+GO
+

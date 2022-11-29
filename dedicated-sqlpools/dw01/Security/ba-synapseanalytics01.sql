@@ -1,0 +1,5 @@
+CREATE USER [ba-synapseanalytics01] FOR EXTERNAL PROVIDER;
+
+
+GO
+

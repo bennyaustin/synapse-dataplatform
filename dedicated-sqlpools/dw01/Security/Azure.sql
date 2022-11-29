@@ -1,0 +1,6 @@
+CREATE SCHEMA [Azure]
+    AUTHORIZATION [dbo];
+
+
+GO
+

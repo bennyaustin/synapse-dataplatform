@@ -1,0 +1,6 @@
+CREATE SCHEMA [nyct]
+    AUTHORIZATION [dbo];
+
+
+GO
+
