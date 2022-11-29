@@ -8,6 +8,81 @@
     <ModelCollation>1033, CI</ModelCollation>
     <TargetDatabaseSet>True</TargetDatabaseSet>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="amlmodels" />
+    <Folder Include="amlmodels\StoredProcedures" />
+    <Folder Include="amlmodels\Tables" />
+    <Folder Include="Azure" />
+    <Folder Include="Azure\Tables" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\ExternalTables" />
+    <Folder Include="dbo\StoredProcedures" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="ExternalResources" />
+    <Folder Include="nyct" />
+    <Folder Include="nyct\Tables" />
+    <Folder Include="Purview" />
+    <Folder Include="Purview\Tables" />
+    <Folder Include="Security" />
+    <Folder Include="stg" />
+    <Folder Include="stg\Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
+    <Build Include="amlmodels\Tables\nyc_yellowtaxi_tips_v4.sql" />
+    <Build Include="Azure\Tables\operations.sql" />
+    <Build Include="dbo\ExternalTables\AUPH.sql" />
+    <Build Include="dbo\ExternalTables\nyc_tlc_yellow_trip_ext.sql" />
+    <Build Include="dbo\StoredProcedures\nyc_taxi_procedure.sql" />
+    <Build Include="dbo\Tables\DimActors.sql" />
+    <Build Include="dbo\Tables\DimCategories.sql" />
+    <Build Include="dbo\Tables\DimCustomers.sql" />
+    <Build Include="dbo\Tables\DimDate.sql" />
+    <Build Include="dbo\Tables\DimLocation.sql" />
+    <Build Include="dbo\Tables\DimMovieActors.sql" />
+    <Build Include="dbo\Tables\DimMovies.sql" />
+    <Build Include="dbo\Tables\DimRatings.sql" />
+    <Build Include="dbo\Tables\DimTime.sql" />
+    <Build Include="dbo\Tables\FactRentals.sql" />
+    <Build Include="dbo\Tables\FactSales.sql" />
+    <Build Include="dbo\Tables\FactStreaming.sql" />
+    <Build Include="dbo\Tables\Numbers.sql" />
+    <Build Include="dbo\Tables\nyc_taxi.sql" />
+    <Build Include="dbo\Tables\nyc_taxi_tip_aml_model.sql" />
+    <Build Include="ExternalResources\nyctlc_azureopendatastorage_blob_core_windows_net.sql" />
+    <Build Include="ExternalResources\public-datasets_bastoragedatalake01_dfs_core_windows_net.sql" />
+    <Build Include="ExternalResources\SQLAnalyticsConnectorDataSource_se6kCyaRQdt.sql" />
+    <Build Include="ExternalResources\SQLAnalyticsConnectorFileFormat_se6kCyaRQdt.sql" />
+    <Build Include="ExternalResources\SynapseDelimitedTextFormat.sql" />
+    <Build Include="ExternalResources\SynapseParquetFormat.sql" />
+    <Build Include="nyct\Tables\nyc_tlc_yellow_trip.sql" />
+    <Build Include="nyct\Tables\nyc_tlc_yellow_trip_copy.sql" />
+    <Build Include="nyct\Tables\nyc_tlc_yellow_trip_merge.sql" />
+    <Build Include="nyct\Tables\nyc_tlc_yellow_trip_stage.sql" />
+    <Build Include="Purview\Tables\collections.sql" />
+    <Build Include="Purview\Tables\datasources.sql" />
+    <Build Include="Security\amlmodels.sql" />
+    <Build Include="Security\Azure.sql" />
+    <Build Include="Security\ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
+    <Build Include="Security\ba-purview02-aug-pubpreview.sql" />
+    <Build Include="Security\ba-synapseanalytics01.sql" />
+    <Build Include="Security\bennyaustin%40microsoft.com.sql" />
+    <Build Include="Security\db_datareader for ba-purview02-aug-pubpreview.sql" />
+    <Build Include="Security\db_datawriter for ba-synapseanalytics01.sql" />
+    <Build Include="Security\db_exporter for ba-synapseanalytics01.sql" />
+    <Build Include="Security\db_exporter for bennyaustin%40microsoft.com.sql" />
+    <Build Include="Security\db_owner for ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
+    <Build Include="Security\db_owner for ba-synapseanalytics01.sql" />
+    <Build Include="Security\db_owner for bennyaustin%40microsoft.com.sql" />
+    <Build Include="Security\nyct.sql" />
+    <Build Include="Security\Purview.sql" />
+    <Build Include="Security\SqlAnalyticsConnector.sql" />
+    <Build Include="Security\stg.sql" />
+    <Build Include="stg\Tables\merge_Azure_operations.sql" />
+    <Build Include="stg\Tables\merge_Purview_collections.sql" />
+    <Build Include="stg\Tables\merge_Purview_datasources.sql" />
+    <Build Include="stg\Tables\nyc_tlc_yellow_trip.sql" />
+  </ItemGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
   </Target>
