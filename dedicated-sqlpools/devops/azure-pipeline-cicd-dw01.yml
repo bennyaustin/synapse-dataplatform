@@ -39,5 +39,4 @@ steps:
     DacpacFile: dedicated-sqlpools\dw01\bin\Release\dw01.dacpac
     IpDetectionMethod: AutoDetect
     DeleteFirewallRule: true
-    AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=false /p:IgnoreColumnOrder=true /p:IgnorePermissions=true
-    SqlAdditionalArguments: /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"
+    AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=false /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"
