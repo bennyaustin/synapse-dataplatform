@@ -1,0 +1,18 @@
+{
+	"name": "Synapse Link CosmosDB View",
+	"properties": {
+		"description": "Script to create a view from HTAP CosmosDB",
+		"content": {
+			"query": "IF (NOT EXISTS(SELECT * FROM sys.credentials WHERE name = 'ba-cosmosdb1'))\n    CREATE CREDENTIAL [ba-cosmosdb1] WITH IDENTITY = 'SHARED ACCESS SIGNATURE', SECRET = '<CosmodDBKey>'\n\nIF (NOT EXISTS(SELECT * FROM sys.schemas WHERE name = 'htap_cosmosdb'))\n   EXEC ('CREATE SCHEMA [htap_cosmosdb]')\n\nCREATE OR ALTER VIEW [htap_cosmosdb].[volcano_htap]\nAS SELECT id, Country, [Status], Elevation, [Type],Region, [Location]\nfrom OPENROWSET(​PROVIDER = 'CosmosDB',\n                CONNECTION = 'Account=ba-cosmosdb1;Database=SampleDB',\n                OBJECT = 'Volcano_HTAP',\n                SERVER_CREDENTIAL = 'ba-cosmosdb1'\n) WITH\n    (id varchar(50),\n    Country varchar(50),\n    Status varchar(20),\n    Elevation int,\n    Type varchar(20),\n    Region varchar(100),\n    Location varchar(1000)) as rows\n\n\n-- SELECT top 10 * from [htap_cosmosdb].[volcano_htap]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ldw01",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
