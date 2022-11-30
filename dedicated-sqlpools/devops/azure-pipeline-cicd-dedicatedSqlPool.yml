@@ -1,0 +1,49 @@
+# Pipeline to build and deploy Dedicated SQL pool for Synapse Data Platform https://github.com/bennyaustin/synapse-dataplatform implemented using ELT Framework https://github.com/bennyaustin/elt-framework
+
+trigger:
+- main
+
+pool:
+  name: Azure Pipelines
+  demands:
+  - msbuild
+  - visualstudio
+  vmImage: windows-latest
+
+stages:
+  - stage: ci
+    displayName: Build Stage
+    jobs:
+      - template: templates/build-sqldb.yml
+        parameters:
+          solutionName:  dw01
+          buildPath:  dedicated-sqlpools\dw01\bin\Release
+
+  - stage: cd_nonprod
+    displayName: Deploy Stage - Non Prod
+    dependsOn: ci
+    condition: succeeded()
+    jobs:
+    - template: templates/deploy-sqldb.yml
+      parameters:
+        serviceConnectionName:  ba-devops-spn
+        keyvaultName:  ba-keyvault1 
+        buildArtifactName:  dacpac
+        targetDatabaseServer:  ba-synapseanalytics01.sql.azuresynapse.net,1433
+        targetDatabase:  dw01
+
+  - stage: cd_prod
+    displayName: Deploy Stage - Prod
+    dependsOn: ci
+    condition: succeeded()
+    jobs:
+    - template: templates/deploy-sqldb.yml
+      parameters:
+        serviceConnectionName:  ba-devops-spn
+        keyvaultName:  ba-keyvault1 
+        buildArtifactName:  dacpac
+        targetDatabaseServer:  ba-synapseanalytics01.sql.azuresynapse.net,1433
+        targetDatabase:  dw01
+
+
+
