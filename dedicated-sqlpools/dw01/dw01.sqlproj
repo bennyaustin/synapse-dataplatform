@@ -96,7 +96,7 @@
   <ItemGroup>
     <SqlCmdVariable Include="DatalakeEndpoint">
       <DefaultValue>bastoragedatalake01.dfs.core.windows.net</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
+      <Value>bastoragedatalake01.dfs.core.windows.net</Value>
     </SqlCmdVariable>
   </ItemGroup>
   <Target Name="BeforeBuild">
