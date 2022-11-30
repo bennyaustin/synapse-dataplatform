@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="0.1.3-preview" />
+  <PropertyGroup>
+    <Name>ldw01</Name>
+    <ProjectGuid>{9ff134c6-b02f-4b66-b115-132d266677b3}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlDwDatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateCreateScript>True</GenerateCreateScript>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="DatalakeEndpoint">
+      <DefaultValue>bastoragedatalake01.dfs.core.windows.net</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="External Resources" />
+    <Folder Include="External Resources\External Data Sources" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Schema" />
+    <Folder Include="External Resources\External File Format" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\External Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="External Resources\External File Format\SynapseDelimitedTextFormat.sql" />
+    <Build Include="External Resources\External Data Sources\public-datasets_bastoragedatalake01_dfs_core_windows_net.sql" />
+    <Build Include="dbo\External Tables\AUPH.sql" />
+  </ItemGroup>
+  <Target Name="BeforeBuild">
+    <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
+  </Target>
+</Project>
