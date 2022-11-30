@@ -40,4 +40,4 @@ steps:
     SqlFile: serverless\ldw01\bin\Release\ldw01_Create.sql
     IpDetectionMethod: AutoDetect
     DeleteFirewallRule: true
-    SqlAdditionalArguments: -DatalakeEndpoint "bastoragedatalake01.dfs.core.windows.net"
+    # SqlAdditionalArguments: -DatalakeEndpoint "bastoragedatalake01.dfs.core.windows.net"
