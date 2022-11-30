@@ -7,6 +7,8 @@
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlDwDatabaseSchemaProvider</DSP>
     <ModelCollation>1033, CI</ModelCollation>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="amlmodels" />
@@ -28,6 +30,9 @@
     <Folder Include="stg\Tables" />
     <Folder Include="ExternalResources\External Data Sources" />
     <Folder Include="ExternalResources\External File Format" />
+    <Folder Include="Security\Schema" />
+    <Folder Include="Security\Users" />
+    <Folder Include="Security\Roles" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
@@ -57,23 +62,6 @@
     <Build Include="nyct\Tables\nyc_tlc_yellow_trip_stage.sql" />
     <Build Include="Purview\Tables\collections.sql" />
     <Build Include="Purview\Tables\datasources.sql" />
-    <Build Include="Security\amlmodels.sql" />
-    <Build Include="Security\Azure.sql" />
-    <Build Include="Security\ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
-    <Build Include="Security\ba-purview02-aug-pubpreview.sql" />
-    <Build Include="Security\ba-synapseanalytics01.sql" />
-    <Build Include="Security\bennyaustin%40microsoft.com.sql" />
-    <Build Include="Security\db_datareader for ba-purview02-aug-pubpreview.sql" />
-    <Build Include="Security\db_datawriter for ba-synapseanalytics01.sql" />
-    <Build Include="Security\db_exporter for ba-synapseanalytics01.sql" />
-    <Build Include="Security\db_exporter for bennyaustin%40microsoft.com.sql" />
-    <Build Include="Security\db_owner for ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
-    <Build Include="Security\db_owner for ba-synapseanalytics01.sql" />
-    <Build Include="Security\db_owner for bennyaustin%40microsoft.com.sql" />
-    <Build Include="Security\nyct.sql" />
-    <Build Include="Security\Purview.sql" />
-    <Build Include="Security\SqlAnalyticsConnector.sql" />
-    <Build Include="Security\stg.sql" />
     <Build Include="stg\Tables\merge_Azure_operations.sql" />
     <Build Include="stg\Tables\merge_Purview_collections.sql" />
     <Build Include="stg\Tables\merge_Purview_datasources.sql" />
@@ -84,6 +72,23 @@
     <Build Include="ExternalResources\External File Format\SQLAnalyticsConnectorFileFormat_se6kCyaRQdt.sql" />
     <Build Include="ExternalResources\External File Format\SynapseDelimitedTextFormat.sql" />
     <Build Include="ExternalResources\External File Format\SynapseParquetFormat.sql" />
+    <Build Include="Security\Schema\amlmodels.sql" />
+    <Build Include="Security\Schema\Azure.sql" />
+    <Build Include="Security\Schema\nyct.sql" />
+    <Build Include="Security\Schema\Purview.sql" />
+    <Build Include="Security\Schema\SqlAnalyticsConnector.sql" />
+    <Build Include="Security\Schema\stg.sql" />
+    <Build Include="Security\Users\ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
+    <Build Include="Security\Users\ba-purview02-aug-pubpreview.sql" />
+    <Build Include="Security\Users\ba-synapseanalytics01.sql" />
+    <Build Include="Security\Users\bennyaustin%40microsoft.com.sql" />
+    <Build Include="Security\Roles\db_datareader for ba-purview02-aug-pubpreview.sql" />
+    <Build Include="Security\Roles\db_datawriter for ba-synapseanalytics01.sql" />
+    <Build Include="Security\Roles\db_exporter for ba-synapseanalytics01.sql" />
+    <Build Include="Security\Roles\db_exporter for bennyaustin%40microsoft.com.sql" />
+    <Build Include="Security\Roles\db_owner for ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
+    <Build Include="Security\Roles\db_owner for ba-synapseanalytics01.sql" />
+    <Build Include="Security\Roles\db_owner for bennyaustin%40microsoft.com.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="DatalakeEndpoint">
