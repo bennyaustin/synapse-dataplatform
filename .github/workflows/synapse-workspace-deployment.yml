@@ -1,0 +1,23 @@
+name: Synapse workspace deployment
+on:
+    push:
+        branches: [ publish_branch ]
+jobs:
+    release:      
+      runs-on: windows-latest
+      steps:
+        - uses: Azure/Synapse-workspace-deployment@V1.7.0
+          with:
+            # Provide the Synapse workspace name where you want to deploy the artifacts.
+            TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4' # Specify the path to the workspace artifacts template.
+#             TemplateFile: './ba-synapseanalytics01/TemplateParametersForWorkspace.json' # Specify the path to the template parameter file.
+            ParametersFile: './ba-synapseanalytics01/TemplateParametersForWorkspace.json'   # Specify deployment parameter values.
+#             OverrideArmParameters: # optional, default is 
+            Environment: 'Azure Public' # Provide the type of cloud environment. Valid values are: Azure Public, Azure China, Azure US Government, Azure Germany
+            resourceGroup: 'rg-synapse-dataplatform' # Provide the resource group of the target Synapse workspace.
+            clientId: ${{secrets.ACTION_SPN_CLIENTID}} # optional # Provide client id of service principal.
+            clientSecret: ${{secrets.ACTION_SPN_SECRET}} # optional # Provide client secret of the service principal.
+            subscriptionId: ${{secrets.SUBSCRIPTION_ID}} # Provide subscription id.
+            tenantId: ${{secrets.TENANT_ID}} # optional # Provide tenant id.
+            DeleteArtifactsNotInTemplate: 'true' # optional # Delete the artifacts which are in the workspace but not in the template.
+            managedIdentity: 'False' # optional # Use managed identity to generate the bearer token?
