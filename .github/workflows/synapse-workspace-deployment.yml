@@ -6,6 +6,8 @@ jobs:
     release:      
       runs-on: windows-latest
       steps:
+        # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
+        - uses: actions/checkout@v2
         - uses: Azure/Synapse-workspace-deployment@V1.7.0
           with:
             # Provide the Synapse workspace name where you want to deploy the artifacts.
