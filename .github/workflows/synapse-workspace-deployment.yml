@@ -1,7 +1,5 @@
 name: Synapse workspace deployment
-on:
-    push:
-        branches: [ publish_branch ]
+on: workflow_dispatch 
 jobs:
     release:      
       runs-on: windows-latest
