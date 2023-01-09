@@ -6,13 +6,13 @@
 			"value": "ba-synapseanalytics01"
 		},
 		"ControlDB_connectionString": {
-			"value": ""
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sqlserver1.database.windows.net;Initial Catalog=ControlDB"
 		},
 		"SampleDB_connectionString": {
 			"value": ""
 		},
 		"ba-synapseanalytics01-WorkspaceDefaultSqlServer_connectionString": {
-			"value": ""
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapseanalytics01.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
 		"AtlasREST_properties_typeProperties_url": {
 			"value": "https://ba-purview02-aug-pubpreview.purview.azure.com"
