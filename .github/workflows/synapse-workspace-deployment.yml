@@ -6,11 +6,13 @@ jobs:
     release:      
       runs-on: windows-latest
       steps:
+        # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
+        - uses: actions/checkout@v2
         - uses: Azure/Synapse-workspace-deployment@V1.7.0
           with:
             # Provide the Synapse workspace name where you want to deploy the artifacts.
             TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4' # Specify the path to the workspace artifacts template.
-#             TemplateFile: './ba-synapseanalytics01/TemplateParametersForWorkspace.json' # Specify the path to the template parameter file.
+            TemplateFile: './ba-synapseanalytics01/TemplateParametersForWorkspace.json' # Specify the path to the template parameter file.
             ParametersFile: './ba-synapseanalytics01/TemplateParametersForWorkspace.json'   # Specify deployment parameter values.
 #             OverrideArmParameters: # optional, default is 
             Environment: 'Azure Public' # Provide the type of cloud environment. Valid values are: Azure Public, Azure China, Azure US Government, Azure Germany
