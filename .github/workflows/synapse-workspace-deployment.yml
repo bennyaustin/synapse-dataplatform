@@ -9,7 +9,7 @@ jobs:
           with:
             ref: 'workspace_publish'
             path: 'arm'
-        - run: dir ${{github.workspace}} /s /b
+        - run: dir ${{github.workspace}} *.* /s
         - uses: Azure/Synapse-workspace-deployment@V1.7.0
           with:
             # Provide the Synapse workspace name where you want to deploy the artifacts.
