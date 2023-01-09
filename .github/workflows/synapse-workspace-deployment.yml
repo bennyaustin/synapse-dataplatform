@@ -10,7 +10,7 @@ jobs:
           with:
             # Provide the Synapse workspace name where you want to deploy the artifacts.
             TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4' # Specify the path to the workspace artifacts template.
-            TemplateFile: './TemplateParametersForWorkspace.json' # Specify the path to the template parameter file.
+            TemplateFile: './TemplateForWorkspace.json' # Specify the path to the template parameter file.
             ParametersFile: './TemplateParametersForWorkspace.json'   # Specify deployment parameter values.
 #             OverrideArmParameters: # optional, default is 
             environment: 'Azure Public' # Provide the type of cloud environment. Valid values are: Azure Public, Azure China, Azure US Government, Azure Germany
