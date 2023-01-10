@@ -4,21 +4,23 @@ jobs:
     release:      
       runs-on: windows-latest
       steps:
-        # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
         - uses: actions/checkout@v2
+          with:
+            ref: 'workspace_publish'
+            path: 'arm'
+        - run: Get-ChildItem ${{github.workspace}} -Recurse
         - uses: Azure/Synapse-workspace-deployment@V1.7.0
           with:
-            # Provide the Synapse workspace name where you want to deploy the artifacts.
-            TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4' # Specify the path to the workspace artifacts template.
-            TemplateFile: './TemplateParametersForWorkspace.json' # Specify the path to the template parameter file.
-            ParametersFile: './TemplateParametersForWorkspace.json'   # Specify deployment parameter values.
+            TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4'
+            TemplateFile: ${{github.workspace}}\arm\ba-synapseanalytics01\TemplateForWorkspace.json
+            ParametersFile: ${{github.workspace}}\arm\ba-synapseanalytics01\TemplateParametersForWorkspace.json
 #             OverrideArmParameters: # optional, default is 
-            environment: 'Azure Public' # Provide the type of cloud environment. Valid values are: Azure Public, Azure China, Azure US Government, Azure Germany
-            resourceGroup: 'rg-synapse-dataplatform' # Provide the resource group of the target Synapse workspace.
-            clientId: ${{secrets.ACTION_SPN_CLIENTID}} # optional # Provide client id of service principal.
-            clientSecret: ${{secrets.ACTION_SPN_SECRET}} # optional # Provide client secret of the service principal.
-            subscriptionId: ${{secrets.SUBSCRIPTION_ID}} # Provide subscription id.
-            tenantId: ${{secrets.TENANT_ID}} # optional # Provide tenant id.
-            DeleteArtifactsNotInTemplate: 'true' # optional # Delete the artifacts which are in the workspace but not in the template.
-            managedIdentity: 'False' # optional # Use managed identity to generate the bearer token?
-            operation: 'deploy' # Validate and deploy. Valid values: deploy, validate, validateDeploy
+            environment: 'Azure Public'
+            resourceGroup: 'rg-synapse-dataplatform'
+            clientId: ${{secrets.ACTION_SPN_CLIENTID}}
+            clientSecret: ${{secrets.ACTION_SPN_SECRET}}
+            subscriptionId: ${{secrets.SUBSCRIPTION_ID}}
+            tenantId: ${{secrets.TENANT_ID}}
+            DeleteArtifactsNotInTemplate: 'true'
+            managedIdentity: 'False'
+            operation: 'deploy'
