@@ -15,7 +15,7 @@ jobs:
         - name: Build and Deploy SQL Database
           uses: Azure/sql-action@v2
           with:
-            connection-string: ${{secrets.CONTROLDB_CONNECTIONSTRING}}
+            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
             path: ${{github.workspace}}\synapse-dataplatform\dedicated-sqlpools\dw01\Database.sqlproj
             action: 'Publish'
             arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="badatalake01kn3acb6lw3vr.dfs.core.windows.net/"'
