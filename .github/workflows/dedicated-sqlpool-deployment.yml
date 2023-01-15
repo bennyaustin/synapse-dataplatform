@@ -1,0 +1,24 @@
+name: DWH Deployment
+on: workflow_dispatch 
+jobs:
+    release:      
+      runs-on: windows-latest
+      steps:
+        - name: Checkout code 
+          uses: actions/checkout@v3
+        - name: Display checkout files and folders
+          run: Get-ChildItem ${{github.workspace}} -Recurse
+        - name: Azure Login
+          uses: Azure/login@v1
+          with:
+           creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+        - name: Build and Deploy SQL Database
+          uses: Azure/sql-action@v2
+          with:
+            connection-string: ${{secrets.CONTROLDB_CONNECTIONSTRING}}
+            path: ${{github.workspace}}\elt-framework\ControlDB\ELT\Database.sqlproj
+            action: 'Publish'
+            arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true'
+        - name: Azure Logout
+          run: |
+            az logout
