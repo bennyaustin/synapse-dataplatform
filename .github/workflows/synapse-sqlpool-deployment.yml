@@ -10,8 +10,6 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
         
-      - run: Get-ChildItem ${{github.workspace}} -Recurse
-      
       - name : Build dacpac
         run: |
           msbuild.exe '${{github.workspace}}/dedicated-sqlpools/dw01/dw01.sqlproj' /p:Configuration=Release
@@ -30,7 +28,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: SQLPool
-     
+ 
+      - run: Get-ChildItem SQLPool -Recurse
+       
       - name: Azure Login
         uses: Azure/login@v1
         with:
