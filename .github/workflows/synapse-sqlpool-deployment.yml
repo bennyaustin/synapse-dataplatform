@@ -37,11 +37,10 @@ jobs:
            creds: '{"clientId":"${{ secrets.ACTION_SPN_CLIENTID }}","clientSecret":"${{ secrets.ACTION_SPN_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
            
       - name: Deploy dacpac
-        uses: Azure/sql-action@v1.3
+        uses: Azure/sql-action@v2
         with:
-           server-name: ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
-           dacpac-package: './dw01.dacpac'
+           path: './dw01.dacpac'
            arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"'
       - name: Azure Logout
         run: |
