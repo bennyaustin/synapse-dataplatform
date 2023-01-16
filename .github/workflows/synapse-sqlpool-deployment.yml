@@ -37,7 +37,7 @@ jobs:
            creds: '{"clientId":"${{ secrets.ACTION_SPN_CLIENTID }}","clientSecret":"${{ secrets.ACTION_SPN_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
            
       - name: Deploy dacpac
-        uses: Azure/sql-action@v2
+        uses: Azure/sql-action@v1.3
         with:
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
            path: './dw01.dacpac'
