@@ -39,6 +39,7 @@ jobs:
       - name: Deploy dacpac
         uses: Azure/sql-action@v1.3
         with:
+           server-name: ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
            path: './dw01.dacpac'
            action: 'Publish'
