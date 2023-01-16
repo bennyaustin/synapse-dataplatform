@@ -1,1 +1,24 @@
-
+name: Build and Deploy Synapse Dedicated SQL Pool
+on: workflow_dispatch 
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout sqlproj
+        uses: actions/checkout@v3
+        
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+        
+      - run: Get-ChildItem ${{github.workspace}} -Recurse
+      
+      - name : Build dacpac
+        run: |
+          msbuild.exe '${{github.workspace}}/dedicated-sqlpools/dw01/dw01.sqlproj' /p:Configuration=Release
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SQLPool
+          path: ${{ github.workspace }}/dedicated-sqlpools/dw01/bin/Release/
+      
