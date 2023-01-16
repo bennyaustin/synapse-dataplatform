@@ -23,6 +23,7 @@ jobs:
           path: ${{ github.workspace }}/dedicated-sqlpools/dw01/bin/Release/
       
   deploy:
+    needs: build
     runs-on: windows-latest
     steps:
       - name: Download artifact
