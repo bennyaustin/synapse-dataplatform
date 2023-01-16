@@ -1,4 +1,4 @@
-name: Build and Deploy Synapse Dedicated SQL Pool
+name: Synapse Dedicated SQL Pool deploy
 on: workflow_dispatch 
 jobs:
   build:
@@ -22,3 +22,26 @@ jobs:
           name: SQLPool
           path: ${{ github.workspace }}/dedicated-sqlpools/dw01/bin/Release/
       
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: SQLPool
+     
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+           creds: '{"clientId":"${{ secrets.ACTION_SPN_CLIENTID }}","clientSecret":"${{ secrets.ACTION_SPN_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+           
+      - name: Deploy dacpac
+        uses: Azure/sql-action@v2
+        with:
+           connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
+           path: './SQLPool.dacpac'
+           action: 'Publish'
+           arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"'
+      - name: Azure Logout
+        run: |
+            az logout
