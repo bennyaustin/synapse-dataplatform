@@ -41,8 +41,7 @@ jobs:
         with:
            server-name: ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
-           path: './dw01.dacpac'
-           action: 'Publish'
+           dacpac-package: './dw01.dacpac'
            arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"'
       - name: Azure Logout
         run: |
