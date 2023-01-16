@@ -40,7 +40,7 @@ jobs:
         uses: Azure/sql-action@v2
         with:
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
-           path: './SQLPool.dacpac'
+           path: './dw01.dacpac'
            action: 'Publish'
            arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"'
       - name: Azure Logout
