@@ -19,8 +19,8 @@ bamachinelearningws_properties_typeProperties_tenant: 45a126ff-7fc0-4528-ac6b-ee
 keyvault01_properties_typeProperties_baseUrl: https://ba-kv01-kn3acb6lw3vr4.vault.azure.net/
 storagecosmosdb1_properties_typeProperties_url: https://storagecosmosdb1.dfs.core.windows.net
 Azure Daily_properties_Master ELT REST API_parameters_SourceSystemName: Azure
-Azure Daily_properties_Master ELT REST API_parameters_StreamName: %
-Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: 100
+Azure Daily_properties_Master ELT REST API_parameters_StreamName: '%'
+Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: '100'
 Azure Daily_properties_Master ELT REST API_parameters_BaseURL: https://management.azure.com
 Azure Daily_properties_Master ELT REST API_parameters_ServicePrincipalID: 5e07b142-92b4-4671-83c0-e824bc93da6c
 Azure Daily_properties_Master ELT REST API_parameters_TenantID: 45a126ff-7fc0-4528-ac6b-eefad687db2d
@@ -28,13 +28,13 @@ Azure Daily_properties_Master ELT REST API_parameters_AADResource: https://manag
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint: https://prod-19.australiaeast.logic.azure.com:443/workflows/e22c7046cfcb4402995ce69e12adb567/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=M0pqMtbqQ87mRr8bq6vRuXrS0GVODOe9JBHedxEFmSk
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId: e836675f-2508-4873-ad4f-754d70253b22
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType: Microsoft.Synapse/workspaces/sqlPools
-Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion: 2021-04-01
+Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion: '2021-04-01'
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action: pause
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku: DW100c
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint: https://prod-10.australiaeast.logic.azure.com:443/workflows/563408f5838d4ff4afa7a2c561dc7975/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nretZkGon9hzeLjmZsEvaL3GMyFd683fMB9hoH-QWzI
 Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName: Purview
-Purview Daily_properties_Master ELT REST API_parameters_StreamName: %
-Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: 50
+Purview Daily_properties_Master ELT REST API_parameters_StreamName: '%'
+Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: '50'
 Purview Daily_properties_Master ELT REST API_parameters_BaseURL: https://ba-purview01-6spfx5oytiivq.purview.azure.com
 Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID: 5e07b142-92b4-4671-83c0-e824bc93da6c
 Purview Daily_properties_Master ELT REST API_parameters_TenantID: 45a126ff-7fc0-4528-ac6b-eefad687db2d
