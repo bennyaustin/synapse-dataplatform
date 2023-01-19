@@ -14,7 +14,7 @@ jobs:
             TargetWorkspaceName: 'ba-synapse01-kn3acb6lw3vr4'
             TemplateFile: ${{github.workspace}}\arm\ba-synapseanalytics01\TemplateForWorkspace.json
             ParametersFile: ${{github.workspace}}\arm\ba-synapseanalytics01\TemplateParametersForWorkspace.json
-#             OverrideArmParameters: # optional, default is 
+            OverrideArmParameters:  ${{github.workspace}}\arm\parameters\prod\parameters.yaml
             environment: 'Azure Public'
             resourceGroup: 'rg-synapse-dataplatform'
             clientId: ${{secrets.ACTION_SPN_CLIENTID}}
