@@ -7,7 +7,7 @@ AtlasREST_properties_typeProperties_servicePrincipalId: 5e07b142-92b4-4671-83c0-
 AtlasREST_properties_typeProperties_tenant: 45a126ff-7fc0-4528-ac6b-eefad687db2d
 AtlasREST_properties_typeProperties_aadResourceId: https://purview.azure.net
 Bronze_properties_typeProperties_url: https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/
-REST_properties_typeProperties_url: @{linkedService().BaseURL}
+REST_properties_typeProperties_url: '@{linkedService().BaseURL}'
 REST_properties_typeProperties_servicePrincipalId: @{linkedService().ServicePrincipalID}
 REST_properties_typeProperties_tenant: @{linkedService().TenantID}
 REST_properties_typeProperties_aadResourceId: @{linkedService().AADResource}
