@@ -1,6 +1,6 @@
 workspaceName: ba-synapse01-kn3acb6lw3vr4
 ControlDB_connectionString: Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-kn3acb6lw3vr4.database.windows.net;Initial Catalog=ControlDB
-SampleDB_connectionString: 
+SampleDB_connectionString: ''
 ba-synapseanalytics01-WorkspaceDefaultSqlServer_connectionString: Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net;Initial Catalog=@{linkedService().DBName}
 AtlasREST_properties_typeProperties_url: https://ba-purview02-aug-pubpreview.purview.azure.com
 AtlasREST_properties_typeProperties_servicePrincipalId: 5e07b142-92b4-4671-83c0-e824bc93da6c
