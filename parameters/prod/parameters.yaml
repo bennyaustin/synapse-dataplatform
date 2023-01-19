@@ -9,8 +9,8 @@ AtlasREST_properties_typeProperties_aadResourceId: https://purview.azure.net
 Bronze_properties_typeProperties_url: https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/
 REST_properties_typeProperties_url: '@{linkedService().BaseURL}'
 REST_properties_typeProperties_servicePrincipalId: @{linkedService().ServicePrincipalID}
-REST_properties_typeProperties_tenant: @{linkedService().TenantID}
-REST_properties_typeProperties_aadResourceId: @{linkedService().AADResource}
+REST_properties_typeProperties_tenant: '@{linkedService().TenantID}'
+REST_properties_typeProperties_aadResourceId: '@{linkedService().AADResource}'
 ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url: https://badatalake01kn3acb6lw3vr.dfs.core.windows.net
 bamachinelearningws_properties_typeProperties_subscriptionId: 5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d
 bamachinelearningws_properties_typeProperties_resourceGroupName: rg-dataplatform
