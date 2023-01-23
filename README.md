@@ -1,2 +1,3 @@
 # synapse-dataplatform
-Re-usable artifacts for a Modern data platform implementation on Azure Synapse Analytics using [ELT Framework](https://github.com/bennyaustin/elt-framework)
+A modern data platform implemented on Azure Synapse Analytics using ELT Framework - https://github.com/bennyaustin/elt-framework with resuable artifacts. 
+Data platform infrastructure  provisioned using https://github.com/bennyaustin/iac-synapse-dataplatform
