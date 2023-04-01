@@ -10,13 +10,13 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"resourceList_logicapp_endpoint": "https://prod-14.australiaeast.logic.azure.com:443/workflows/3938e046963c48968a48636f821d6970/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HcQMejUIYn77Y9X6Relz4RY31AXZEEyA54qfNulmhFo",
-					"subscriptionId": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d",
+					"resourceList_logicapp_endpoint": "https://prod-19.australiaeast.logic.azure.com:443/workflows/e22c7046cfcb4402995ce69e12adb567/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=M0pqMtbqQ87mRr8bq6vRuXrS0GVODOe9JBHedxEFmSk",
+					"subscriptionId": "e836675f-2508-4873-ad4f-754d70253b22",
 					"resourceType": "Microsoft.Synapse/workspaces/sqlPools",
 					"apiVersion": "2021-04-01",
 					"action": "pause",
 					"sku": "DW100c",
-					"sqlPool_logicapp_endpoint": "https://prod-19.australiaeast.logic.azure.com:443/workflows/5f8598c0da594852a579269eadaf38e2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkMprjcH_d3xprJfXXr5iZkZN8-IVIewsLg6GLLSaos"
+					"sqlPool_logicapp_endpoint": "https://prod-10.australiaeast.logic.azure.com:443/workflows/563408f5838d4ff4afa7a2c561dc7975/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nretZkGon9hzeLjmZsEvaL3GMyFd683fMB9hoH-QWzI"
 				}
 			}
 		],

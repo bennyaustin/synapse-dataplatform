@@ -1,5 +1,6 @@
 {
 	"name": "AtlasREST",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Endpoint for Purview Atlas REST APIs",
 		"annotations": [],
@@ -17,7 +18,7 @@
 				},
 				"secretName": "ba-purview-spn"
 			},
-			"tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+			"tenant": "45a126ff-7fc0-4528-ac6b-eefad687db2d",
 			"aadResourceId": "https://purview.azure.net"
 		},
 		"connectVia": {

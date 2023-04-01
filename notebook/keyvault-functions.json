@@ -16,6 +16,7 @@
 			"executorMemory": "28g",
 			"executorCores": 4,
 			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
@@ -40,13 +41,14 @@
 				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net"
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 10,
 				"cores": 4,
 				"memory": 28,
-				"automaticScaleJobs": false
+				"extraHeader": null
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -95,8 +97,7 @@
 				},
 				"source": [
 					"kvLinkedService ='your Azure Key Vault Linked Service referenced by this Synapse Workspace'"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -114,8 +115,7 @@
 				},
 				"source": [
 					"from notebookutils import mssparkutils"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "markdown",
@@ -156,8 +156,7 @@
 					"    except Exception as e:\n",
 					"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
 					"        raise e"
-				],
-				"execution_count": null
+				]
 			}
 		]
 	}

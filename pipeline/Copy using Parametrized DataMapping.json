@@ -114,6 +114,8 @@
 		"folder": {
 			"name": "Sandbox"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-01-19T06:39:22Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

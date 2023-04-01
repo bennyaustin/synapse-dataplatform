@@ -89,7 +89,7 @@
 			"name": "Manage-SQLPool"
 		},
 		"annotations": [],
-		"lastPublishTime": "2021-07-07T14:22:37Z"
+		"lastPublishTime": "2023-01-19T06:38:47Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

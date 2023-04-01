@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Daily Trigger to Extract, Load and Transform data from Azure REST APIs",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -16,7 +16,7 @@
 					"MaxIngestInstance": "100",
 					"BaseURL": "https://management.azure.com",
 					"ServicePrincipalID": "5e07b142-92b4-4671-83c0-e824bc93da6c",
-					"TenantID": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+					"TenantID": "45a126ff-7fc0-4528-ac6b-eefad687db2d",
 					"AADResource": "https://management.azure.com"
 				}
 			}

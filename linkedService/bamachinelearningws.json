@@ -17,7 +17,7 @@
 				},
 				"secretName": "synapse-machineleaningws-spn"
 			},
-			"tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+			"tenant": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",

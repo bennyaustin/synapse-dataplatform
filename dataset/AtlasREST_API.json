@@ -22,5 +22,6 @@
 			}
 		},
 		"schema": []
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
 }
