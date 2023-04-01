@@ -1,0 +1,135 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "ba-synapse01-kn3acb6lw3vr4"
+		},
+		"ControlDB_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-kn3acb6lw3vr4.database.windows.net;Initial Catalog=ControlDB"
+		},
+		"ba-synapse01-kn3acb6lw3vr4-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"ba-synapseanalytics01-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapseanalytics01.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"AtlasREST_properties_typeProperties_url": {
+			"value": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+		},
+		"AtlasREST_properties_typeProperties_servicePrincipalId": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"AtlasREST_properties_typeProperties_tenant": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"AtlasREST_properties_typeProperties_aadResourceId": {
+			"value": "https://purview.azure.net"
+		},
+		"Bronze_properties_typeProperties_url": {
+			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
+		"REST_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
+		"REST_properties_typeProperties_servicePrincipalId": {
+			"value": "@{linkedService().ServicePrincipalID}"
+		},
+		"REST_properties_typeProperties_tenant": {
+			"value": "@{linkedService().TenantID}"
+		},
+		"REST_properties_typeProperties_aadResourceId": {
+			"value": "@{linkedService().AADResource}"
+		},
+		"SampleDB_properties_typeProperties_database": {
+			"value": ""
+		},
+		"ba-synapse01-kn3acb6lw3vr4-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
+		"ba-synapseanalytics01-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://bastoragedatalake01.dfs.core.windows.net"
+		},
+		"bamachinelearningws_properties_typeProperties_subscriptionId": {
+			"value": "5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d"
+		},
+		"bamachinelearningws_properties_typeProperties_resourceGroupName": {
+			"value": "rg-dataplatform"
+		},
+		"bamachinelearningws_properties_typeProperties_servicePrincipalId": {
+			"value": "118aab7c-6863-4684-9252-f3e48e747bd5"
+		},
+		"bamachinelearningws_properties_typeProperties_tenant": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"keyvault01_properties_typeProperties_baseUrl": {
+			"value": "https://ba-kv01-kn3acb6lw3vr4.vault.azure.net/"
+		},
+		"storagecosmosdb1_properties_typeProperties_url": {
+			"value": "https://storagecosmosdb1.dfs.core.windows.net"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Azure"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "100"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://management.azure.com"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://management.azure.com"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint": {
+			"value": "https://prod-19.australiaeast.logic.azure.com:443/workflows/e22c7046cfcb4402995ce69e12adb567/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=M0pqMtbqQ87mRr8bq6vRuXrS0GVODOe9JBHedxEFmSk"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId": {
+			"value": "e836675f-2508-4873-ad4f-754d70253b22"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType": {
+			"value": "Microsoft.Synapse/workspaces/sqlPools"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion": {
+			"value": "2021-04-01"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action": {
+			"value": "pause"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku": {
+			"value": "DW100c"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
+			"value": "https://prod-10.australiaeast.logic.azure.com:443/workflows/563408f5838d4ff4afa7a2c561dc7975/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nretZkGon9hzeLjmZsEvaL3GMyFd683fMB9hoH-QWzI"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Purview"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "50"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://purview.azure.net"
+		}
+	}
+}
