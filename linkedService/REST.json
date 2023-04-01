@@ -1,6 +1,5 @@
 {
 	"name": "REST",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Parametrized Linked Service for a REST API data source using Service Principal AAD Authentication",
 		"parameters": {
@@ -30,7 +29,7 @@
 					"referenceName": "keyvault01",
 					"type": "LinkedServiceReference"
 				},
-				"secretName": "ba-purview-spn"
+				"secretName": "contoso-spn-secret"
 			},
 			"tenant": "@{linkedService().TenantID}",
 			"aadResourceId": "@{linkedService().AADResource}"
@@ -39,5 +38,6 @@
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
