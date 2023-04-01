@@ -222,6 +222,8 @@
 		"folder": {
 			"name": "Manage-SQLPool"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-01-19T06:39:05Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

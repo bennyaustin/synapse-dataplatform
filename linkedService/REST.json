@@ -1,5 +1,6 @@
 {
 	"name": "REST",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Parametrized Linked Service for a REST API data source using Service Principal AAD Authentication",
 		"parameters": {

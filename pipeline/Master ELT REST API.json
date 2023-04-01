@@ -263,6 +263,8 @@
 		"folder": {
 			"name": "REST API Pipelines"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-01-19T06:39:25Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
 }
