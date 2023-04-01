@@ -1,5 +1,11 @@
 name: Synapse workspace deployment
-on: workflow_dispatch 
+# on: workflow_dispatch 
+on:
+  push:
+    branches:
+      - workspace_publish
+    paths:
+      - 'ba-synapse01-kn3acb6lw3vr4/**.json'
 jobs:
     release:      
       runs-on: windows-latest
