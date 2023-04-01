@@ -12,10 +12,10 @@
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
 		"AtlasREST_properties_typeProperties_url": {
-			"value": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+			"value": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
 		},
 		"AtlasREST_properties_typeProperties_servicePrincipalId": {
-			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+			"value": "5f2dc546-5728-4896-8055-a4853c8cc26b"
 		},
 		"AtlasREST_properties_typeProperties_tenant": {
 			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"

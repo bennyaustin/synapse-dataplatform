@@ -19,11 +19,11 @@
 		},
 		"AtlasREST_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://ba-purview02-aug-pubpreview.purview.azure.com"
+			"defaultValue": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
 		},
 		"AtlasREST_properties_typeProperties_servicePrincipalId": {
 			"type": "string",
-			"defaultValue": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+			"defaultValue": "5f2dc546-5728-4896-8055-a4853c8cc26b"
 		},
 		"AtlasREST_properties_typeProperties_tenant": {
 			"type": "string",
@@ -2515,7 +2515,7 @@
 							"referenceName": "keyvault01",
 							"type": "LinkedServiceReference"
 						},
-						"secretName": "ba-purview-spn"
+						"secretName": "contoso-spn-secret"
 					},
 					"tenant": "[parameters('AtlasREST_properties_typeProperties_tenant')]",
 					"aadResourceId": "[parameters('AtlasREST_properties_typeProperties_aadResourceId')]"
@@ -2606,7 +2606,7 @@
 							"referenceName": "keyvault01",
 							"type": "LinkedServiceReference"
 						},
-						"secretName": "ba-purview-spn"
+						"secretName": "contoso-spn-secret"
 					},
 					"tenant": "[parameters('REST_properties_typeProperties_tenant')]",
 					"aadResourceId": "[parameters('REST_properties_typeProperties_aadResourceId')]"
