@@ -1,22 +1,21 @@
 {
 	"name": "AtlasREST",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Endpoint for Purview Atlas REST APIs",
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://ba-purview02-aug-pubpreview.purview.azure.com",
+			"url": "https://ba-purview01-6spfx5oytiivq.purview.azure.com",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "AadServicePrincipal",
-			"servicePrincipalId": "5e07b142-92b4-4671-83c0-e824bc93da6c",
+			"servicePrincipalId": "5f2dc546-5728-4896-8055-a4853c8cc26b",
 			"servicePrincipalKey": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
 					"referenceName": "keyvault01",
 					"type": "LinkedServiceReference"
 				},
-				"secretName": "ba-purview-spn"
+				"secretName": "contoso-spn-secret"
 			},
 			"tenant": "45a126ff-7fc0-4528-ac6b-eefad687db2d",
 			"aadResourceId": "https://purview.azure.net"
@@ -25,5 +24,6 @@
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
