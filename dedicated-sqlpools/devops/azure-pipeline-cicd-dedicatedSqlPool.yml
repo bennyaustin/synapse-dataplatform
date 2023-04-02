@@ -21,7 +21,7 @@ stages:
     jobs:
       - template: templates/build-sqldb.yml
         parameters:
-          solutionName:  dw01
+          solutionName:  dwh01
           buildPath:  dedicated-sqlpools\dw01\bin\Release
 
   - stage: cd_nonprod
