@@ -1,7 +1,12 @@
 # Pipeline to build and deploy Dedicated SQL pool for Synapse Data Platform https://github.com/bennyaustin/synapse-dataplatform implemented using ELT Framework https://github.com/bennyaustin/elt-framework
 
 trigger:
-- main
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - dedicated-sqlpools/dw01
 
 pool:
   name: Azure Pipelines
@@ -16,7 +21,7 @@ stages:
     jobs:
       - template: templates/build-sqldb.yml
         parameters:
-          solutionName:  dw01
+          solutionName:  dwh01
           buildPath:  dedicated-sqlpools\dw01\bin\Release
 
   - stage: cd_nonprod
