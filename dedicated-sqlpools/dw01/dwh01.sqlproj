@@ -39,7 +39,6 @@
     <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
     <Build Include="amlmodels\Tables\nyc_yellowtaxi_tips_v4.sql" />
     <Build Include="Azure\Tables\operations.sql" />
-    <Build Include="dbo\ExternalTables\AUPH.sql" />
     <Build Include="dbo\ExternalTables\nyc_tlc_yellow_trip_ext.sql" />
     <Build Include="dbo\StoredProcedures\nyc_taxi_procedure.sql" />
     <Build Include="dbo\Tables\DimActors.sql" />
@@ -69,15 +68,12 @@
     <Build Include="stg\Tables\nyc_tlc_yellow_trip.sql" />
     <Build Include="ExternalResources\External Data Sources\nyctlc_azureopendatastorage_blob_core_windows_net.sql" />
     <Build Include="ExternalResources\External Data Sources\public-datasets_bastoragedatalake01_dfs_core_windows_net.sql" />
-    <Build Include="ExternalResources\External Data Sources\SQLAnalyticsConnectorDataSource_se6kCyaRQdt.sql" />
     <Build Include="ExternalResources\External File Format\SQLAnalyticsConnectorFileFormat_se6kCyaRQdt.sql" />
-    <Build Include="ExternalResources\External File Format\SynapseDelimitedTextFormat.sql" />
     <Build Include="ExternalResources\External File Format\SynapseParquetFormat.sql" />
     <Build Include="Security\Schema\amlmodels.sql" />
     <Build Include="Security\Schema\Azure.sql" />
     <Build Include="Security\Schema\nyct.sql" />
     <Build Include="Security\Schema\Purview.sql" />
-    <Build Include="Security\Schema\SqlAnalyticsConnector.sql" />
     <Build Include="Security\Schema\stg.sql" />
   </ItemGroup>
   <ItemGroup>
