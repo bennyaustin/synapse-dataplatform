@@ -14,9 +14,6 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="amlmodels" />
-    <Folder Include="amlmodels\StoredProcedures" />
-    <Folder Include="amlmodels\Tables" />
     <Folder Include="Azure" />
     <Folder Include="Azure\Tables" />
     <Folder Include="dbo" />
@@ -36,8 +33,6 @@
     <Folder Include="Security\Schema" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
-    <Build Include="amlmodels\Tables\nyc_yellowtaxi_tips_v4.sql" />
     <Build Include="Azure\Tables\operations.sql" />
     <Build Include="dbo\ExternalTables\nyc_tlc_yellow_trip_ext.sql" />
     <Build Include="dbo\StoredProcedures\nyc_taxi_procedure.sql" />
