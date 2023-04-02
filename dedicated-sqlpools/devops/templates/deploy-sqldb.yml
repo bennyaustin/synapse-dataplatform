@@ -38,5 +38,4 @@ jobs:
           DacpacFile: ${{parameters.targetDatabase}}.dacpac
           IpDetectionMethod: AutoDetect
           DeleteFirewallRule: true
-          AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint=${{parameters.datalakeEndpoint}}
-
+          AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /p: DoNotDropObjectType='Users' /v:DatalakeEndpoint=${{parameters.datalakeEndpoint}}

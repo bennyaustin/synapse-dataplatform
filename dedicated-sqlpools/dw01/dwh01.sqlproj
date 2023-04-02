@@ -34,8 +34,6 @@
     <Folder Include="ExternalResources\External Data Sources" />
     <Folder Include="ExternalResources\External File Format" />
     <Folder Include="Security\Schema" />
-    <Folder Include="Security\Users" />
-    <Folder Include="Security\Roles" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="amlmodels\StoredProcedures\score_nyc_yellowtaxi_tips_v4.sql" />
@@ -81,17 +79,6 @@
     <Build Include="Security\Schema\Purview.sql" />
     <Build Include="Security\Schema\SqlAnalyticsConnector.sql" />
     <Build Include="Security\Schema\stg.sql" />
-    <Build Include="Security\Users\ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
-    <Build Include="Security\Users\ba-purview02-aug-pubpreview.sql" />
-    <Build Include="Security\Users\ba-synapseanalytics01.sql" />
-    <Build Include="Security\Users\bennyaustin%40microsoft.com.sql" />
-    <Build Include="Security\Roles\db_datareader for ba-purview02-aug-pubpreview.sql" />
-    <Build Include="Security\Roles\db_datawriter for ba-synapseanalytics01.sql" />
-    <Build Include="Security\Roles\db_exporter for ba-synapseanalytics01.sql" />
-    <Build Include="Security\Roles\db_exporter for bennyaustin%40microsoft.com.sql" />
-    <Build Include="Security\Roles\db_owner for ba-logicaapp01-sqlpool-pause-resume-scale.sql" />
-    <Build Include="Security\Roles\db_owner for ba-synapseanalytics01.sql" />
-    <Build Include="Security\Roles\db_owner for bennyaustin%40microsoft.com.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="DatalakeEndpoint">
