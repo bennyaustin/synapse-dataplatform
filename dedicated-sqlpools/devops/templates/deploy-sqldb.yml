@@ -4,6 +4,7 @@ parameters:
   buildArtifactName: <replace with name of artifact published by the build stage>
   targetDatabaseServer:  <replace with database server where the code needs to be deployed>
   targetDatabase:  <replace with database name where the code needs to be deployed>
+  datalakeEndpoint: <replace with storage account name where the external data is for instance storagename.dfs.core.windows.net>
 
 
 jobs:
@@ -15,7 +16,7 @@ jobs:
         inputs:
           connectedServiceName: ${{parameters.serviceConnectionName}}
           KeyVaultName: ${{parameters.keyvaultName}} 
-          SecretsFilter: dw01-sqlusername,dw01-sqlpassword
+          SecretsFilter: sqlserver-admin-username,sqlserver-admin-password
           RunAsPreJob: true
 
       - task: DownloadPipelineArtifact@2
@@ -32,10 +33,10 @@ jobs:
           AuthenticationType: server
           ServerName: ${{parameters.targetDatabaseServer}}
           DatabaseName: ${{parameters.targetDatabase}}
-          SqlUsername: $(dw01-sqlusername)
-          SqlPassword: $(dw01-sqlpassword)
+          SqlUsername: $(sqlserver-admin-username)
+          SqlPassword: $(sqlserver-admin-password)
           DacpacFile: ${{parameters.targetDatabase}}.dacpac
           IpDetectionMethod: AutoDetect
           DeleteFirewallRule: true
-          AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"
+          AdditionalArguments: /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint=${{parameters.datalakeEndpoint}}
 
