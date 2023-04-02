@@ -23,16 +23,3 @@ CREATE TABLE [nyct].[nyc_tlc_yellow_trip] (
 )
 WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = ROUND_ROBIN);
 
-
-GO
-
-
-
-GO
-
-
-GRANT INSERT
-    ON OBJECT::[nyct].[nyc_tlc_yellow_trip] TO [ba-synapseanalytics01]
-    AS [dbo];
-GO
-
