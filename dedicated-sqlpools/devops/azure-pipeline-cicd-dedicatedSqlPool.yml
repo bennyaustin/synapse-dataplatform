@@ -52,5 +52,7 @@ stages:
         targetDatabase:  dwh01
         datalakeEndpoint: badatalake01o5rium4bfcf6.dfs.core.windows.net
 
+        /p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /p: DoNotDropObjectType='Users' /v:DatalakeEndpoint=${{parameters.datalakeEndpoint}}
+
 
 
