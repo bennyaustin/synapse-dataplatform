@@ -26,11 +26,12 @@ stages:
     jobs:
     - template: templates/deploy-sqldb.yml
       parameters:
-        serviceConnectionName:  ba-devops-spn
-        keyvaultName:  ba-keyvault1 
+        serviceConnectionName:  devops-contoso-spn
+        keyvaultName:  ba-kv01-kn3acb6lw3vr4 
         buildArtifactName:  dacpac
-        targetDatabaseServer:  ba-synapseanalytics01.sql.azuresynapse.net,1433
-        targetDatabase:  dw01
+        targetDatabaseServer:  ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433
+        targetDatabase:  dwh01
+        datalakeEndpoint: badatalake01kn3acb6lw3vr.dfs.core.windows.net
 
   - stage: cd_prod
     displayName: Deploy Stage - Prod
@@ -39,11 +40,12 @@ stages:
     jobs:
     - template: templates/deploy-sqldb.yml
       parameters:
-        serviceConnectionName:  ba-devops-spn
-        keyvaultName:  ba-keyvault1 
+        serviceConnectionName:  devops-contoso-spn
+        keyvaultName:  ba-kv01-o5rium4bfcf6a
         buildArtifactName:  dacpac
-        targetDatabaseServer:  ba-synapseanalytics01.sql.azuresynapse.net,1433
-        targetDatabase:  dw01
+        targetDatabaseServer:  ba-synapse01-o5rium4bfcf6a.sql.azuresynapse.net,1433
+        targetDatabase:  dwh01
+        datalakeEndpoint: badatalake01o5rium4bfcf6.dfs.core.windows.net
 
 
 
