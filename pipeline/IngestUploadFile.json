@@ -2,6 +2,14 @@
 	"name": "IngestUploadFile",
 	"properties": {
 		"description": "Pipelines that ingests a file from drop-zone of data lake",
+		"parameters": {
+			"SourceFileDropFileSystem": {
+				"type": "string"
+			},
+			"SourceFileDropFolder": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Upload File Pipelines"
 		},
