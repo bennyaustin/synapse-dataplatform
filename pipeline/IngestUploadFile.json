@@ -8,6 +8,9 @@
 			},
 			"SourceFileDropFolder": {
 				"type": "string"
+			},
+			"SourceFileDropFile": {
+				"type": "string"
 			}
 		},
 		"folder": {

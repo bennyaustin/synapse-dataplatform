@@ -11,7 +11,9 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"SourceFileDropFolder": "@triggerBody().folderPath"
+					"SourceFileDropFileSystem": "inference",
+					"SourceFileDropFolder": "@triggerBody().folderPath",
+					"SourceFileDropFile": "@triggerBody().fileName"
 				}
 			}
 		],
