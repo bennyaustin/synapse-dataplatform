@@ -14,6 +14,8 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
+			"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
+			"blobPathEndsWith": ".json",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575",
 			"events": [
