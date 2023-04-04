@@ -1,0 +1,10 @@
+{
+	"name": "IngestUploadFiles",
+	"properties": {
+		"description": "Pipelines that ingests a file from drop-zone of data lake",
+		"folder": {
+			"name": "Upload File Pipelines"
+		},
+		"annotations": []
+	}
+}
