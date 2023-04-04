@@ -9,6 +9,9 @@
 				"pipelineReference": {
 					"referenceName": "IngestUploadFile",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"SourceFileDropFolder": "@triggerBody().folderPath"
 				}
 			}
 		],
