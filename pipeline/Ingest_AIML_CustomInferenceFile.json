@@ -1,5 +1,5 @@
 {
-	"name": "IngestUploadFile",
+	"name": "Ingest_AIML_CustomInferenceFile",
 	"properties": {
 		"description": "Pipelines that ingests a file from drop-zone of data lake",
 		"activities": [
@@ -175,7 +175,7 @@
 				}
 			},
 			{
-				"name": "DropZone2Raw",
+				"name": "AIMLCustom2Raw",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -197,7 +197,7 @@
 					"source": {
 						"type": "JsonSource",
 						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
+							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
 							"enablePartitionDiscovery": false
 						},
@@ -218,7 +218,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Drop_JSON",
+						"referenceName": "AIMLCustomModels_JSON",
 						"type": "DatasetReference",
 						"parameters": {
 							"FileSystem": {
@@ -262,7 +262,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "DropZone2Raw",
+						"activity": "AIMLCustom2Raw",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -304,7 +304,7 @@
 						},
 						"IngestCount": {
 							"value": {
-								"value": "@activity('DropZone2Raw').output.filesWritten",
+								"value": "@activity('AIMLCustom2Raw').output.filesWritten",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -319,7 +319,7 @@
 						},
 						"SourceCount": {
 							"value": {
-								"value": "@activity('DropZone2Raw').output.filesRead",
+								"value": "@activity('AIMLCustom2Raw').output.filesRead",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -336,7 +336,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "DropZone2Raw",
+						"activity": "AIMLCustom2Raw",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -812,7 +812,7 @@
 									},
 									"IngestCount": {
 										"value": {
-											"value": "@activity('DropZone2Raw').output.filesWritten",
+											"value": "@activity('AIMLCustom2Raw').output.filesWritten",
 											"type": "Expression"
 										},
 										"type": "Int32"
@@ -967,19 +967,24 @@
 		],
 		"parameters": {
 			"SourceFileDropFileSystem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "inference"
 			},
 			"SourceFileDropFolder": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "formrecognizer-re-json"
 			},
 			"SourceFileDropFile": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Statement #52 - OWN00426-1 .json"
 			},
 			"SourceSystemName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AIML-OCR"
 			},
 			"StreamName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "analyze"
 			}
 		},
 		"variables": {
