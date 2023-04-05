@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c8790ea5-f66a-4f6f-8ea2-3e04d71e0b92"
+				"spark.autotune.trackingId": "94c5ae5d-3749-4102-a91c-d8ec2b27a029"
 			}
 		},
 		"metadata": {
@@ -58,7 +58,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 31
+				"execution_count": 89
 			},
 			{
 				"cell_type": "markdown",
@@ -112,7 +112,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 32
+				"execution_count": 90
 			},
 			{
 				"cell_type": "code",
@@ -151,7 +151,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 33
+				"execution_count": 91
 			},
 			{
 				"cell_type": "code",
@@ -170,21 +170,25 @@
 				"source": [
 					"import pyspark.sql.functions \r\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)\r\n",
-					"# df.printSchema()\r\n",
+					"\r\n",
 					"# extract datapoints of interest\r\n",
+					"# df.printSchema()\r\n",
 					"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\r\n",
 					"            ,col(\"fields.owner.valueString\").alias(\"owner\")\r\n",
-					"            ,col(\"fields.owner address.valueString\").alias(\"address\")\r\n",
+					"            ,col(\"fields.owner address.valueString\").alias(\"re_agency_address\")\r\n",
 					"            ,col(\"fields.rental address.valueString\").alias(\"rental_address\")\r\n",
 					"            ,col(\"fields.statement date.valueString\").alias(\"statement_date\")\r\n",
 					"            ,col(\"fields.tenant.valueString\").alias(\"tenant\")\r\n",
 					"            ,col(\"fields.total payment.valueString\").alias(\"total_payment\")\r\n",
-					"            ,col(\"fields.statement details.valueArray\").alias(\"statement details\")\r\n",
+					"            ,explode(col(\"fields.statement details.valueArray\")).alias(\"statement details\")\r\n",
 					"            )\r\n",
 					"\r\n",
+					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
+					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
+					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
 					"df.printSchema()"
 				],
-				"execution_count": 76
+				"execution_count": 92
 			}
 		]
 	}
