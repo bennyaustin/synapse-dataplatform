@@ -54,7 +54,11 @@
 					},
 					"dataset": {
 						"referenceName": "ControlDB_Dataset",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"Table": "Not Applicable",
+							"Schema": "Not Applicable"
+						}
 					}
 				}
 			},
