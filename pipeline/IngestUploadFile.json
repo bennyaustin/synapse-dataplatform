@@ -11,6 +11,12 @@
 			},
 			"SourceFileDropFile": {
 				"type": "string"
+			},
+			"SourceSystemName": {
+				"type": "string"
+			},
+			"StreamName": {
+				"type": "string"
 			}
 		},
 		"folder": {

@@ -13,7 +13,9 @@
 				"parameters": {
 					"SourceFileDropFileSystem": "inference",
 					"SourceFileDropFolder": "@triggerBody().folderPath",
-					"SourceFileDropFile": "@triggerBody().fileName"
+					"SourceFileDropFile": "@triggerBody().fileName",
+					"SourceSystemName": "AIML-OCR",
+					"StreamName": "analyze"
 				}
 			}
 		],
