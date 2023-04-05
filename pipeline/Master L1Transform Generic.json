@@ -1,0 +1,10 @@
+{
+	"name": "Master L1Transform Generic",
+	"properties": {
+		"description": "Generic Level 1 Transformation Pipeline",
+		"folder": {
+			"name": "Transform Pipelines"
+		},
+		"annotations": []
+	}
+}
