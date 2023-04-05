@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "94c5ae5d-3749-4102-a91c-d8ec2b27a029"
+				"spark.autotune.trackingId": "a5516c1c-cdf6-4634-a402-14ab1f591033"
 			}
 		},
 		"metadata": {
@@ -128,28 +128,28 @@
 					}
 				},
 				"source": [
-					"# Parameters for Testing only, should be commeted off\r\n",
-					"L1TransformInstanceID = 1\r\n",
-					"L1TransformID = 4\r\n",
-					"IngestID = 4\r\n",
-					"CustomParameters = None\r\n",
-					"InputRawFileSystem = 'raw-bronze'\r\n",
-					"InputRawFileFolder = 're-statements/2023/04'\r\n",
-					"InputRawFile = '2023-04-05_194935_re-statement.json'\r\n",
-					"InputRawFileDelimiter = None\r\n",
-					"InputFileHeaderFlag = None\r\n",
-					"OutputL1CurateFileSystem = 'curated-silver'\r\n",
-					"OutputL1CuratedFolder = 're-statements/2023/04'\r\n",
-					"OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\r\n",
-					"OutputL1CuratedFileDelimiter = None\r\n",
-					"OutputL1CuratedFileFormat = 'json'\r\n",
-					"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-					"OutputDWStagingTable = None\r\n",
-					"LookupColumns = None\r\n",
-					"OutputDWTable = None\r\n",
-					"OutputDWTableWriteMode = None\r\n",
-					"ReRunL1TransformFlag = None\r\n",
-					"DeltaName = None"
+					"# # Parameters for Testing only, should be commented off\r\n",
+					"# L1TransformInstanceID = 1\r\n",
+					"# L1TransformID = 4\r\n",
+					"# IngestID = 4\r\n",
+					"# CustomParameters = None\r\n",
+					"# InputRawFileSystem = 'raw-bronze'\r\n",
+					"# InputRawFileFolder = 're-statements/2023/04'\r\n",
+					"# InputRawFile = '2023-04-05_194935_re-statement.json'\r\n",
+					"# InputRawFileDelimiter = None\r\n",
+					"# InputFileHeaderFlag = None\r\n",
+					"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
+					"# OutputL1CuratedFolder = 're-statements/2023/04'\r\n",
+					"# OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\r\n",
+					"# OutputL1CuratedFileDelimiter = None\r\n",
+					"# OutputL1CuratedFileFormat = 'json'\r\n",
+					"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+					"# OutputDWStagingTable = None\r\n",
+					"# LookupColumns = None\r\n",
+					"# OutputDWTable = None\r\n",
+					"# OutputDWTableWriteMode = None\r\n",
+					"# ReRunL1TransformFlag = None\r\n",
+					"# DeltaName = None"
 				],
 				"execution_count": 91
 			},
@@ -169,9 +169,9 @@
 				},
 				"source": [
 					"import pyspark.sql.functions \r\n",
-					"df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)\r\n",
+					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
 					"\r\n",
-					"# extract datapoints of interest\r\n",
+					"# extract datapoints of interest and explode array\r\n",
 					"# df.printSchema()\r\n",
 					"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\r\n",
 					"            ,col(\"fields.owner.valueString\").alias(\"owner\")\r\n",
@@ -186,9 +186,11 @@
 					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
 					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
 					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
-					"df.printSchema()"
+					"df.printSchema()\r\n",
+					"\r\n",
+					"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 92
+				"execution_count": 93
 			}
 		]
 	}

@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "ccec65e2-b642-4afa-92cb-1fd0ef2e2350"
+				"spark.autotune.trackingId": "19fcb895-15d2-41dc-ad8c-d948be65da9d"
 			}
 		},
 		"metadata": {
@@ -183,7 +183,7 @@
 					}
 				},
 				"source": [
-					"# # Parameters for Testing only, should be commeted off\r\n",
+					"# # Parameters for Testing only, should be commented off\r\n",
 					"# L1TransformInstanceID = 1\r\n",
 					"# L1TransformID = 3\r\n",
 					"# IngestID = 3\r\n",
