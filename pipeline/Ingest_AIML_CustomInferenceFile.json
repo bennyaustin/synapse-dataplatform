@@ -967,19 +967,24 @@
 		],
 		"parameters": {
 			"SourceFileDropFileSystem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "inference"
 			},
 			"SourceFileDropFolder": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "formrecognizer-re-json"
 			},
 			"SourceFileDropFile": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Statement #52 - OWN00426-1 .json"
 			},
 			"SourceSystemName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AIML-OCR"
 			},
 			"StreamName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "analyze"
 			}
 		},
 		"variables": {
