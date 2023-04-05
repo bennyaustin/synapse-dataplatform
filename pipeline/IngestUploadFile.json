@@ -2,6 +2,63 @@
 	"name": "IngestUploadFile",
 	"properties": {
 		"description": "Pipelines that ingests a file from drop-zone of data lake",
+		"activities": [
+			{
+				"name": "Get_IngestDefinition_FileDrop",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[ELT].[GetIngestDefinition_FileDrop]",
+						"storedProcedureParameters": {
+							"SourceFile": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceFileDropFile",
+									"type": "Expression"
+								}
+							},
+							"SourceFolder": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceFileDropFolder",
+									"type": "Expression"
+								}
+							},
+							"SourceSystemName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								}
+							},
+							"StreamName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ControlDB_Dataset",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
 		"parameters": {
 			"SourceFileDropFileSystem": {
 				"type": "string"
