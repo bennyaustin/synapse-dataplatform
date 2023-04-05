@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "44eb2850-7581-40e0-a555-d0220bd5a981"
+				"spark.autotune.trackingId": "2d209d8d-6181-4bf1-a904-da1b27b6049b"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 6
+				"execution_count": 12
 			},
 			{
 				"cell_type": "markdown",
@@ -111,7 +111,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 7
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -150,7 +150,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 8
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
@@ -166,9 +166,10 @@
 					}
 				},
 				"source": [
-					"df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)"
+					"print(InputRawFileFolder +'/' + InputRawFile)\r\n",
+					"# df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)"
 				],
-				"execution_count": 11
+				"execution_count": 17
 			}
 		]
 	}
