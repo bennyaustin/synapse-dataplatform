@@ -152,6 +152,30 @@
 		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
 			"type": "string",
 			"defaultValue": "https://purview.azure.net"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"type": "string",
+			"defaultValue": "inference"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"type": "string",
+			"defaultValue": "AIML-OCR"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"type": "string",
+			"defaultValue": "analyze"
+		},
+		"Real Estate Statement Event_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
 		}
 	},
 	"variables": {
@@ -4978,6 +5002,44 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/pipelines/Master ELT REST API')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Real Estate Statement Event')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Event grid trigger for real estate statements processed by Form Recognizer custom model ",
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Ingest_AIML_CustomInferenceFile",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFileDropFileSystem": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem')]",
+							"SourceFileDropFolder": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
+							"SourceFileDropFile": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
+							"SourceSystemName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
+					"blobPathEndsWith": ".json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('Real Estate Statement Event_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Ingest_AIML_CustomInferenceFile')]"
 			]
 		},
 		{
