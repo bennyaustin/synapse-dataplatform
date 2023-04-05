@@ -57,6 +57,118 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "InsertIngestInstance - Running",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set PipelineRunID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[InsertIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DestinationRawFile": {
+							"value": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFile",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DestinationRawFileSystem": {
+							"value": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFileSystem",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DestinationRawFolder": {
+							"value": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFolder",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"IngestID": {
+							"value": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.IngestID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"ReloadFlag": {
+							"value": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.ReloadFlag",
+								"type": "Expression"
+							},
+							"type": "Boolean"
+						},
+						"SourceFileDropFile": {
+							"value": {
+								"value": "@pipeline().parameters.SourceFileDropFile",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SourceFileDropFileSystem": {
+							"value": {
+								"value": "@pipeline().parameters.SourceFileDropFileSystem",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SourceFileDropFolder": {
+							"value": {
+								"value": "@pipeline().parameters.SourceFileDropFolder",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set PipelineRunID",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get_IngestDefinition_FileDrop",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunID",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -74,6 +186,11 @@
 			},
 			"StreamName": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineRunID": {
+				"type": "String"
 			}
 		},
 		"folder": {
