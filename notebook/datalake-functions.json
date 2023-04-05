@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "00306cc7-9286-4b36-9989-c3b003c2f0b6"
+				"spark.autotune.trackingId": "7caabb42-45ae-4fa6-a613-49cccad339e0"
 			}
 		},
 		"metadata": {
@@ -121,7 +121,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"def readFile(container, path, colSeparator, headerFlag=None):\r\n",
+					"def readFile(container, path, colSeparator=None, headerFlag=None):\r\n",
 					"  # ##########################################################################################################################  \r\n",
 					"  # Function: readFile\r\n",
 					"  # Reads a file from Azure Gen2 Storage and returns as dataframe\r\n",
