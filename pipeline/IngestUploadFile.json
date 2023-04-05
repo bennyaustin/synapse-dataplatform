@@ -581,7 +581,7 @@
 									},
 									"IngestADFPipelineRunID": {
 										"value": {
-											"value": "@variables('ADFPipelineRunID')",
+											"value": "@variables('PipelineRunID')",
 											"type": "Expression"
 										},
 										"type": "Guid"
