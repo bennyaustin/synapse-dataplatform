@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1906d9fe-23fa-4bbc-808c-89f54237b538"
+				"spark.autotune.trackingId": "3269bfdb-9e31-47fa-ac35-80b6354da813"
 			}
 		},
 		"metadata": {
@@ -187,7 +187,7 @@
 					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
 					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
 					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
-					"# df.printSchema()\r\n",
+					"df.printSchema()\r\n",
 					"\r\n",
 					"#write flattened json to curated zone of data lake\r\n",
 					"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
