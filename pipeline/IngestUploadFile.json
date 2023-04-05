@@ -205,6 +205,15 @@
 							"type": "JsonReadSettings"
 						}
 					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
 					"enableStaging": false
 				},
 				"inputs": [
@@ -222,6 +231,26 @@
 							},
 							"File": {
 								"value": "@pipeline().parameters.SourceFileDropFile",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Bronze_JSON",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileSystem": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFileSystem",
+								"type": "Expression"
+							},
+							"Folder": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFolder",
+								"type": "Expression"
+							},
+							"File": {
+								"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFile",
 								"type": "Expression"
 							}
 						}
