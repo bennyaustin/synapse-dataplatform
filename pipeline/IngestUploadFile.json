@@ -808,14 +808,14 @@
 									},
 									"IngestADFPipelineRunID": {
 										"value": {
-											"value": "@variables('ADFPipelineRunID')",
+											"value": "@variables('PipelineRunID')",
 											"type": "Expression"
 										},
 										"type": "Guid"
 									},
 									"IngestCount": {
 										"value": {
-											"value": "@activity('Source To Datalake Bronze Zone').output.rowsCopied",
+											"value": "@activity('DropZone2Raw').output.rowsCopied",
 											"type": "Expression"
 										},
 										"type": "Int32"
@@ -840,7 +840,7 @@
 									},
 									"InputRawFile": {
 										"value": {
-											"value": "@pipeline().parameters.DestinationRawFile",
+											"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFile",
 											"type": "Expression"
 										},
 										"type": "String"
@@ -854,14 +854,14 @@
 									},
 									"InputRawFileFolder": {
 										"value": {
-											"value": "@pipeline().parameters.DestinationRawFolder",
+											"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFolder",
 											"type": "Expression"
 										},
 										"type": "String"
 									},
 									"InputRawFileSystem": {
 										"value": {
-											"value": "@pipeline().parameters.DestinationRawFileSystem",
+											"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.DestinationRawFileSystem",
 											"type": "Expression"
 										},
 										"type": "String"
