@@ -194,8 +194,39 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "Drop_JSON",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileSystem": {
+								"value": "@pipeline().parameters.SourceFileDropFileSystem",
+								"type": "Expression"
+							},
+							"Folder": {
+								"value": "@pipeline().parameters.SourceFileDropFolder",
+								"type": "Expression"
+							},
+							"File": {
+								"value": "@pipeline().parameters.SourceFileDropFile",
+								"type": "Expression"
+							}
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
