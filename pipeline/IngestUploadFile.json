@@ -475,15 +475,12 @@
 						"storedProcedureParameters": {
 							"DeltaDate": {
 								"type": "DateTime",
-								"value": {
-									"value": "@pipeline().parameters.DataFromTimestamp",
-									"type": "Expression"
-								}
+								"value": null
 							},
 							"IngestID": {
 								"type": "Int32",
 								"value": {
-									"value": "@pipeline().parameters.IngestID",
+									"value": "@activity('Get_IngestDefinition_FileDrop').output.firstRow.IngestID",
 									"type": "Expression"
 								}
 							},
