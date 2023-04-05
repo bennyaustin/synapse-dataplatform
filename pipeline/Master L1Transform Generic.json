@@ -2,6 +2,17 @@
 	"name": "Master L1Transform Generic",
 	"properties": {
 		"description": "Generic Level 1 Transformation Pipeline",
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
 		"folder": {
 			"name": "Transform Pipelines"
 		},
