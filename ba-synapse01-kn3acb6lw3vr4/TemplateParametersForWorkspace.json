@@ -11,6 +11,9 @@
 		"ba-synapse01-kn3acb6lw3vr4-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
+		"AIMLCustomModels_properties_typeProperties_serviceEndpoint": {
+			"value": "https://bacustmodelstorage01q575.blob.core.windows.net/"
+		},
 		"AtlasREST_properties_typeProperties_url": {
 			"value": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
 		},
@@ -24,6 +27,9 @@
 			"value": "https://purview.azure.net"
 		},
 		"Bronze_properties_typeProperties_url": {
+			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
+		"DropZone_properties_typeProperties_url": {
 			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
 		},
 		"REST_properties_typeProperties_url": {
@@ -106,6 +112,24 @@
 		},
 		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
 			"value": "https://purview.azure.net"
+		},
+		"Real Estate Agency Statement Event_properties_IngestUploadFile_parameters_SourceFileDropFileSystem": {
+			"value": "inference"
+		},
+		"Real Estate Agency Statement Event_properties_IngestUploadFile_parameters_SourceFileDropFolder": {
+			"value": "@triggerBody().folderPath"
+		},
+		"Real Estate Agency Statement Event_properties_IngestUploadFile_parameters_SourceFileDropFile": {
+			"value": "@triggerBody().fileName"
+		},
+		"Real Estate Agency Statement Event_properties_IngestUploadFile_parameters_SourceSystemName": {
+			"value": "AIML-OCR"
+		},
+		"Real Estate Agency Statement Event_properties_IngestUploadFile_parameters_StreamName": {
+			"value": "analyze"
+		},
+		"Real Estate Agency Statement Event_properties_typeProperties_scope": {
+			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
 		}
 	}
 }
