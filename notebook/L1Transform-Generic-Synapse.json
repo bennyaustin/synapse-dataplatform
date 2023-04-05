@@ -1,5 +1,5 @@
 {
-	"name": "L2Transform-Generic-Synapse",
+	"name": "L1Transform-Generic-Synapse",
 	"properties": {
 		"description": "Generic Level 1 Transform Notebook for Synapse Dedicated SQL Pool Target",
 		"folder": {
@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b3062607-fb3d-4b18-968d-56f2deab4e5f"
+				"spark.autotune.trackingId": "19fcb895-15d2-41dc-ad8c-d948be65da9d"
 			}
 		},
 		"metadata": {
@@ -36,20 +36,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/mediumMO",
+				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
 				"name": "mediumMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
-				"nodeCount": 10,
+				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -184,7 +183,7 @@
 					}
 				},
 				"source": [
-					"# # Parameters for Testing only, should be commeted off\r\n",
+					"# # Parameters for Testing only, should be commented off\r\n",
 					"# L1TransformInstanceID = 1\r\n",
 					"# L1TransformID = 3\r\n",
 					"# IngestID = 3\r\n",

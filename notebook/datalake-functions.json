@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f209c3f1-aa4a-4fa2-8e31-54d85cc64382"
+				"spark.autotune.trackingId": "1e035a31-0972-40e3-8140-e03280840553"
 			}
 		},
 		"metadata": {
@@ -35,20 +35,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
+				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/smallMO",
 				"name": "smallMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
-				"nodeCount": 10,
+				"nodeCount": 3,
 				"cores": 4,
 				"memory": 28,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -70,7 +69,8 @@
 				"cell_type": "code",
 				"source": [
 					"from notebookutils import mssparkutils"
-				]
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -90,7 +90,8 @@
 				},
 				"source": [
 					"storageAccount = '<Storage Account Name>'"
-				]
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -120,7 +121,7 @@
 					"collapsed": true
 				},
 				"source": [
-					"def readFile(container, path, colSeparator, headerFlag):\r\n",
+					"def readFile(container, path, colSeparator=None, headerFlag=None):\r\n",
 					"  # ##########################################################################################################################  \r\n",
 					"  # Function: readFile\r\n",
 					"  # Reads a file from Azure Gen2 Storage and returns as dataframe\r\n",
@@ -143,6 +144,8 @@
 					"        df = spark.read.csv(path=filePath, sep=colSeparator, header=headerFlag, inferSchema=\"true\")\r\n",
 					"    elif \".parquet\" in path:\r\n",
 					"        df = spark.read.parquet(filePath)\r\n",
+					"    elif \".json\" in path:\r\n",
+					"        df = spark.read.json(filePath, multiLine= True)\r\n",
 					"    elif \".orc\" in path:\r\n",
 					"        df = spark.read.orc(filePath)\r\n",
 					"    else:\r\n",
@@ -151,7 +154,8 @@
 					"    df =df.dropDuplicates()\r\n",
 					"    return df\r\n",
 					""
-				]
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -211,7 +215,8 @@
 					"        df.write.save(path=filePath,format=\"csv\",mode=writeMode)\r\n",
 					"    return\r\n",
 					""
-				]
+				],
+				"execution_count": null
 			}
 		]
 	}
