@@ -314,7 +314,7 @@
 							"type": "String"
 						},
 						"ReloadFlag": {
-							"value": "",
+							"value": "false",
 							"type": "Boolean"
 						},
 						"SourceCount": {
