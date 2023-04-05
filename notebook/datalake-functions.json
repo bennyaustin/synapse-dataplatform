@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b959223d-f7f5-4fd2-80c5-64e6fc67f755"
+				"spark.autotune.trackingId": "54be06ad-b467-49f5-afb8-ac4bec6fbf9f"
 			}
 		},
 		"metadata": {
@@ -152,8 +152,8 @@
 					"    else:\r\n",
 					"        df = spark.read.format(\"csv\").load(filePath)\r\n",
 					"  \r\n",
-					"    # df =df.dropDuplicates()\r\n",
-					"    # return df\r\n",
+					"    df =df.dropDuplicates()\r\n",
+					"    return df\r\n",
 					""
 				],
 				"execution_count": null
