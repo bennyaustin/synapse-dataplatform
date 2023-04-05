@@ -3,22 +3,8 @@
 	"properties": {
 		"description": "Event Trigger that fires when a Real Estate Agency Statement has been analysed by a custom form recognizer model",
 		"annotations": [],
-		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "IngestUploadFile",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"SourceFileDropFileSystem": "inference",
-					"SourceFileDropFolder": "@triggerBody().folderPath",
-					"SourceFileDropFile": "@triggerBody().fileName",
-					"SourceSystemName": "AIML-OCR",
-					"StreamName": "analyze"
-				}
-			}
-		],
+		"runtimeState": "Stopped",
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
