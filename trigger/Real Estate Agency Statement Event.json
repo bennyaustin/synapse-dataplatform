@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Event Trigger that fires when a Real Estate Agency Statement has been analysed by a custom form recognizer model",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
