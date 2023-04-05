@@ -256,6 +256,80 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "DropZone2Raw",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFIngestPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DataFromNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataFromTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"DataToNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataToTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"IngestCount": {
+							"value": {
+								"value": "@activity('DropZone2Raw').output.rowsCopied",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"IngestStatus": {
+							"value": "Success",
+							"type": "String"
+						},
+						"ReloadFlag": {
+							"value": "",
+							"type": "Boolean"
+						},
+						"SourceCount": {
+							"value": {
+								"value": "@activity('DropZone2Raw').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {
