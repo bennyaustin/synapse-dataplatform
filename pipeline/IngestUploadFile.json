@@ -63,7 +63,7 @@
 				}
 			},
 			{
-				"name": "InsertIngestInstance - Running",
+				"name": "IngestInstance - Running",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
@@ -179,7 +179,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "InsertIngestInstance - Running",
+						"activity": "IngestInstance - Running",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -258,7 +258,7 @@
 				]
 			},
 			{
-				"name": "Stored procedure1",
+				"name": "IngestInstance - Success",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
@@ -322,6 +322,74 @@
 								"value": "@activity('DropZone2Raw').output.rowsRead",
 								"type": "Expression"
 							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "IngestInstance - Failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "DropZone2Raw",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateIngestInstance]",
+					"storedProcedureParameters": {
+						"ADFIngestPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"DataFromNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataFromTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"DataToNumber": {
+							"value": null,
+							"type": "Int32"
+						},
+						"DataToTimestamp": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"IngestCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"IngestStatus": {
+							"value": "Failure",
+							"type": "String"
+						},
+						"ReloadFlag": {
+							"value": "true",
+							"type": "Boolean"
+						},
+						"SourceCount": {
+							"value": null,
 							"type": "Int32"
 						}
 					}
