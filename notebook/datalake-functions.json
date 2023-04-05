@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "54be06ad-b467-49f5-afb8-ac4bec6fbf9f"
+				"spark.autotune.trackingId": "1e035a31-0972-40e3-8140-e03280840553"
 			}
 		},
 		"metadata": {
@@ -140,13 +140,12 @@
 					"    assert storageAccount is not None, \"Storage Account not specified\"   \r\n",
 					"\r\n",
 					"    filePath = \"abfss://\" + container + \"@\"+ storageAccount + \".dfs.core.windows.net/\" + path\r\n",
-					"    print(filePath)\r\n",
 					"    if \".csv\" in path or \".txt\" in path:\r\n",
 					"        df = spark.read.csv(path=filePath, sep=colSeparator, header=headerFlag, inferSchema=\"true\")\r\n",
 					"    elif \".parquet\" in path:\r\n",
 					"        df = spark.read.parquet(filePath)\r\n",
 					"    elif \".json\" in path:\r\n",
-					"        df = spark.read.json(filePath)\r\n",
+					"        df = spark.read.json(filePath, multiLine= True)\r\n",
 					"    elif \".orc\" in path:\r\n",
 					"        df = spark.read.orc(filePath)\r\n",
 					"    else:\r\n",

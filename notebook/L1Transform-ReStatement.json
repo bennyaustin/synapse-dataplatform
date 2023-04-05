@@ -17,11 +17,12 @@
 			"executorMemory": "28g",
 			"executorCores": 4,
 			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": true,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "21d47f16-c59a-4046-bcf9-73985afb6021"
+				"spark.autotune.trackingId": "96f05b29-ecf3-464c-8b21-6af37e3cc8e4"
 			}
 		},
 		"metadata": {
@@ -57,7 +58,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 43
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -111,7 +112,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 44
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -134,7 +135,7 @@
 					"CustomParameters = None\r\n",
 					"InputRawFileSystem = 'raw-bronze'\r\n",
 					"InputRawFileFolder = 're-statements/2023/04'\r\n",
-					"InputRawFile = '2023-04-05 18:54:01_re-statement.json'\r\n",
+					"InputRawFile = 'test.json' #'2023-04-05 18:54:01_re-statement.json'\r\n",
 					"InputRawFileDelimiter = None\r\n",
 					"InputFileHeaderFlag = None\r\n",
 					"OutputL1CurateFileSystem = 'curated-silver'\r\n",
@@ -150,7 +151,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 45
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -166,9 +167,10 @@
 					}
 				},
 				"source": [
-					"df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)"
+					"df = readFile(InputRawFileSystem, InputRawFileFolder +'/' + InputRawFile, None, None)\r\n",
+					"df.show(10)"
 				],
-				"execution_count": 46
+				"execution_count": 10
 			}
 		]
 	}
