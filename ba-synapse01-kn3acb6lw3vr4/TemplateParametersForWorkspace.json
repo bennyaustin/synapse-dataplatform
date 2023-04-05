@@ -113,6 +113,21 @@
 		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
 			"value": "https://purview.azure.net"
 		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"value": "inference"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"value": "@triggerBody().folderPath"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"value": "@triggerBody().fileName"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"value": "AIML-OCR"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"value": "analyze"
+		},
 		"Real Estate Agency Statement Event_properties_typeProperties_scope": {
 			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
 		}

@@ -153,6 +153,26 @@
 			"type": "string",
 			"defaultValue": "https://purview.azure.net"
 		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"type": "string",
+			"defaultValue": "inference"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"type": "string",
+			"defaultValue": "AIML-OCR"
+		},
+		"Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"type": "string",
+			"defaultValue": "analyze"
+		},
 		"Real Estate Agency Statement Event_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
@@ -4992,7 +5012,34 @@
 				"description": "Event Trigger that fires when a Real Estate Agency Statement has been analysed by a custom form recognizer model",
 				"annotations": [],
 				"runtimeState": "Stopped",
-				"pipelines": [],
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Ingest_AIML_CustomInferenceFile",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFileDropFileSystem": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem')]",
+							"SourceFileDropFolder": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
+							"SourceFileDropFile": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
+							"SourceSystemName": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Ingest_AIML_CustomInferenceFile",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFileDropFileSystem": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem')]",
+							"SourceFileDropFolder": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
+							"SourceFileDropFile": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
+							"SourceSystemName": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('Real Estate Agency Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]"
+						}
+					}
+				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
@@ -5004,7 +5051,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Ingest_AIML_CustomInferenceFile')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
