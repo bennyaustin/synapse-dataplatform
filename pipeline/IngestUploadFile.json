@@ -304,7 +304,7 @@
 						},
 						"IngestCount": {
 							"value": {
-								"value": "@activity('DropZone2Raw').output.rowsCopied",
+								"value": "@activity('DropZone2Raw').output.filesWritten",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -319,7 +319,7 @@
 						},
 						"SourceCount": {
 							"value": {
-								"value": "@activity('DropZone2Raw').output.rowsRead",
+								"value": "@activity('DropZone2Raw').output.filesRead",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -812,7 +812,7 @@
 									},
 									"IngestCount": {
 										"value": {
-											"value": "@activity('DropZone2Raw').output.rowsCopied",
+											"value": "@activity('DropZone2Raw').output.filesWritten",
 											"type": "Expression"
 										},
 										"type": "Int32"
