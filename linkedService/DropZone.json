@@ -1,0 +1,15 @@
+{
+	"name": "DropZone",
+	"properties": {
+		"description": "Linked service for external files uploaded to the data platform",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
