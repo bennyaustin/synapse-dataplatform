@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "99b3e2ad-6cc0-4169-8cae-14cd90e23bfa"
+				"spark.autotune.trackingId": "9b6714d6-9e9a-4f7d-b88f-89ff6cc9a778"
 			}
 		},
 		"metadata": {
@@ -326,9 +326,56 @@
 					"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\r\n",
 					"# display(dfSummaryRisk)\r\n",
 					"\r\n",
+					"#Summary3\r\n",
+					"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\r\n",
+					"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\r\n",
+					"completion = (\r\n",
+					"    OpenAICompletion()\r\n",
+					"    .setSubscriptionKey(aoaiApiKey)\r\n",
+					"    .setDeploymentName(aoaiDeploymentName)\r\n",
+					"    .setUrl(aoaiEndpoint)\r\n",
+					"    .setMaxTokens(100)\r\n",
+					"    .setPromptCol(\"controls_procedures_prompt\")\r\n",
+					"    .setErrorCol(\"error\")\r\n",
+					"    .setOutputCol(\"controls_procedures_summary\")\r\n",
+					")\r\n",
+					"\r\n",
+					"dfSummaryCP = completion.transform(dfPrompt_controls_procedures).cache()\r\n",
+					"# display(dfSummaryCP.select(\r\n",
+					"#   col(\"controls_procedures_prompt\"), col(\"error\"), col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"text\")))\r\n",
+					"# dfSummaryCP.printSchema()\r\n",
+					"\r\n",
+					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))\r\n",
+					"# display(dfSummaryCP)\r\n",
 					""
 				],
-				"execution_count": 52
+				"execution_count": 53
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"from functools import reduce\r\n",
+					"from pyspark.sql import DataFrame\r\n",
+					"\r\n",
+					"#Merge all the dataframes\r\n",
+					"dfs = [df,dfSummaryMgmtAnalysis,dfSummaryRisk,dfSummaryCP]\r\n",
+					"dfFinal = reduce(DataFrame.crossJoin, dfs)\r\n",
+					"dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
+					"display(dfFinal)"
+				],
+				"execution_count": 56
 			}
 		]
 	}
