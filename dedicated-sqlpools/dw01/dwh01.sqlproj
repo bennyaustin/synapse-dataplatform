@@ -23,6 +23,7 @@
     <Folder Include="stg" />
     <Folder Include="stg\Tables" />
     <Folder Include="Security\Schema" />
+    <Folder Include="sec" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Azure\Tables\operations.sql" />
@@ -34,6 +35,9 @@
     <Build Include="Security\Schema\Azure.sql" />
     <Build Include="Security\Schema\Purview.sql" />
     <Build Include="Security\Schema\stg.sql" />
+    <Build Include="Security\Schema\sec.sql" />
+    <Build Include="sec\form10q.sql" />
+    <Build Include="stg\Tables\merge_sec_form10q.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="DatalakeEndpoint">
