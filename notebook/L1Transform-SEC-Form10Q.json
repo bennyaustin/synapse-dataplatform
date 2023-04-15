@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "db4c7036-cf60-49a3-96bb-e971521cc7db"
+				"spark.autotune.trackingId": "b183ad87-8525-43d6-ab68-36010d9a46f3"
 			}
 		},
 		"metadata": {
@@ -63,7 +63,7 @@
 					}
 				},
 				"source": [
-					"# Install SynapseML for this Session\r\n",
+					"# Install SynapseML for this spark session\r\n",
 					"https://microsoft.github.io/SynapseML/docs/getting_started/installation/"
 				]
 			},
