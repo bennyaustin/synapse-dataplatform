@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "6a20019b-08f3-4f2b-9215-65e1da1071a1"
+				"spark.autotune.trackingId": "126782da-50d0-4f8e-9044-ed0f84489fbd"
 			}
 		},
 		"metadata": {
@@ -58,7 +58,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 2
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
@@ -112,7 +112,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -151,7 +151,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -181,25 +181,22 @@
 					"                ,col(\"org_stock_ticker.content\").alias(\"org_stock_ticker\")\r\n",
 					"                ,col(\"reporting_quarter.content\").alias(\"reporting_quarter\")\r\n",
 					"                ,col(\"stock_exchange.content\").alias(\"stock_exchange\")\r\n",
-					"                ,col(\"total_assets.content\").alias(\"total_assets\")\r\n",
-					"                ,col(\"total_comprehensive_income.content\").alias(\"total_comprehensive_income\")\r\n",
-					"                ,col(\"total_equity.content\").alias(\"total_equity\")\r\n",
-					"                ,col(\"total_liabilities.content\").alias(\"total_liabilities\")                \r\n",
+					"                ,regexp_replace(col(\"total_assets.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_assets\")\r\n",
+					"                ,regexp_replace(col(\"total_comprehensive_income.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_comprehensive_income\")\r\n",
+					"                ,regexp_replace(col(\"total_equity.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_equity\")\r\n",
+					"                ,regexp_replace(col(\"total_liabilities.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_liabilities\")                \r\n",
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"                ,col(\"mgmt_analysis.content\").alias(\"mgmt_analysis\")\r\n",
 					"                ,col(\"risk_disclosure.content\").alias(\"risk_disclosure\")\r\n",
 					"            )\r\n",
 					"\r\n",
 					"display(df)\r\n",
-					"# df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
-					"#                 ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
-					"#                 ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
-					"# df.printSchema()\r\n",
+					"\r\n",
 					"\r\n",
 					"#write flattened json to curated zone of data lake\r\n",
 					"# writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": null
+				"execution_count": 18
 			}
 		]
 	}
