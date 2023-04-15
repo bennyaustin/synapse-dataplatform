@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "126782da-50d0-4f8e-9044-ed0f84489fbd"
+				"spark.autotune.trackingId": "0ab54433-4b9b-4051-826e-42e50af3deee"
 			}
 		},
 		"metadata": {
@@ -54,11 +54,72 @@
 		},
 		"cells": [
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Install SynapseML for this Session\r\n",
+					"https://microsoft.github.io/SynapseML/docs/getting_started/installation/"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%%configure -f\r\n",
+					"{\r\n",
+					"  \"name\": \"synapseml\",\r\n",
+					"  \"conf\": {\r\n",
+					"      \"spark.jars.packages\": \"com.microsoft.azure:synapseml_2.12:0.11.0,org.apache.spark:spark-avro_2.12:3.3.1\",\r\n",
+					"      \"spark.jars.repositories\": \"https://mmlspark.azureedge.net/maven\",\r\n",
+					"      \"spark.jars.excludes\": \"org.scala-lang:scala-reflect,org.apache.spark:spark-tags_2.12,org.scalactic:scalactic_2.12,org.scalatest:scalatest_2.12,com.fasterxml.jackson.core:jackson-databind\",\r\n",
+					"      \"spark.yarn.user.classpath.first\": \"true\",\r\n",
+					"      \"spark.sql.parquet.enableVectorizedReader\": \"false\",\r\n",
+					"      \"spark.sql.legacy.replaceDatabricksSparkAvro.enabled\": \"true\"\r\n",
+					"  }\r\n",
+					"}"
+				],
+				"execution_count": 19
+			},
+			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
 				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -197,6 +258,27 @@
 					"# writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
 				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import os\r\n",
+					"from synapse.ml.core.platform import running_on_synapse, find_secret\r\n",
+					"\r\n",
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
