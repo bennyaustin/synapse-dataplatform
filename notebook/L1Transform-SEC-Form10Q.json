@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4f6bc75a-80f9-4c79-a227-1a1cada25c79"
+				"spark.autotune.trackingId": "99b3e2ad-6cc0-4169-8cae-14cd90e23bfa"
 			}
 		},
 		"metadata": {
@@ -324,7 +324,7 @@
 					"# dfSummaryRisk.printSchema()\r\n",
 					"\r\n",
 					"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\r\n",
-					"display(dfSummaryRisk)\r\n",
+					"# display(dfSummaryRisk)\r\n",
 					"\r\n",
 					""
 				],
