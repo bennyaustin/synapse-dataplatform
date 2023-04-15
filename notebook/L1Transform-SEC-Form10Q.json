@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b183ad87-8525-43d6-ab68-36010d9a46f3"
+				"spark.autotune.trackingId": "0a13c2e8-679c-4be8-9143-3c37998739ea"
 			}
 		},
 		"metadata": {
@@ -261,11 +261,22 @@
 					"                ,col(\"mgmt_analysis.content\").alias(\"mgmt_analysis\")\r\n",
 					"                ,col(\"risk_disclosure.content\").alias(\"risk_disclosure\")\r\n",
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
-					"            )\r\n",
-					"\r\n",
-					"display(df)"
+					"            )"
 				],
 				"execution_count": 63
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# AOAI Summarization GPT3.5"
+				]
 			},
 			{
 				"cell_type": "code",
@@ -310,7 +321,6 @@
 					"# dfSummaryMgmtAnalysis.printSchema()\r\n",
 					"\r\n",
 					"dfSummaryMgmtAnalysis = dfSummaryMgmtAnalysis.select(col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"mgmt_analysis_summary\"))\r\n",
-					"# display(dfSummaryMgmtAnalysis)\r\n",
 					"\r\n",
 					"#Summary2\r\n",
 					"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\r\n",
@@ -332,7 +342,6 @@
 					"# dfSummaryRisk.printSchema()\r\n",
 					"\r\n",
 					"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\r\n",
-					"# display(dfSummaryRisk)\r\n",
 					"\r\n",
 					"#Summary3\r\n",
 					"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\r\n",
@@ -353,9 +362,7 @@
 					"#   col(\"controls_procedures_prompt\"), col(\"error\"), col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"text\")))\r\n",
 					"# dfSummaryCP.printSchema()\r\n",
 					"\r\n",
-					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))\r\n",
-					"# display(dfSummaryCP)\r\n",
-					""
+					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
 				"execution_count": 64
 			},
