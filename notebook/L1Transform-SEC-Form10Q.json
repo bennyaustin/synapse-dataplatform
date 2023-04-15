@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "eac73f3b-31e0-4c66-9a60-5adb0fa93986"
+				"spark.autotune.trackingId": "6a20019b-08f3-4f2b-9215-65e1da1071a1"
 			}
 		},
 		"metadata": {
@@ -58,7 +58,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 1
+				"execution_count": 2
 			},
 			{
 				"cell_type": "markdown",
@@ -112,7 +112,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 2
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -151,7 +151,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 3
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -169,6 +169,7 @@
 				},
 				"source": [
 					"from pyspark.sql.functions import *\r\n",
+					"from pyspark.sql.types import *\r\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
 					"\r\n",
 					"# extract datapoints of interest and explode array\r\n",
@@ -198,7 +199,7 @@
 					"#write flattened json to curated zone of data lake\r\n",
 					"# writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 8
+				"execution_count": null
 			}
 		]
 	}
