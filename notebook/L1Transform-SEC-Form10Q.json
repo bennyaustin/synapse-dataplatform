@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0a13c2e8-679c-4be8-9143-3c37998739ea"
+				"spark.autotune.trackingId": "e4c4795a-fdf6-4df4-951e-7ad3b1439a1a"
 			}
 		},
 		"metadata": {
@@ -94,14 +94,50 @@
 					"  }\r\n",
 					"}"
 				],
-				"execution_count": 58
+				"execution_count": 77
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 59
+				"execution_count": 88
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
+				],
+				"execution_count": 89
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -119,7 +155,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 60
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -173,7 +209,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 61
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -205,14 +241,14 @@
 					"OutputL1CuratedFileDelimiter = None\r\n",
 					"OutputL1CuratedFileFormat = 'json'\r\n",
 					"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-					"OutputDWStagingTable = None\r\n",
-					"LookupColumns = None\r\n",
-					"OutputDWTable = None\r\n",
-					"OutputDWTableWriteMode = None\r\n",
+					"OutputDWStagingTable = '[stg].[merge_sec_form10q]'\r\n",
+					"LookupColumns = ['org_name','reporting_quarter']\r\n",
+					"OutputDWTable = '[sec].[form10q]'\r\n",
+					"OutputDWTableWriteMode = 'append'\r\n",
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 62
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -263,7 +299,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )"
 				],
-				"execution_count": 63
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -364,7 +400,7 @@
 					"\r\n",
 					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
-				"execution_count": 64
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -388,10 +424,9 @@
 					"dfs = [df,dfSummaryMgmtAnalysis,dfSummaryRisk,dfSummaryCP]\r\n",
 					"dfFinal = reduce(DataFrame.crossJoin, dfs)\r\n",
 					"display(dfFinal)\r\n",
-					"# dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
 					""
 				],
-				"execution_count": 66
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -422,7 +457,53 @@
 				"source": [
 					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 67
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Merge to Deicated SQL Pool"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
+					"dfFinal.printSchema()\r\n",
+					"\r\n",
+					"\r\n",
+					"pos = OutputDWTable.find(\".\")\r\n",
+					"schemaName = OutputDWTable[0:pos]\r\n",
+					"tableName = OutputDWTable[pos+1:]\r\n",
+					"\r\n",
+					"posStg = OutputDWStagingTable.find(\".\")\r\n",
+					"stgSchemaName = OutputDWStagingTable[0:posStg]\r\n",
+					"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
+					"\r\n",
+					"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
+					"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
+					"else:\r\n",
+					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
+				],
+				"execution_count": null
 			}
 		]
 	}
