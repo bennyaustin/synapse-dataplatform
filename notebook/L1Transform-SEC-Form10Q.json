@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e4c4795a-fdf6-4df4-951e-7ad3b1439a1a"
+				"spark.autotune.trackingId": "70aa7533-7e8b-4d77-8d5a-50ede238980a"
 			}
 		},
 		"metadata": {
@@ -137,7 +137,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": null
+				"execution_count": 90
 			},
 			{
 				"cell_type": "code",
@@ -155,7 +155,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": null
+				"execution_count": 91
 			},
 			{
 				"cell_type": "markdown",
@@ -209,7 +209,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": null
+				"execution_count": 92
 			},
 			{
 				"cell_type": "code",
@@ -248,7 +248,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": null
+				"execution_count": 93
 			},
 			{
 				"cell_type": "markdown",
@@ -299,7 +299,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )"
 				],
-				"execution_count": null
+				"execution_count": 94
 			},
 			{
 				"cell_type": "markdown",
@@ -400,7 +400,7 @@
 					"\r\n",
 					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
-				"execution_count": null
+				"execution_count": 95
 			},
 			{
 				"cell_type": "code",
@@ -426,7 +426,7 @@
 					"display(dfFinal)\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 96
 			},
 			{
 				"cell_type": "markdown",
@@ -457,7 +457,7 @@
 				"source": [
 					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": null
+				"execution_count": 97
 			},
 			{
 				"cell_type": "markdown",
@@ -487,8 +487,7 @@
 				},
 				"source": [
 					"dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
-					"dfFinal.printSchema()\r\n",
-					"\r\n",
+					"# dfFinal.printSchema()\r\n",
 					"\r\n",
 					"pos = OutputDWTable.find(\".\")\r\n",
 					"schemaName = OutputDWTable[0:pos]\r\n",
@@ -503,7 +502,7 @@
 					"else:\r\n",
 					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": null
+				"execution_count": 98
 			}
 		]
 	}
