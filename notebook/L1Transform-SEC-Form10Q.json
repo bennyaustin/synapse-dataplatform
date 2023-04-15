@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e0f6fd21-5aa9-4d9c-bd78-93a64eb9cabd"
+				"spark.autotune.trackingId": "db4c7036-cf60-49a3-96bb-e971521cc7db"
 			}
 		},
 		"metadata": {
@@ -215,6 +215,19 @@
 				"execution_count": 62
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Extract datapoints of interest"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -233,7 +246,6 @@
 					"from pyspark.sql.types import *\r\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
 					"\r\n",
-					"# extract datapoints of interest and explode array\r\n",
 					"# df.printSchema()\r\n",
 					"\r\n",
 					"df = df.select( col(\"org_name.content\").alias(\"org_name\")\r\n",
@@ -251,11 +263,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )\r\n",
 					"\r\n",
-					"display(df)\r\n",
-					"\r\n",
-					"\r\n",
-					"#write flattened json to curated zone of data lake\r\n",
-					"# writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
+					"display(df)"
 				],
 				"execution_count": 63
 			},
@@ -372,10 +380,42 @@
 					"#Merge all the dataframes\r\n",
 					"dfs = [df,dfSummaryMgmtAnalysis,dfSummaryRisk,dfSummaryCP]\r\n",
 					"dfFinal = reduce(DataFrame.crossJoin, dfs)\r\n",
-					"dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
-					"display(dfFinal)"
+					"display(dfFinal)\r\n",
+					"# dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
+					""
 				],
-				"execution_count": 65
+				"execution_count": 66
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Write summarized json to curated zone of data lake"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
+				],
+				"execution_count": 67
 			}
 		]
 	}
