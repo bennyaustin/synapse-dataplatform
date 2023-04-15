@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0ab54433-4b9b-4051-826e-42e50af3deee"
+				"spark.autotune.trackingId": "1ee61834-a246-420f-9eb4-0165dc43575c"
 			}
 		},
 		"metadata": {
@@ -101,7 +101,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 3
+				"execution_count": 25
 			},
 			{
 				"cell_type": "code",
@@ -119,7 +119,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": null
+				"execution_count": 26
 			},
 			{
 				"cell_type": "markdown",
@@ -173,7 +173,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 4
+				"execution_count": 27
 			},
 			{
 				"cell_type": "code",
@@ -212,7 +212,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 5
+				"execution_count": 28
 			},
 			{
 				"cell_type": "code",
@@ -246,9 +246,9 @@
 					"                ,regexp_replace(col(\"total_comprehensive_income.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_comprehensive_income\")\r\n",
 					"                ,regexp_replace(col(\"total_equity.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_equity\")\r\n",
 					"                ,regexp_replace(col(\"total_liabilities.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_liabilities\")                \r\n",
-					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"                ,col(\"mgmt_analysis.content\").alias(\"mgmt_analysis\")\r\n",
 					"                ,col(\"risk_disclosure.content\").alias(\"risk_disclosure\")\r\n",
+					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )\r\n",
 					"\r\n",
 					"display(df)\r\n",
@@ -257,7 +257,7 @@
 					"#write flattened json to curated zone of data lake\r\n",
 					"# writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 18
+				"execution_count": 29
 			},
 			{
 				"cell_type": "code",
@@ -276,9 +276,24 @@
 					"import os\r\n",
 					"from synapse.ml.core.platform import running_on_synapse, find_secret\r\n",
 					"\r\n",
-					""
+					"aoaiEndpoint = getSecret(\"aoai-endpoint\")\r\n",
+					"aoaiDeploymentName = \"gpt35\"\r\n",
+					"aoaiApiKey = getSecret(\"aoai-api-key\")\r\n",
+					"\r\n",
+					"from synapse.ml.cognitive import OpenAICompletion\r\n",
+					"\r\n",
+					"dfPrompt_mgmt_analysis = df.select(\"mgmt_analysis\")\r\n",
+					"dfPrompt_mgmt_analysis = dfPrompt_mgmt_analysis.withColumn(\"mgmt_analysis_prompt\",concat(lit(\"summarize the text below.\\n\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")))\r\n",
+					"display(dfPrompt_mgmt_analysis)\r\n",
+					"# completion = (\r\n",
+					"#     OpenAICompletion()\r\n",
+					"#     .setSubscriptionKey(aoaiApiKey)\r\n",
+					"#     .setDeploymentName(aoaiDeploymentName)\r\n",
+					"#     .setUrl(aoaiEndpoint)\r\n",
+					"#     .setMaxTokens(100)\r\n",
+					"# )"
 				],
-				"execution_count": null
+				"execution_count": 30
 			}
 		]
 	}
