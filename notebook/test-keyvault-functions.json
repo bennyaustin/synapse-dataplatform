@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "24107359-7f6a-42d1-819f-bc77ea2b34fb"
+				"spark.autotune.trackingId": "b69c1284-9c15-4b15-a717-c78bb1277e61"
 			}
 		},
 		"metadata": {
@@ -36,20 +36,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/mediumMO",
+				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
 				"name": "mediumMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
-				"nodeCount": 10,
+				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -70,8 +69,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/keyvault-functions {\"kvLinkedService\": \"Your AKV Linked Service Name\"}"
-				]
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"Your AKV Linked Service name\"}"
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -88,7 +88,8 @@
 				},
 				"source": [
 					"getSecret(\"SecretName\")"
-				]
+				],
+				"execution_count": null
 			}
 		]
 	}

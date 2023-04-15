@@ -972,11 +972,11 @@
 			},
 			"SourceFileDropFolder": {
 				"type": "string",
-				"defaultValue": "formrecognizer-re-json"
+				"defaultValue": "formrecognizer-sec-form10q-json"
 			},
 			"SourceFileDropFile": {
 				"type": "string",
-				"defaultValue": "Statement #52 - OWN00426-1 .json"
+				"defaultValue": "NVIDIA_202105May.json"
 			},
 			"SourceSystemName": {
 				"type": "string",
@@ -984,7 +984,7 @@
 			},
 			"StreamName": {
 				"type": "string",
-				"defaultValue": "analyze"
+				"defaultValue": "analyze-sec-form10q"
 			}
 		},
 		"variables": {
