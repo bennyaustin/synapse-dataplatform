@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "SQL Script to query JSON files in datalake",
 		"content": {
-			"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nCREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\nWITH IDENTITY = 'MANAGED IDENTITY'",
+			"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nCREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\nWITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\nCREATE EXTERNAL DATA SOURCE datalake\nWITH (    LOCATION   = 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n          ,CREDENTIAL = [ba-synapse01-kn3acb6lw3vr4]\n)",
 			"metadata": {
 				"language": "sql"
 			},
