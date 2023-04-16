@@ -8,21 +8,21 @@
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
-			"referenceName": "smallMO",
+			"referenceName": "mediumMO",
 			"type": "BigDataPoolReference"
 		},
 		"sessionProperties": {
-			"driverMemory": "28g",
-			"driverCores": 4,
-			"executorMemory": "28g",
-			"executorCores": 4,
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
 			"numExecutors": 2,
 			"runAsWorkspaceSystemIdentity": true,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b1f7aad0-952d-4345-8652-3514f3bcf37e"
+				"spark.autotune.trackingId": "5eab8ff5-b369-42ff-90b7-e87228a68e2e"
 			}
 		},
 		"metadata": {
@@ -36,18 +36,18 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/smallMO",
-				"name": "smallMO",
+				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+				"name": "mediumMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
-				"cores": 4,
-				"memory": 28,
+				"cores": 8,
+				"memory": 56,
 				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
@@ -94,14 +94,14 @@
 					"  }\r\n",
 					"}"
 				],
-				"execution_count": 110
+				"execution_count": 44
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 111
+				"execution_count": 45
 			},
 			{
 				"cell_type": "code",
@@ -119,7 +119,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
 				],
-				"execution_count": 112
+				"execution_count": 46
 			},
 			{
 				"cell_type": "code",
@@ -137,7 +137,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 113
+				"execution_count": 47
 			},
 			{
 				"cell_type": "code",
@@ -155,7 +155,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 114
+				"execution_count": 48
 			},
 			{
 				"cell_type": "markdown",
@@ -209,7 +209,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 115
+				"execution_count": 49
 			},
 			{
 				"cell_type": "code",
@@ -248,7 +248,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 116
+				"execution_count": 50
 			},
 			{
 				"cell_type": "markdown",
@@ -299,7 +299,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )"
 				],
-				"execution_count": 117
+				"execution_count": 51
 			},
 			{
 				"cell_type": "markdown",
@@ -400,7 +400,7 @@
 					"\r\n",
 					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
-				"execution_count": 118
+				"execution_count": 52
 			},
 			{
 				"cell_type": "code",
@@ -426,7 +426,7 @@
 					"display(dfFinal)\r\n",
 					""
 				],
-				"execution_count": 119
+				"execution_count": 53
 			},
 			{
 				"cell_type": "markdown",
@@ -457,7 +457,7 @@
 				"source": [
 					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 120
+				"execution_count": 54
 			},
 			{
 				"cell_type": "markdown",
@@ -498,11 +498,11 @@
 					"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
 					"\r\n",
 					"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
-					"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
+					"    upsertSdp(dfFinal,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
 					"else:\r\n",
-					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
+					"    insertSdpTable(dfFinal, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": 121
+				"execution_count": 57
 			}
 		]
 	}
