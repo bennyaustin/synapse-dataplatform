@@ -183,6 +183,15 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('workspaceName'), '/smallMO')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Copy from REST API')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -5206,7 +5215,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "db7b41fb-d3e1-493c-ab5e-6e3597b8809a"
+						"spark.autotune.trackingId": "c72386c5-d047-4d00-9057-f394c04ab46a"
 					}
 				},
 				"metadata": {
@@ -5231,8 +5240,7 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -5932,7 +5940,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "5eab8ff5-b369-42ff-90b7-e87228a68e2e"
+						"spark.autotune.trackingId": "106a5d4f-27cc-44f3-b816-8f6a635f3887"
 					}
 				},
 				"metadata": {
@@ -5957,7 +5965,8 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6004,15 +6013,16 @@
 							"}"
 						],
 						"outputs": [],
-						"execution_count": 44
+						"execution_count": 1
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 						],
 						"outputs": [],
-						"execution_count": 45
+						"execution_count": 2
 					},
 					{
 						"cell_type": "code",
@@ -6031,7 +6041,7 @@
 							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
 						],
 						"outputs": [],
-						"execution_count": 46
+						"execution_count": 3
 					},
 					{
 						"cell_type": "code",
@@ -6050,7 +6060,7 @@
 							"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
 						],
 						"outputs": [],
-						"execution_count": 47
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -6069,7 +6079,7 @@
 							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 						],
 						"outputs": [],
-						"execution_count": 48
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -6124,7 +6134,7 @@
 							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 49
+						"execution_count": 6
 					},
 					{
 						"cell_type": "code",
@@ -6164,7 +6174,7 @@
 							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 50
+						"execution_count": 7
 					},
 					{
 						"cell_type": "markdown",
@@ -6216,7 +6226,7 @@
 							"            )"
 						],
 						"outputs": [],
-						"execution_count": 51
+						"execution_count": 8
 					},
 					{
 						"cell_type": "markdown",
@@ -6318,7 +6328,7 @@
 							"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 						],
 						"outputs": [],
-						"execution_count": 52
+						"execution_count": 9
 					},
 					{
 						"cell_type": "code",
@@ -6345,7 +6355,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 53
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -6377,7 +6387,7 @@
 							"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 						],
 						"outputs": [],
-						"execution_count": 54
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -6423,7 +6433,7 @@
 							"    insertSdpTable(dfFinal, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 						],
 						"outputs": [],
-						"execution_count": 57
+						"execution_count": null
 					}
 				]
 			},
@@ -10050,12 +10060,12 @@
 					"maxNodeCount": 4,
 					"minNodeCount": 3
 				},
-				"nodeCount": 0,
+				"nodeCount": 10,
 				"nodeSize": "Small",
 				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.2",
+				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
+				"sessionLevelPackagesEnabled": true,
 				"annotations": []
 			},
 			"dependsOn": [],
