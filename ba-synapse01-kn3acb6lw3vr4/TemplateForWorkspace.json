@@ -5149,6 +5149,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- This is auto-generated code\nSELECT TOP 100\n    jsonContent\n/* --> place the keys that you see in JSON documents in the WITH clause:\n       , JSON_VALUE (jsonContent, '$.key1') AS header1\n       , JSON_VALUE (jsonContent, '$.key2') AS header2\n*/\nFROM\n    OPENROWSET(\n        BULK 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q/2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        FORMAT = 'CSV',\n        FIELDQUOTE = '0x0b',\n        FIELDTERMINATOR ='0x0b',\n        ROWTERMINATOR = '0x0b'\n    )\n    WITH (\n        jsonContent varchar(MAX)\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Serverless - Query Parquet')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -5160,6 +5180,27 @@
 					},
 					"currentConnection": {
 						"databaseName": "default",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Serverless SQL JSON Queries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "SQL Script to query JSON files in datalake",
+				"content": {
+					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-kn3acb6lw3vr4')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='sec-form10q')\n    CREATE EXTERNAL DATA SOURCE [sec-form10q]\n    WITH (    LOCATION   = 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-kn3acb6lw3vr4]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n    ) \n\n\n    --Create View\n    IF NOT EXISTS (select 1 from sys.views where name ='vwSecForm10Q')\n        CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'sec-form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n            ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n            ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n            ) \n--Query View\nselect * from vwSecForm10Q\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dlsql01",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -5926,21 +5967,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "mediumMO",
+					"referenceName": "smallMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "56g",
-					"driverCores": 8,
-					"executorMemory": "56g",
-					"executorCores": 8,
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": true,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "106a5d4f-27cc-44f3-b816-8f6a635f3887"
+						"spark.autotune.trackingId": "1e20f9d9-748b-4c2e-9d33-a8f9e6c30a1f"
 					}
 				},
 				"metadata": {
@@ -5954,19 +5995,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
-						"name": "mediumMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/smallMO",
+						"name": "smallMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
 						"auth": {
 							"type": "AAD",
 							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"nodeCount": 10,
+						"cores": 4,
+						"memory": 28
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6017,7 +6057,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 						],
@@ -6038,48 +6077,10 @@
 							}
 						},
 						"source": [
-							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
-						],
-						"outputs": [],
-						"execution_count": 3
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
-						],
-						"outputs": [],
-						"execution_count": 4
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
 							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -6134,7 +6135,7 @@
 							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -6157,12 +6158,12 @@
 							"CustomParameters = None\r\n",
 							"InputRawFileSystem = 'raw-bronze'\r\n",
 							"InputRawFileFolder = 'sec-form10q/2023/04'\r\n",
-							"InputRawFile = '2023-04-15_204450_sec-form10q.json'\r\n",
+							"InputRawFile = '2023-04-16_141247_sec-form10q.json'\r\n",
 							"InputRawFileDelimiter = None\r\n",
 							"InputFileHeaderFlag = None\r\n",
 							"OutputL1CurateFileSystem = 'curated-silver'\r\n",
 							"OutputL1CuratedFolder = 'sec-form10q/2023/04'\r\n",
-							"OutputL1CuratedFile = 'standardized_2023-04-15_204525_sec-form10q.json'\r\n",
+							"OutputL1CuratedFile = 'standardized_2023-04-16_141247_sec-form10q.json'\r\n",
 							"OutputL1CuratedFileDelimiter = None\r\n",
 							"OutputL1CuratedFileFormat = 'json'\r\n",
 							"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
@@ -6174,7 +6175,7 @@
 							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -6226,7 +6227,7 @@
 							"            )"
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -6328,7 +6329,7 @@
 							"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
@@ -6355,7 +6356,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 8
 					},
 					{
 						"cell_type": "markdown",
@@ -6387,53 +6388,7 @@
 							"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 						],
 						"outputs": [],
-						"execution_count": null
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# Merge to Dedicated SQL Pool"
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"dfFinal = dfFinal.drop(*[\"mgmt_analysis\",\"risk_disclosure\",\"controls_procedures\"])\r\n",
-							"# dfFinal.printSchema()\r\n",
-							"\r\n",
-							"pos = OutputDWTable.find(\".\")\r\n",
-							"schemaName = OutputDWTable[0:pos]\r\n",
-							"tableName = OutputDWTable[pos+1:]\r\n",
-							"\r\n",
-							"posStg = OutputDWStagingTable.find(\".\")\r\n",
-							"stgSchemaName = OutputDWStagingTable[0:posStg]\r\n",
-							"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
-							"\r\n",
-							"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
-							"    upsertSdp(dfFinal,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
-							"else:\r\n",
-							"    insertSdpTable(dfFinal, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
-						],
-						"outputs": [],
-						"execution_count": null
+						"execution_count": 9
 					}
 				]
 			},
@@ -10063,7 +10018,7 @@
 				"nodeCount": 10,
 				"nodeSize": "Small",
 				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.1",
+				"sparkVersion": "3.2",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
 				"annotations": []
