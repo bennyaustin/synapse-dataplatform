@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "SQL Script to query JSON files in datalake",
 		"content": {
-			"query": "",
+			"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';",
 			"metadata": {
 				"language": "sql"
 			},
