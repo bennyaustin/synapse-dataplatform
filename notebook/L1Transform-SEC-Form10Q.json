@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f4a64334-967f-404b-b321-bc7688e1e73e"
+				"spark.autotune.trackingId": "19b8d893-ca4d-42c3-b2c3-69c455c43982"
 			}
 		},
 		"metadata": {
@@ -498,11 +498,11 @@
 					"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
 					"\r\n",
 					"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
-					"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
+					"    upsertSdp(dfFinal,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
 					"else:\r\n",
-					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
+					"    insertSdpTable(dfFinal, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": 55
+				"execution_count": 57
 			}
 		]
 	}
