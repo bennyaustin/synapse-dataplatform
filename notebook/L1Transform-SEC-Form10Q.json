@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4615af42-30af-49cd-8b4b-89986efae63c"
+				"spark.autotune.trackingId": "12a1b23f-6ac7-4b42-92d9-880b841ef6f1"
 			}
 		},
 		"metadata": {
@@ -94,14 +94,14 @@
 					"  }\r\n",
 					"}"
 				],
-				"execution_count": 1
+				"execution_count": 32
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
 				],
-				"execution_count": 2
+				"execution_count": 33
 			},
 			{
 				"cell_type": "code",
@@ -119,7 +119,7 @@
 				"source": [
 					"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
 				],
-				"execution_count": 3
+				"execution_count": 34
 			},
 			{
 				"cell_type": "code",
@@ -137,7 +137,7 @@
 				"source": [
 					"%run /common/upsertSdp-function {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
 				],
-				"execution_count": 4
+				"execution_count": 35
 			},
 			{
 				"cell_type": "code",
@@ -155,7 +155,7 @@
 				"source": [
 					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
-				"execution_count": 5
+				"execution_count": 36
 			},
 			{
 				"cell_type": "markdown",
@@ -209,7 +209,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 6
+				"execution_count": 37
 			},
 			{
 				"cell_type": "code",
@@ -248,7 +248,7 @@
 					"ReRunL1TransformFlag = None\r\n",
 					"DeltaName = None"
 				],
-				"execution_count": 7
+				"execution_count": 38
 			},
 			{
 				"cell_type": "markdown",
@@ -299,7 +299,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
 					"            )"
 				],
-				"execution_count": 8
+				"execution_count": 39
 			},
 			{
 				"cell_type": "markdown",
@@ -400,7 +400,7 @@
 					"\r\n",
 					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
-				"execution_count": 9
+				"execution_count": 40
 			},
 			{
 				"cell_type": "code",
@@ -426,7 +426,7 @@
 					"display(dfFinal)\r\n",
 					""
 				],
-				"execution_count": 10
+				"execution_count": 41
 			},
 			{
 				"cell_type": "markdown",
@@ -457,7 +457,7 @@
 				"source": [
 					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 11
+				"execution_count": 42
 			},
 			{
 				"cell_type": "markdown",
@@ -502,7 +502,7 @@
 					"else:\r\n",
 					"    insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
 				],
-				"execution_count": 13
+				"execution_count": 43
 			}
 		]
 	}

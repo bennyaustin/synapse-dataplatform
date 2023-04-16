@@ -1,0 +1,17 @@
+{
+	"name": "Grant DSQL Pool Permissions",
+	"properties": {
+		"content": {
+			"query": "CREATE USER [ba-synapse01-kn3acb6lw3vr4] FROM EXTERNAL PROVIDER\nGO\n\nEXEC sp_addrolemember 'db_exporter', [ba-synapse01-kn3acb6lw3vr4]\n\nGO\n\nEXEC sp_addrolemember 'db_datawriter', [ba-synapse01-kn3acb6lw3vr4]\n\nGO\n\nCREATE USER [bennyaustin@microsoft.com] FROM EXTERNAL PROVIDER\nGO\n\nEXEC sp_addrolemember 'db_exporter', [bennyaustin@microsoft.com]\nGO\nGO\n\nEXEC sp_addrolemember 'db_owner', [bennyaustin@microsoft.com]\nGO\n\n\n--Make sure your user has the permissions to CREATE tables in the [dbo] schema\nGRANT CREATE TABLE TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::dbo TO [ba-synapse01-kn3acb6lw3vr4];\n\n--Make sure your user has ADMINISTER DATABASE BULK OPERATIONS permissions\nGRANT ADMINISTER DATABASE BULK OPERATIONS TO [ba-synapse01-kn3acb6lw3vr4];\n\n-- --Make sure your user has INSERT permissions on the target table\n-- GRANT INSERT ON nyct.nyc_tlc_yellow_trip TO [ba-synapse01-kn3acb6lw3vr4]\n\n-- GRANT INSERT ON nyct.nyc_tlc_yellow_trip_copy TO [ba-synapse01-kn3acb6lw3vr4]\n\n--Alternatively give db_owner for ease of maintenance\nEXEC sp_addrolemember 'db_owner', [ba-synapse01-kn3acb6lw3vr4]\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dwh01",
+				"poolName": "dwh01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
