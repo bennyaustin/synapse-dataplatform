@@ -226,7 +226,7 @@
 								"type": "Expression"
 							},
 							"Folder": {
-								"value": "@pipeline().parameters.SourceFileDropFolder",
+								"value": "@replace(pipeline().parameters.SourceFileDropFolder,concat(pipeline().parameters.SourceFileDropFileSystem,'/'),'')",
 								"type": "Expression"
 							},
 							"File": {
