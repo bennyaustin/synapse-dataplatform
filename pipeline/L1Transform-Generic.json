@@ -105,6 +105,74 @@
 						},
 						"type": "NotebookReference"
 					},
+					"parameters": {
+						"L1TransformInstanceID": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"L1TransformID ": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"IngestID": {
+							"value": {
+								"value": "@pipeline().parameters.IngestID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"CustomParameters": {
+							"value": {
+								"value": "@pipeline().parameters.CustomParameters",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileSystem": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileSystem",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileFolder": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileFolder",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFile": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFile",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileDelimiter": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileDelimiter",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputFileHeaderFlag": {
+							"value": {
+								"value": "@pipeline().parameters.InputFileHeaderFlag",
+								"type": "Expression"
+							},
+							"type": "bool"
+						},
+						"": {
+							"value": ""
+						}
+					},
 					"snapshot": true,
 					"sparkPool": {
 						"referenceName": "smallMO",
