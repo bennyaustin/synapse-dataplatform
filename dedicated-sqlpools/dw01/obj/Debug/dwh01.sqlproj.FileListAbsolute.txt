@@ -1,0 +1,10 @@
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\bin\Release\dwh01.dacpac
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\bin\Release\dwh01.dll
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\bin\Release\dwh01.pdb
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\dwh01.dll
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\dwh01.pdb
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\dwh01.sqlproj.AssemblyReference.cache
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\Model.xml
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\refactor.xml
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\postdeploy.sql
+C:\Git Repos\synapse-dataplatform\dedicated-sqlpools\dw01\obj\Debug\predeploy.sql
