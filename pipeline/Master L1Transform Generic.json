@@ -84,7 +84,120 @@
 						"value": "@activity('Get L1 Instances').output.value",
 						"type": "Expression"
 					},
-					"isSequential": true
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Run L1 Transform Pipeline",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "L1Transform-Generic",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"L1TransformInstanceID": {
+										"value": "@item().L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"L1TransformID": {
+										"value": "@item().L1TransformID",
+										"type": "Expression"
+									},
+									"IngestID": {
+										"value": "@item().IngestID",
+										"type": "Expression"
+									},
+									"NotebookName": {
+										"value": "@item().NotebookName",
+										"type": "Expression"
+									},
+									"NotebookPath": {
+										"value": "@item().NotebookPath",
+										"type": "Expression"
+									},
+									"CustomParameters": {
+										"value": "@item().CustomParameters",
+										"type": "Expression"
+									},
+									"InputRawFileSystem": {
+										"value": "@item().InputRawFileSystem",
+										"type": "Expression"
+									},
+									"InputRawFileFolder": {
+										"value": "@item().InputRawFileFolder",
+										"type": "Expression"
+									},
+									"InputRawFile": {
+										"value": "@item().InputRawFile",
+										"type": "Expression"
+									},
+									"InputRawFileDelimiter": {
+										"value": "@item().InputRawFileDelimiter",
+										"type": "Expression"
+									},
+									"InputFileHeaderFlag": {
+										"value": "@item().InputFileHeaderFlag",
+										"type": "Expression"
+									},
+									"OutputL1CurateFileSystem": {
+										"value": "@item().OutputL1CurateFileSystem",
+										"type": "Expression"
+									},
+									"OutputL1CuratedFolder": {
+										"value": "@item().OutputL1CuratedFolder",
+										"type": "Expression"
+									},
+									"OutputL1CuratedFile": {
+										"value": "@item().OutputL1CuratedFile",
+										"type": "Expression"
+									},
+									"OutputL1CuratedFileDelimiter": {
+										"value": "@item().OutputL1CuratedFileDelimiter",
+										"type": "Expression"
+									},
+									"OutputL1CuratedFileFormat": {
+										"value": "@item().OutputL1CuratedFileFormat",
+										"type": "Expression"
+									},
+									"OutputL1CuratedFileWriteMode": {
+										"value": "@item().OutputL1CuratedFileWriteMode",
+										"type": "Expression"
+									},
+									"OutputDWStagingTable": {
+										"value": "@item().OutputDWStagingTable",
+										"type": "Expression"
+									},
+									"LookupColumns": {
+										"value": "@item().LookupColumns",
+										"type": "Expression"
+									},
+									"OutputDWTable": {
+										"value": "@item().OutputDWTable",
+										"type": "Expression"
+									},
+									"OutputDWTableWriteMode": {
+										"value": "@item().OutputDWTableWriteMode",
+										"type": "Expression"
+									},
+									"ReRunL1TransformFlag": {
+										"value": "@item().ReRunL1TransformFlag",
+										"type": "Expression"
+									},
+									"MaxRetries": {
+										"value": "@item().MaxRetries",
+										"type": "Expression"
+									},
+									"DeltaName": {
+										"value": "@item().DeltaName",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],
