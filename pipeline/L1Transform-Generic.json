@@ -79,7 +79,7 @@
 				}
 			},
 			{
-				"name": "L1 Notebook",
+				"name": "L1 Transform",
 				"type": "SynapseNotebook",
 				"dependsOn": [
 					{
@@ -110,11 +110,9 @@
 						"referenceName": "smallMO",
 						"type": "BigDataPoolReference"
 					},
-					"executorSize": "Small",
 					"conf": {
 						"spark.dynamicAllocation.enabled": false
-					},
-					"driverSize": "Small"
+					}
 				}
 			}
 		],
