@@ -4,7 +4,7 @@
 		"description": "Generic Level 1 Transformation Pipeline",
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "Get L1 Instances",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -21,19 +21,36 @@
 						"sqlReaderStoredProcedureName": "[ELT].[GetTransformInstance_L1]",
 						"storedProcedureParameters": {
 							"DelayL1TransformationFlag": {
-								"type": "Int32"
+								"type": "Int32",
+								"value": {
+									"value": "@pipeline().parameters.DelayL1TransformationFlag",
+									"type": "Expression"
+								}
 							},
 							"L1TransformInstanceId": {
-								"type": "Int32"
+								"type": "Int32",
+								"value": null
 							},
 							"MaxTransformInstance": {
-								"type": "Int32"
+								"type": "Int32",
+								"value": {
+									"value": "@pipeline().parameters.MaxTransformInstance",
+									"type": "Expression"
+								}
 							},
 							"SourceSystemName": {
-								"type": "String"
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								}
 							},
 							"StreamName": {
-								"type": "String"
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								}
 							}
 						},
 						"queryTimeout": "02:00:00",
@@ -41,7 +58,11 @@
 					},
 					"dataset": {
 						"referenceName": "ControlDB_Dataset",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"Table": "Not Applicable",
+							"Schema": "Not Applicable"
+						}
 					},
 					"firstRowOnly": false
 				}
@@ -49,10 +70,12 @@
 		],
 		"parameters": {
 			"SourceSystemName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AIML-OCR"
 			},
 			"StreamName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "analyze-sec-form10q"
 			},
 			"MaxTransformInstance": {
 				"type": "int",
