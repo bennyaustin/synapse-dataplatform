@@ -4,12 +4,78 @@
 		"description": "Generic pipeline to execute a single instance of L1 Transform",
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "Update L1 Instance - Running",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set PipelineRunID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+					"storedProcedureParameters": {
+						"IngestCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformADFPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"L1TransformCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformInstanceId": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformStatus": {
+							"value": "Running",
+							"type": "String"
+						},
+						"MaxRetries": {
+							"value": {
+								"value": "@pipeline().parameters.MaxRetries",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set PipelineRunID",
+				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"variableName": "PipelineRunID",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -85,6 +151,11 @@
 			},
 			"DeltaName": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineRunID": {
+				"type": "String"
 			}
 		},
 		"folder": {
