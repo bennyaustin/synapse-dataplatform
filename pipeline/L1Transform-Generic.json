@@ -288,7 +288,7 @@
 					"storedProcedureParameters": {
 						"IngestCount": {
 							"value": {
-								"value": "@activity('L1 Transform').output.status.Output.result.exitValue.IngestCount",
+								"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).IngestCount",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -302,7 +302,7 @@
 						},
 						"L1TransformCount": {
 							"value": {
-								"value": "@activity('L1 Transform').output.status.Output.result.exitValue.L1TransformCount",
+								"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).L1TransformCount",
 								"type": "Expression"
 							},
 							"type": "Int32"
@@ -487,6 +487,9 @@
 		},
 		"variables": {
 			"PipelineRunID": {
+				"type": "String"
+			},
+			"ReturnValue": {
 				"type": "String"
 			}
 		},
