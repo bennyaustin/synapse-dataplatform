@@ -173,7 +173,39 @@
 			"type": "string",
 			"defaultValue": "analyze"
 		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"type": "string",
+			"defaultValue": "smallMO"
+		},
 		"Real Estate Statement Event_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"type": "string",
+			"defaultValue": "inference"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"type": "string",
+			"defaultValue": "AIML-OCR"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"type": "string",
+			"defaultValue": "analyze-sec-form10q"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"type": "string",
+			"defaultValue": "smallMO"
+		},
+		"SEC Form10Q Event_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
 		}
@@ -1639,7 +1671,7 @@
 					}
 				},
 				"folder": {
-					"name": "REST API Pipelines"
+					"name": "Extract and Load/REST API Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:39:23Z"
@@ -2618,6 +2650,42 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEach L1Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Master L1Transform Generic",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"SourceSystemName": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								},
+								"StreamName": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								},
+								"MaxTransformInstance": 20,
+								"DelayL1TransformationFlag": 0,
+								"SparkPool": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -2639,6 +2707,9 @@
 					},
 					"StreamName": {
 						"type": "string"
+					},
+					"SparkPool": {
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -2647,7 +2718,7 @@
 					}
 				},
 				"folder": {
-					"name": "Upload File Pipelines"
+					"name": "Extract and Load/Upload File Pipelines"
 				},
 				"annotations": []
 			},
@@ -2655,7 +2726,8 @@
 				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
 				"[concat(variables('workspaceId'), '/datasets/Drop_JSON')]",
-				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]"
+				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]",
+				"[concat(variables('workspaceId'), '/pipelines/Master L1Transform Generic')]"
 			]
 		},
 		{
@@ -3625,6 +3697,42 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEach L1Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Master L1Transform Generic",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"SourceSystemName": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								},
+								"StreamName": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								},
+								"MaxTransformInstance": 20,
+								"DelayL1TransformationFlag": 0,
+								"SparkPool": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3638,11 +3746,11 @@
 					},
 					"SourceFileDropFolder": {
 						"type": "string",
-						"defaultValue": "formrecognizer-re-json"
+						"defaultValue": "formrecognizer-sec-form10q-json"
 					},
 					"SourceFileDropFile": {
 						"type": "string",
-						"defaultValue": "Statement #52 - OWN00426-1 .json"
+						"defaultValue": "NVIDIA_202105May.json"
 					},
 					"SourceSystemName": {
 						"type": "string",
@@ -3650,7 +3758,11 @@
 					},
 					"StreamName": {
 						"type": "string",
-						"defaultValue": "analyze"
+						"defaultValue": "analyze-sec-form10q"
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "smallMO"
 					}
 				},
 				"variables": {
@@ -3659,7 +3771,7 @@
 					}
 				},
 				"folder": {
-					"name": "Upload File Pipelines"
+					"name": "Extract and Load/Upload File Pipelines"
 				},
 				"annotations": []
 			},
@@ -3667,22 +3779,731 @@
 				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
 				"[concat(variables('workspaceId'), '/datasets/AIMLCustomModels_JSON')]",
-				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]"
+				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]",
+				"[concat(variables('workspaceId'), '/pipelines/Master L1Transform Generic')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/L2Transform-Generic-Synapse')]",
+			"name": "[concat(parameters('workspaceName'), '/L1Transform-Generic')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"description": "Generic pipeline to execute a single instance of L1 Transform",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Update L1 Instance - Running",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Set PipelineRunID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Running",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set PipelineRunID",
+						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"variableName": "PipelineRunID",
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "SynapseNotebook",
+						"dependsOn": [
+							{
+								"activity": "Update L1 Instance - Running",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": {
+									"value": "@pipeline().parameters.NotebookName",
+									"type": "Expression"
+								},
+								"type": "NotebookReference"
+							},
+							"parameters": {
+								"L1TransformInstanceID": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"L1TransformID ": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"IngestID": {
+									"value": {
+										"value": "@pipeline().parameters.IngestID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"CustomParameters": {
+									"value": {
+										"value": "@pipeline().parameters.CustomParameters",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileSystem": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileSystem",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileFolder": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileFolder",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFile": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFile",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileDelimiter": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileDelimiter",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputFileHeaderFlag": {
+									"value": {
+										"value": "@pipeline().parameters.InputFileHeaderFlag",
+										"type": "Expression"
+									},
+									"type": "bool"
+								},
+								"OutputL1CurateFileSystem": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CurateFileSystem",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFolder": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFolder",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFile": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFile",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileDelimiter": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileDelimiter",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileFormat": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileFormat",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileWriteMode": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileWriteMode",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWStagingTable": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWStagingTable",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"LookupColumns": {
+									"value": {
+										"value": "@pipeline().parameters.LookupColumns",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWTable": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWTable",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWTableWriteMode": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWTableWriteMode",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"ReRunL1TransformFlag": {
+									"value": {
+										"value": "@pipeline().parameters.ReRunL1TransformFlag",
+										"type": "Expression"
+									},
+									"type": "bool"
+								},
+								"DeltaName": {
+									"value": {
+										"value": "@pipeline().parameters.DeltaName",
+										"type": "Expression"
+									},
+									"type": "string"
+								}
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								},
+								"type": "BigDataPoolReference"
+							},
+							"conf": {
+								"spark.dynamicAllocation.enabled": false
+							}
+						}
+					},
+					{
+						"name": "Update L1 Instance - Success",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "L1 Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": {
+										"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).IngestCount",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": {
+										"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).L1TransformCount",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Success",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Update L1 Instance - Failure",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "L1 Transform",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Failure",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Get L2 Transform Definition",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Update L1 Instance - Success",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetTransformDefinition_L2]",
+								"storedProcedureParameters": {
+									"DeltaDate": {
+										"type": "DateTime",
+										"value": null
+									},
+									"IngestID": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.IngestID",
+											"type": "Expression"
+										}
+									},
+									"InputType": {
+										"type": "String",
+										"value": null
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "Not Applicable",
+									"Schema": "Not Applicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach L2 Definition",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get L2 Transform Definition",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get L2 Transform Definition').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Insert TransformInstance L2",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[ELT].[InsertTransformInstance_L2]",
+										"storedProcedureParameters": {
+											"CustomParameters": {
+												"value": {
+													"value": "@item().CustomParameters",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"DataFromNumber": {
+												"value": {
+													"value": "@item().DataFromNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"DataFromTimestamp": {
+												"value": {
+													"value": "@item().DataFromTimestamp",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"DataToNumber": {
+												"value": {
+													"value": "@item().DataToNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"DataToTimestamp": {
+												"value": {
+													"value": "@item().DataToTimestamp",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"DeltaName": {
+												"value": {
+													"value": "@item().DeltaName",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"IngestADFPipelineRunID": {
+												"value": {
+													"value": "@item().IngestADFPipelineRunID",
+													"type": "Expression"
+												},
+												"type": "Guid"
+											},
+											"IngestID": {
+												"value": {
+													"value": "@item().IngestID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"InputDWTable": {
+												"value": {
+													"value": "@item().InputDWTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFile": {
+												"value": {
+													"value": "@item().InputFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileDelimiter": {
+												"value": {
+													"value": "@item().InputFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileFolder": {
+												"value": {
+													"value": "@item().InputFileFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileHeaderFlag": {
+												"value": {
+													"value": "@item().InputFileHeaderFlag",
+													"type": "Expression"
+												},
+												"type": "Boolean"
+											},
+											"InputFileSystem": {
+												"value": {
+													"value": "@item().InputFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"L1TransformADFPipelineRunID": {
+												"value": {
+													"value": "@item().L1TransformADFPipelineRunID",
+													"type": "Expression"
+												},
+												"type": "Guid"
+											},
+											"L1TransformID": {
+												"value": {
+													"value": "@item().L1TransformID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"L2TransformID": {
+												"value": {
+													"value": "@item().L2TransformID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"LastDeltaDate": {
+												"value": {
+													"value": "@item().LastDeltaDate",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"LastDeltaNumber": {
+												"value": {
+													"value": "@item().LastDeltaNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"LookupColumns": {
+												"value": {
+													"value": "@item().LookupColumns",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"MaxRetries": {
+												"value": {
+													"value": "@item().MaxRetries",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"NotebookName": {
+												"value": {
+													"value": "@item().NotebookName",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"NotebookPath": {
+												"value": {
+													"value": "@item().NotebookPath",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWStagingTable": {
+												"value": {
+													"value": "@item().OutputDWStagingTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTable": {
+												"value": {
+													"value": "@item().OutputDWTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTableWriteMode": {
+												"value": {
+													"value": "@item().OutputDWTableWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFile": {
+												"value": {
+													"value": "@item().OutputL2CuratedFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileDelimiter": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileFormat": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileFormat",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileWriteMode": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFolder": {
+												"value": {
+													"value": "@item().OutputL2CuratedFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CurateFileSystem": {
+												"value": {
+													"value": "@item().OutputL2CurateFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "ControlDB",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
 						}
 					}
 				],
@@ -3690,13 +4511,115 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"L1TransformInstanceID": {
+						"type": "int",
+						"defaultValue": 6
+					},
+					"L1TransformID": {
+						"type": "int",
+						"defaultValue": 8
+					},
+					"IngestID": {
+						"type": "int",
+						"defaultValue": 5
+					},
+					"NotebookName": {
+						"type": "string",
+						"defaultValue": "L1Transform-SEC-Form10Q"
+					},
+					"NotebookPath": {
+						"type": "string",
+						"defaultValue": "L1Transform"
+					},
+					"CustomParameters": {
+						"type": "string"
+					},
+					"InputRawFileSystem": {
+						"type": "string",
+						"defaultValue": "raw-bronze"
+					},
+					"InputRawFileFolder": {
+						"type": "string",
+						"defaultValue": "sec-form10q/2023/04"
+					},
+					"InputRawFile": {
+						"type": "string",
+						"defaultValue": "2023-04-15_204450_sec-form10q.json"
+					},
+					"InputRawFileDelimiter": {
+						"type": "string"
+					},
+					"InputFileHeaderFlag": {
+						"type": "bool",
+						"defaultValue": false
+					},
+					"OutputL1CurateFileSystem": {
+						"type": "string",
+						"defaultValue": "curated-silver"
+					},
+					"OutputL1CuratedFolder": {
+						"type": "string",
+						"defaultValue": "sec-form10q/2023/04"
+					},
+					"OutputL1CuratedFile": {
+						"type": "string",
+						"defaultValue": "standardized_2023-04-15_204525_sec-form10q.json"
+					},
+					"OutputL1CuratedFileDelimiter": {
+						"type": "string"
+					},
+					"OutputL1CuratedFileFormat": {
+						"type": "string",
+						"defaultValue": "json"
+					},
+					"OutputL1CuratedFileWriteMode": {
+						"type": "string",
+						"defaultValue": "overwrite"
+					},
+					"OutputDWStagingTable": {
+						"type": "string"
+					},
+					"LookupColumns": {
+						"type": "string"
+					},
+					"OutputDWTable": {
+						"type": "string"
+					},
+					"OutputDWTableWriteMode": {
+						"type": "string"
+					},
+					"ReRunL1TransformFlag": {
+						"type": "bool",
+						"defaultValue": false
+					},
+					"MaxRetries": {
+						"type": "int",
+						"defaultValue": 3
+					},
+					"DeltaName": {
+						"type": "string"
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "SmallMO"
+					}
+				},
+				"variables": {
+					"PipelineRunID": {
+						"type": "String"
+					}
+				},
 				"folder": {
-					"name": "Transform Pipelines"
+					"name": "Transform/L1 Transform Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:37:38Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Manage-All-SQLPools')]",
@@ -4206,7 +5129,7 @@
 					}
 				},
 				"folder": {
-					"name": "REST API Pipelines"
+					"name": "Extract and Load/REST API Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:39:25Z"
@@ -4214,6 +5137,247 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
 				"[concat(variables('workspaceId'), '/pipelines/IngestREST')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Master L1Transform Generic')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Generic Level 1 Transformation Pipeline",
+				"activities": [
+					{
+						"name": "Get L1 Instances",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetTransformInstance_L1]",
+								"storedProcedureParameters": {
+									"DelayL1TransformationFlag": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.DelayL1TransformationFlag",
+											"type": "Expression"
+										}
+									},
+									"L1TransformInstanceId": {
+										"type": "Int32",
+										"value": null
+									},
+									"MaxTransformInstance": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.MaxTransformInstance",
+											"type": "Expression"
+										}
+									},
+									"SourceSystemName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.SourceSystemName",
+											"type": "Expression"
+										}
+									},
+									"StreamName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.StreamName",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "Not Applicable",
+									"Schema": "Not Applicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach L1 Instance",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get L1 Instances",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get L1 Instances').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Run L1 Transform Pipeline",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "L1Transform-Generic",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"L1TransformInstanceID": {
+												"value": "@item().L1TransformInstanceID",
+												"type": "Expression"
+											},
+											"L1TransformID": {
+												"value": "@item().L1TransformID",
+												"type": "Expression"
+											},
+											"IngestID": {
+												"value": "@item().IngestID",
+												"type": "Expression"
+											},
+											"NotebookName": {
+												"value": "@item().NotebookName",
+												"type": "Expression"
+											},
+											"NotebookPath": {
+												"value": "@item().NotebookPath",
+												"type": "Expression"
+											},
+											"CustomParameters": {
+												"value": "@item().CustomParameters",
+												"type": "Expression"
+											},
+											"InputRawFileSystem": {
+												"value": "@item().InputRawFileSystem",
+												"type": "Expression"
+											},
+											"InputRawFileFolder": {
+												"value": "@item().InputRawFileFolder",
+												"type": "Expression"
+											},
+											"InputRawFile": {
+												"value": "@item().InputRawFile",
+												"type": "Expression"
+											},
+											"InputRawFileDelimiter": {
+												"value": "@item().InputRawFileDelimiter",
+												"type": "Expression"
+											},
+											"InputFileHeaderFlag": {
+												"value": "@item().InputFileHeaderFlag",
+												"type": "Expression"
+											},
+											"OutputL1CurateFileSystem": {
+												"value": "@item().OutputL1CurateFileSystem",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFolder": {
+												"value": "@item().OutputL1CuratedFolder",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFile": {
+												"value": "@item().OutputL1CuratedFile",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileDelimiter": {
+												"value": "@item().OutputL1CuratedFileDelimiter",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileFormat": {
+												"value": "@item().OutputL1CuratedFileFormat",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileWriteMode": {
+												"value": "@item().OutputL1CuratedFileWriteMode",
+												"type": "Expression"
+											},
+											"OutputDWStagingTable": {
+												"value": "@item().OutputDWStagingTable",
+												"type": "Expression"
+											},
+											"LookupColumns": {
+												"value": "@item().LookupColumns",
+												"type": "Expression"
+											},
+											"OutputDWTable": {
+												"value": "@item().OutputDWTable",
+												"type": "Expression"
+											},
+											"OutputDWTableWriteMode": {
+												"value": "@item().OutputDWTableWriteMode",
+												"type": "Expression"
+											},
+											"ReRunL1TransformFlag": {
+												"value": "@item().ReRunL1TransformFlag",
+												"type": "Expression"
+											},
+											"MaxRetries": {
+												"value": "@item().MaxRetries",
+												"type": "Expression"
+											},
+											"DeltaName": {
+												"value": "@item().DeltaName",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceSystemName": {
+						"type": "string",
+						"defaultValue": "AIML-OCR"
+					},
+					"StreamName": {
+						"type": "string",
+						"defaultValue": "analyze-sec-form10q"
+					},
+					"MaxTransformInstance": {
+						"type": "int",
+						"defaultValue": 20
+					},
+					"DelayL1TransformationFlag": {
+						"type": "int",
+						"defaultValue": 0
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "smallMO"
+					}
+				},
+				"folder": {
+					"name": "Transform/L1 Transform Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
+				"[concat(variables('workspaceId'), '/pipelines/L1Transform-Generic')]"
 			]
 		},
 		{
@@ -5023,7 +6187,8 @@
 							"SourceFileDropFolder": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
 							"SourceFileDropFile": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
 							"SourceSystemName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
-							"StreamName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]"
+							"StreamName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]",
+							"SparkPool": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool')]"
 						}
 					}
 				],
@@ -5033,6 +6198,45 @@
 					"blobPathEndsWith": ".json",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Real Estate Statement Event_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Ingest_AIML_CustomInferenceFile')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SEC Form10Q Event')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Event grid trigger for SEC Form 10Q summarization",
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Ingest_AIML_CustomInferenceFile",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFileDropFileSystem": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem')]",
+							"SourceFileDropFolder": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
+							"SourceFileDropFile": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
+							"SourceSystemName": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]",
+							"SparkPool": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/inference/blobs/formrecognizer-sec-form10q-json/",
+					"blobPathEndsWith": ".json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('SEC Form10Q Event_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
@@ -5092,6 +6296,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Grant DSQL Pool Permissions')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE USER [ba-synapse01-kn3acb6lw3vr4] FROM EXTERNAL PROVIDER\nGO\n\nEXEC sp_addrolemember 'db_exporter', [ba-synapse01-kn3acb6lw3vr4]\n\nGO\n\nEXEC sp_addrolemember 'db_datawriter', [ba-synapse01-kn3acb6lw3vr4]\n\nGO\n\nCREATE USER [bennyaustin@microsoft.com] FROM EXTERNAL PROVIDER\nGO\n\nEXEC sp_addrolemember 'db_exporter', [bennyaustin@microsoft.com]\nGO\nGO\n\nEXEC sp_addrolemember 'db_owner', [bennyaustin@microsoft.com]\nGO\n\n\n--Make sure your user has the permissions to CREATE tables in the [dbo] schema\nGRANT CREATE TABLE TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::dbo TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::stg TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::sec TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::Purview TO [ba-synapse01-kn3acb6lw3vr4];\nGRANT ALTER ON SCHEMA::Azure TO [ba-synapse01-kn3acb6lw3vr4];\n\n--Make sure your user has ADMINISTER DATABASE BULK OPERATIONS permissions\nGRANT ADMINISTER DATABASE BULK OPERATIONS TO [ba-synapse01-kn3acb6lw3vr4];\n\n-- --Make sure your user has INSERT permissions on the target table\n-- GRANT INSERT ON nyct.nyc_tlc_yellow_trip TO [ba-synapse01-kn3acb6lw3vr4]\n\n-- GRANT INSERT ON nyct.nyc_tlc_yellow_trip_copy TO [ba-synapse01-kn3acb6lw3vr4]\n\n--Alternatively give db_owner for ease of maintenance\nEXEC sp_addrolemember 'db_owner', [ba-synapse01-kn3acb6lw3vr4]\nGO\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dwh01",
+						"poolName": "dwh01"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Serverless - Query Parquet')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -5103,6 +6327,27 @@
 					},
 					"currentConnection": {
 						"databaseName": "default",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Serverless SQL JSON Queries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "SQL Script to query JSON files in datalake",
+				"content": {
+					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-kn3acb6lw3vr4')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='sec-form10q')\n    CREATE EXTERNAL DATA SOURCE [sec-form10q]\n    WITH (    LOCATION   = 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-kn3acb6lw3vr4]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n    ) \n\n    DROP VIEW vwSecForm10Q\n    GO\n    --Create View\n    CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'sec-form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(MAX) '$.mgmt_analysis_summary'\n            ,risk_disclosure_summary varchar(MAX) '$.risk_disclosure_summary'\n            ,controls_procedures_summary varchar(MAX) '$.controls_procedures_summary'\n            ) \n--Query View\nselect * from vwSecForm10Q\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dlsql01",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -5144,21 +6389,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "546ae886-c5b3-43eb-ab0c-2ae971168852"
+						"spark.autotune.trackingId": "c72386c5-d047-4d00-9057-f394c04ab46a"
 					}
 				},
 				"metadata": {
@@ -5172,20 +6417,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -5347,14 +6590,15 @@
 						"source": [
 							""
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/L2Transform-Generic-Synapse')]",
+			"name": "[concat(parameters('workspaceName'), '/L1Transform-Generic-Synapse')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -5379,7 +6623,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "b3062607-fb3d-4b18-968d-56f2deab4e5f"
+						"spark.autotune.trackingId": "b7ff3dcb-4c45-4800-981e-e86aa41b2e59"
 					}
 				},
 				"metadata": {
@@ -5393,20 +6637,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/mediumMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
 						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
+						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"extraHeader": null
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -5546,7 +6788,7 @@
 							}
 						},
 						"source": [
-							"# # Parameters for Testing only, should be commeted off\r\n",
+							"# # Parameters for Testing only, should be commented off\r\n",
 							"# L1TransformInstanceID = 1\r\n",
 							"# L1TransformID = 3\r\n",
 							"# IngestID = 3\r\n",
@@ -5601,6 +6843,8 @@
 						},
 						"source": [
 							"df = readFile(container=InputRawFileSystem, path= InputRawFileFolder + '/' + InputRawFile, colSeparator=InputRawFileDelimiter, headerFlag=InputFileHeaderFlag)\r\n",
+							"ingestCount = df.count()\r\n",
+							"\r\n",
 							"ct=CommonTransforms(df)\r\n",
 							"\r\n",
 							"# Remove duplicates\r\n",
@@ -5643,6 +6887,8 @@
 							"stgSchemaName = OutputDWStagingTable[0:posStg]\r\n",
 							"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
 							"\r\n",
+							"l1TransformCount = df.count()\r\n",
+							"\r\n",
 							"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
 							"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
 							"else:\r\n",
@@ -5650,6 +6896,763 @@
 						],
 						"outputs": [],
 						"execution_count": 79
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/L1Transform-ReStatement')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook to simplify the json generated by form recognizer",
+				"folder": {
+					"name": "L1Transform"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "mediumMO",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": true,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "c9aa0e07-a944-4bd3-afe9-eddb7d50ac90"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
+						"type": "Spark",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.2",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
+						],
+						"outputs": [],
+						"execution_count": 89
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Notebook Parameters"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"L1TransformInstanceID = None\r\n",
+							"L1TransformID = None\r\n",
+							"IngestID = None\r\n",
+							"CustomParameters = None\r\n",
+							"InputRawFileSystem = None\r\n",
+							"InputRawFileFolder = None\r\n",
+							"InputRawFile = None\r\n",
+							"InputRawFileDelimiter = None\r\n",
+							"InputFileHeaderFlag = None\r\n",
+							"OutputL1CurateFileSystem = None\r\n",
+							"OutputL1CuratedFolder = None\r\n",
+							"OutputL1CuratedFile = None\r\n",
+							"OutputL1CuratedFileDelimiter = None\r\n",
+							"OutputL1CuratedFileFormat = None\r\n",
+							"OutputL1CuratedFileWriteMode = None\r\n",
+							"OutputDWStagingTable = None\r\n",
+							"LookupColumns = None\r\n",
+							"OutputDWTable = None\r\n",
+							"OutputDWTableWriteMode = None\r\n",
+							"ReRunL1TransformFlag = None\r\n",
+							"DeltaName = None"
+						],
+						"outputs": [],
+						"execution_count": 90
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# # Parameters for Testing only, should be commented off\r\n",
+							"# L1TransformInstanceID = 1\r\n",
+							"# L1TransformID = 4\r\n",
+							"# IngestID = 4\r\n",
+							"# CustomParameters = None\r\n",
+							"# InputRawFileSystem = 'raw-bronze'\r\n",
+							"# InputRawFileFolder = 're-statements/2023/04'\r\n",
+							"# InputRawFile = '2023-04-05_194935_re-statement.json'\r\n",
+							"# InputRawFileDelimiter = None\r\n",
+							"# InputFileHeaderFlag = None\r\n",
+							"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
+							"# OutputL1CuratedFolder = 're-statements/2023/04'\r\n",
+							"# OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\r\n",
+							"# OutputL1CuratedFileDelimiter = None\r\n",
+							"# OutputL1CuratedFileFormat = 'json'\r\n",
+							"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+							"# OutputDWStagingTable = None\r\n",
+							"# LookupColumns = None\r\n",
+							"# OutputDWTable = None\r\n",
+							"# OutputDWTableWriteMode = None\r\n",
+							"# ReRunL1TransformFlag = None\r\n",
+							"# DeltaName = None"
+						],
+						"outputs": [],
+						"execution_count": 91
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"import pyspark.sql.functions \r\n",
+							"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+							"ingestCount = df.count()\r\n",
+							"\r\n",
+							"# extract datapoints of interest and explode array\r\n",
+							"\r\n",
+							"# df.printSchema()\r\n",
+							"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\r\n",
+							"            ,col(\"fields.owner.valueString\").alias(\"owner\")\r\n",
+							"            ,col(\"fields.owner address.valueString\").alias(\"re_agency_address\")\r\n",
+							"            ,col(\"fields.rental address.valueString\").alias(\"rental_address\")\r\n",
+							"            ,col(\"fields.statement date.valueString\").alias(\"statement_date\")\r\n",
+							"            ,col(\"fields.tenant.valueString\").alias(\"tenant\")\r\n",
+							"            ,col(\"fields.total payment.valueString\").alias(\"total_payment\")\r\n",
+							"            ,explode(col(\"fields.statement details.valueArray\")).alias(\"statement details\")\r\n",
+							"            )\r\n",
+							"\r\n",
+							"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
+							"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
+							"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
+							"df.printSchema()\r\n",
+							"\r\n",
+							"#write flattened json to curated zone of data lake\r\n",
+							"l1TransformCount = df.count()\r\n",
+							"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
+						],
+						"outputs": [],
+						"execution_count": 93
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values   "
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/L1Transform-SEC-Form10Q')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Notebook to summarize SEC Form 10Q statement using AOAI",
+				"folder": {
+					"name": "L1Transform"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "smallMO",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": true,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "7edcf4ce-60da-4250-b8b3-85e15b788ac3"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/smallMO",
+						"name": "smallMO",
+						"type": "Spark",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.2",
+						"nodeCount": 10,
+						"cores": 4,
+						"memory": 28
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Install SynapseML for this spark session\r\n",
+							"https://microsoft.github.io/SynapseML/docs/getting_started/installation/"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%%configure -f\r\n",
+							"{\r\n",
+							"  \"name\": \"synapseml\",\r\n",
+							"  \"conf\": {\r\n",
+							"      \"spark.jars.packages\": \"com.microsoft.azure:synapseml_2.12:0.11.0,org.apache.spark:spark-avro_2.12:3.3.1\",\r\n",
+							"      \"spark.jars.repositories\": \"https://mmlspark.azureedge.net/maven\",\r\n",
+							"      \"spark.jars.excludes\": \"org.scala-lang:scala-reflect,org.apache.spark:spark-tags_2.12,org.scalactic:scalactic_2.12,org.scalatest:scalatest_2.12,com.fasterxml.jackson.core:jackson-databind\",\r\n",
+							"      \"spark.yarn.user.classpath.first\": \"true\",\r\n",
+							"      \"spark.sql.parquet.enableVectorizedReader\": \"false\",\r\n",
+							"      \"spark.sql.legacy.replaceDatabricksSparkAvro.enabled\": \"true\"\r\n",
+							"  }\r\n",
+							"}"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+						],
+						"outputs": [],
+						"execution_count": 3
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Notebook Parameters"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"L1TransformInstanceID = None\r\n",
+							"L1TransformID = None\r\n",
+							"IngestID = None\r\n",
+							"CustomParameters = None\r\n",
+							"InputRawFileSystem = None\r\n",
+							"InputRawFileFolder = None\r\n",
+							"InputRawFile = None\r\n",
+							"InputRawFileDelimiter = None\r\n",
+							"InputFileHeaderFlag = None\r\n",
+							"OutputL1CurateFileSystem = None\r\n",
+							"OutputL1CuratedFolder = None\r\n",
+							"OutputL1CuratedFile = None\r\n",
+							"OutputL1CuratedFileDelimiter = None\r\n",
+							"OutputL1CuratedFileFormat = None\r\n",
+							"OutputL1CuratedFileWriteMode = None\r\n",
+							"OutputDWStagingTable = None\r\n",
+							"LookupColumns = None\r\n",
+							"OutputDWTable = None\r\n",
+							"OutputDWTableWriteMode = None\r\n",
+							"ReRunL1TransformFlag = None\r\n",
+							"DeltaName = None"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Parameters for Testing only, should be commented off\r\n",
+							"L1TransformInstanceID = 6\r\n",
+							"L1TransformID = 8\r\n",
+							"IngestID = 5\r\n",
+							"CustomParameters = None\r\n",
+							"InputRawFileSystem = 'raw-bronze'\r\n",
+							"InputRawFileFolder = 'sec-form10q/2023/04'\r\n",
+							"InputRawFile = '2023-04-16_141247_sec-form10q.json'\r\n",
+							"InputRawFileDelimiter = None\r\n",
+							"InputFileHeaderFlag = None\r\n",
+							"OutputL1CurateFileSystem = 'curated-silver'\r\n",
+							"OutputL1CuratedFolder = 'sec-form10q/2023/04'\r\n",
+							"OutputL1CuratedFile = 'standardized_2023-04-16_141247_sec-form10q.json'\r\n",
+							"OutputL1CuratedFileDelimiter = None\r\n",
+							"OutputL1CuratedFileFormat = 'json'\r\n",
+							"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+							"OutputDWStagingTable = '[stg].[merge_sec_form10q]'\r\n",
+							"LookupColumns = ['org_name','reporting_quarter']\r\n",
+							"OutputDWTable = '[sec].[form10q]'\r\n",
+							"OutputDWTableWriteMode = 'append'\r\n",
+							"ReRunL1TransformFlag = None\r\n",
+							"DeltaName = None"
+						],
+						"outputs": [],
+						"execution_count": 5
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Extract datapoints of interest"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from pyspark.sql.functions import *\r\n",
+							"from pyspark.sql.types import *\r\n",
+							"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+							"ingestCount = df.count()\r\n",
+							"\r\n",
+							"# df.printSchema()\r\n",
+							"\r\n",
+							"df = df.select( col(\"org_name.content\").alias(\"org_name\")\r\n",
+							"                ,col(\"org_address.content\").alias(\"org_address\")\r\n",
+							"                ,col(\"org_jurisdiction.content\").alias(\"org_jurisdiction\")\r\n",
+							"                ,col(\"org_stock_ticker.content\").alias(\"org_stock_ticker\")\r\n",
+							"                ,col(\"reporting_quarter.content\").alias(\"reporting_quarter\")\r\n",
+							"                ,col(\"stock_exchange.content\").alias(\"stock_exchange\")\r\n",
+							"                ,regexp_replace(col(\"total_assets.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_assets\")\r\n",
+							"                ,regexp_replace(col(\"total_comprehensive_income.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_comprehensive_income\")\r\n",
+							"                ,regexp_replace(col(\"total_equity.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_equity\")\r\n",
+							"                ,regexp_replace(col(\"total_liabilities.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_liabilities\")                \r\n",
+							"                ,col(\"mgmt_analysis.content\").alias(\"mgmt_analysis\")\r\n",
+							"                ,col(\"risk_disclosure.content\").alias(\"risk_disclosure\")\r\n",
+							"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\r\n",
+							"            )"
+						],
+						"outputs": [],
+						"execution_count": 6
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# AOAI Summarization GPT3.5"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"import os\r\n",
+							"from synapse.ml.core.platform import running_on_synapse, find_secret\r\n",
+							"from synapse.ml.cognitive import OpenAICompletion\r\n",
+							"\r\n",
+							"aoaiEndpoint = getSecret(\"aoai-endpoint\")\r\n",
+							"aoaiDeploymentName = \"gpt35\"\r\n",
+							"aoaiApiKey = getSecret(\"aoai-api-key\")\r\n",
+							"\r\n",
+							"#Summary1\r\n",
+							"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\r\n",
+							"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\r\n",
+							"completion = (\r\n",
+							"    OpenAICompletion()\r\n",
+							"    .setSubscriptionKey(aoaiApiKey)\r\n",
+							"    .setDeploymentName(aoaiDeploymentName)\r\n",
+							"    .setUrl(aoaiEndpoint)\r\n",
+							"    .setMaxTokens(100)\r\n",
+							"    .setPromptCol(\"mgmt_analysis_prompt\")\r\n",
+							"    .setErrorCol(\"error\")\r\n",
+							"    .setOutputCol(\"mgmt_analysis_summary\")\r\n",
+							")\r\n",
+							"\r\n",
+							"dfSummaryMgmtAnalysis = completion.transform(dfPrompt_mgmt_analysis).cache()\r\n",
+							"# display(dfSummaryMgmtAnalysis.select(\r\n",
+							"#   col(\"mgmt_analysis_prompt\"), col(\"error\"), col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"text\")))\r\n",
+							"# dfSummaryMgmtAnalysis.printSchema()\r\n",
+							"\r\n",
+							"dfSummaryMgmtAnalysis = dfSummaryMgmtAnalysis.select(col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"mgmt_analysis_summary\"))\r\n",
+							"\r\n",
+							"#Summary2\r\n",
+							"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\r\n",
+							"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\r\n",
+							"completion = (\r\n",
+							"    OpenAICompletion()\r\n",
+							"    .setSubscriptionKey(aoaiApiKey)\r\n",
+							"    .setDeploymentName(aoaiDeploymentName)\r\n",
+							"    .setUrl(aoaiEndpoint)\r\n",
+							"    .setMaxTokens(100)\r\n",
+							"    .setPromptCol(\"risk_disclosure_prompt\")\r\n",
+							"    .setErrorCol(\"error\")\r\n",
+							"    .setOutputCol(\"risk_disclosure_summary\")\r\n",
+							")\r\n",
+							"\r\n",
+							"dfSummaryRisk = completion.transform(dfPrompt_risk_disclosure).cache()\r\n",
+							"# display(dfSummaryRisk.select(\r\n",
+							"#   col(\"risk_disclosure_prompt\"), col(\"error\"), col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"text\")))\r\n",
+							"# dfSummaryRisk.printSchema()\r\n",
+							"\r\n",
+							"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\r\n",
+							"\r\n",
+							"#Summary3\r\n",
+							"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\r\n",
+							"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\r\n",
+							"completion = (\r\n",
+							"    OpenAICompletion()\r\n",
+							"    .setSubscriptionKey(aoaiApiKey)\r\n",
+							"    .setDeploymentName(aoaiDeploymentName)\r\n",
+							"    .setUrl(aoaiEndpoint)\r\n",
+							"    .setMaxTokens(100)\r\n",
+							"    .setPromptCol(\"controls_procedures_prompt\")\r\n",
+							"    .setErrorCol(\"error\")\r\n",
+							"    .setOutputCol(\"controls_procedures_summary\")\r\n",
+							")\r\n",
+							"\r\n",
+							"dfSummaryCP = completion.transform(dfPrompt_controls_procedures).cache()\r\n",
+							"# display(dfSummaryCP.select(\r\n",
+							"#   col(\"controls_procedures_prompt\"), col(\"error\"), col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"text\")))\r\n",
+							"# dfSummaryCP.printSchema()\r\n",
+							"\r\n",
+							"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
+						],
+						"outputs": [],
+						"execution_count": 7
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from functools import reduce\r\n",
+							"from pyspark.sql import DataFrame\r\n",
+							"\r\n",
+							"#Merge all the dataframes\r\n",
+							"dfs = [df,dfSummaryMgmtAnalysis,dfSummaryRisk,dfSummaryCP]\r\n",
+							"dfFinal = reduce(DataFrame.crossJoin, dfs)\r\n",
+							"display(dfFinal)\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Write summarized json to curated zone of data lake"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"l1TransformCount = dfFinal.count()\r\n",
+							"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
+						],
+						"outputs": [],
+						"execution_count": 9
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -5667,21 +7670,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "d3acb2ed-c10b-45c9-a893-2928dbd8e013"
+						"spark.autotune.trackingId": "90df38c5-ecc2-4302-b83a-8a23ee52bd31"
 					}
 				},
 				"metadata": {
@@ -5695,20 +7698,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6193,21 +8194,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "34e632d7-6a83-4726-a147-e090026b9cf6"
+						"spark.autotune.trackingId": "1324316a-ea25-432b-996f-53011244cfd6"
 					}
 				},
 				"metadata": {
@@ -6221,20 +8222,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6458,21 +8457,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f209c3f1-aa4a-4fa2-8e31-54d85cc64382"
+						"spark.autotune.trackingId": "a8efb45d-b2c0-47b4-8833-519df94a5e39"
 					}
 				},
 				"metadata": {
@@ -6486,20 +8485,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6522,7 +8519,8 @@
 						"source": [
 							"from notebookutils import mssparkutils"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -6543,7 +8541,8 @@
 						"source": [
 							"storageAccount = '<Storage Account Name>'"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -6573,7 +8572,7 @@
 							"collapsed": true
 						},
 						"source": [
-							"def readFile(container, path, colSeparator, headerFlag):\r\n",
+							"def readFile(container, path, colSeparator=None, headerFlag=None):\r\n",
 							"  # ##########################################################################################################################  \r\n",
 							"  # Function: readFile\r\n",
 							"  # Reads a file from Azure Gen2 Storage and returns as dataframe\r\n",
@@ -6596,6 +8595,8 @@
 							"        df = spark.read.csv(path=filePath, sep=colSeparator, header=headerFlag, inferSchema=\"true\")\r\n",
 							"    elif \".parquet\" in path:\r\n",
 							"        df = spark.read.parquet(filePath)\r\n",
+							"    elif \".json\" in path:\r\n",
+							"        df = spark.read.json(filePath, multiLine= True)\r\n",
 							"    elif \".orc\" in path:\r\n",
 							"        df = spark.read.orc(filePath)\r\n",
 							"    else:\r\n",
@@ -6605,7 +8606,8 @@
 							"    return df\r\n",
 							""
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -6666,7 +8668,8 @@
 							"    return\r\n",
 							""
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -6683,21 +8686,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "95aeebe5-0782-4e08-8f49-69a7c332238d"
+						"spark.autotune.trackingId": "2d8592bf-1fbf-423c-b16b-d81885d85777"
 					}
 				},
 				"metadata": {
@@ -6711,20 +8714,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -6960,21 +8961,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "39d647a4-9dbe-4f2d-9b12-bfe01788e12e"
+						"spark.autotune.trackingId": "f3c2e220-b435-45c6-8f5e-98f5c34ee9a1"
 					}
 				},
 				"metadata": {
@@ -6988,20 +8989,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -7074,21 +9073,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "4238e7d0-7aaf-4261-b0d7-3465099cc918"
+						"spark.autotune.trackingId": "a83a3def-ca7b-4b13-871c-b17d295fa5f8"
 					}
 				},
 				"metadata": {
@@ -7102,20 +9101,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -7193,21 +9190,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "56bbbb15-e777-47d9-bae1-035cb816ae78"
+						"spark.autotune.trackingId": "2fb28b6d-2802-4d63-a13e-19d1b3859c2c"
 					}
 				},
 				"metadata": {
@@ -7221,20 +9218,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -7284,7 +9279,8 @@
 						"source": [
 							"kvLinkedService ='your Azure Key Vault Linked Service referenced by this Synapse Workspace'"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -7303,7 +9299,8 @@
 						"source": [
 							"from notebookutils import mssparkutils"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -7345,7 +9342,8 @@
 							"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
 							"        raise e"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -8004,21 +10002,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "dc0d3fb2-d7d7-4e84-899a-ca35260c4906"
+						"spark.autotune.trackingId": "7460c5a6-d11c-4bc9-b218-6b79e07c7441"
 					}
 				},
 				"metadata": {
@@ -8032,20 +10030,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -8377,7 +10373,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "24107359-7f6a-42d1-819f-bc77ea2b34fb"
+						"spark.autotune.trackingId": "b69c1284-9c15-4b15-a717-c78bb1277e61"
 					}
 				},
 				"metadata": {
@@ -8391,20 +10387,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/mediumMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
 						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
+						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"extraHeader": null
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -8425,9 +10419,10 @@
 					{
 						"cell_type": "code",
 						"source": [
-							"%run /common/keyvault-functions {\"kvLinkedService\": \"Your AKV Linked Service Name\"}"
+							"%run /common/keyvault-functions {\"kvLinkedService\": \"Your AKV Linked Service name\"}"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -8445,7 +10440,8 @@
 						"source": [
 							"getSecret(\"SecretName\")"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -8700,21 +10696,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "0ff3d976-d286-423b-9ab6-2c483d3b63e4"
+						"spark.autotune.trackingId": "eee5de17-be16-4ef8-850e-2a3f503ee964"
 					}
 				},
 				"metadata": {
@@ -8728,20 +10724,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -8815,21 +10809,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "618fc417-7f71-474d-a1f5-ebf170e66373"
+						"spark.autotune.trackingId": "1d4f2bae-0bf5-4ce2-9429-7bc08a5f4e63"
 					}
 				},
 				"metadata": {
@@ -8843,20 +10837,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -8879,7 +10871,8 @@
 							"import datetime\r\n",
 							"from pyspark.sql.window import *"
 						],
-						"outputs": []
+						"outputs": [],
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -8981,21 +10974,21 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "smallMO",
+					"referenceName": "mediumMO",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
 					"numExecutors": 2,
 					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a3c8b7ec-b0a9-4591-b66f-b4e2f535eaa9"
+						"spark.autotune.trackingId": "4d0da095-6f43-4b89-bc9c-715d9d87edb2"
 					}
 				},
 				"metadata": {
@@ -9009,20 +11002,18 @@
 						"name": "python"
 					},
 					"a365ComputeOptions": {
-						"id": "/subscriptions/5a5ba4fb-f4e0-4eaf-a2d3-7db71dfd729d/resourceGroups/rg-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapseanalytics01/bigDataPools/smallMO",
-						"name": "smallMO",
+						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+						"name": "mediumMO",
 						"type": "Spark",
-						"endpoint": "https://ba-synapseanalytics01.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net",
-							"authHeader": null
+							"authResource": "https://dev.azuresynapse.net"
 						},
 						"sparkVersion": "3.2",
-						"nodeCount": 10,
-						"cores": 4,
-						"memory": 28,
-						"extraHeader": null
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -9087,7 +11078,7 @@
 							}
 						},
 						"source": [
-							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" : \"dw01\"}"
+							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" : \"dwh01\"}"
 						],
 						"outputs": [],
 						"execution_count": 9
@@ -9125,7 +11116,7 @@
 							}
 						},
 						"source": [
-							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapseanalytics01.sql.azuresynapse.net,1433\",\"database\" :\"dw01\" }"
+							"%run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-kn3acb6lw3vr4.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
 						],
 						"outputs": [],
 						"execution_count": 11
@@ -9275,131 +11266,6 @@
 			"location": "australiaeast"
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/largeGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 12,
-					"minNodeCount": 6
-				},
-				"nodeCount": 0,
-				"nodeSize": "Large",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/xxlargeMO')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 24,
-					"minNodeCount": 12
-				},
-				"nodeCount": 0,
-				"nodeSize": "XXLarge",
-				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/xlargeGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 16,
-					"minNodeCount": 8
-				},
-				"nodeCount": 0,
-				"nodeSize": "XLarge",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/xlargeMO')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 16,
-					"minNodeCount": 8
-				},
-				"nodeCount": 0,
-				"nodeSize": "XLarge",
-				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/mediumGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 8,
-					"minNodeCount": 4
-				},
-				"nodeCount": 0,
-				"nodeSize": "Medium",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/smallMO')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -9413,62 +11279,12 @@
 					"maxNodeCount": 4,
 					"minNodeCount": 3
 				},
-				"nodeCount": 0,
+				"nodeCount": 10,
 				"nodeSize": "Small",
 				"nodeSizeFamily": "MemoryOptimized",
 				"sparkVersion": "3.2",
 				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/largeMO')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 12,
-					"minNodeCount": 6
-				},
-				"nodeCount": 0,
-				"nodeSize": "Large",
-				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/smallGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 4,
-					"minNodeCount": 3
-				},
-				"nodeCount": 0,
-				"nodeSize": "Small",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
+				"sessionLevelPackagesEnabled": true,
 				"annotations": []
 			},
 			"dependsOn": [],
