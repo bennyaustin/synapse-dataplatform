@@ -992,7 +992,11 @@
 							"type": "Expression"
 						},
 						"MaxTransformInstance": 20,
-						"DelayL1TransformationFlag": 0
+						"DelayL1TransformationFlag": 0,
+						"SparkPool": {
+							"value": "@pipeline().parameters.SparkPool",
+							"type": "Expression"
+						}
 					}
 				}
 			}
@@ -1017,6 +1021,10 @@
 			"StreamName": {
 				"type": "string",
 				"defaultValue": "analyze-sec-form10q"
+			},
+			"SparkPool": {
+				"type": "string",
+				"defaultValue": "smallMO"
 			}
 		},
 		"variables": {
