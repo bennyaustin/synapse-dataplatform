@@ -173,7 +173,39 @@
 			"type": "string",
 			"defaultValue": "analyze"
 		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"type": "string",
+			"defaultValue": "smallMO"
+		},
 		"Real Estate Statement Event_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"type": "string",
+			"defaultValue": "inference"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"type": "string",
+			"defaultValue": "AIML-OCR"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"type": "string",
+			"defaultValue": "analyze-sec-form10q"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"type": "string",
+			"defaultValue": "smallMO"
+		},
+		"SEC Form10Q Event_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
 		}
@@ -2618,6 +2650,42 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEach L1Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Master L1Transform Generic",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"SourceSystemName": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								},
+								"StreamName": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								},
+								"MaxTransformInstance": 20,
+								"DelayL1TransformationFlag": 0,
+								"SparkPool": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -2639,6 +2707,9 @@
 					},
 					"StreamName": {
 						"type": "string"
+					},
+					"SparkPool": {
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -2655,7 +2726,8 @@
 				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
 				"[concat(variables('workspaceId'), '/datasets/Drop_JSON')]",
-				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]"
+				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]",
+				"[concat(variables('workspaceId'), '/pipelines/Master L1Transform Generic')]"
 			]
 		},
 		{
@@ -3625,6 +3697,42 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEach L1Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Master L1Transform Generic",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"SourceSystemName": {
+									"value": "@pipeline().parameters.SourceSystemName",
+									"type": "Expression"
+								},
+								"StreamName": {
+									"value": "@pipeline().parameters.StreamName",
+									"type": "Expression"
+								},
+								"MaxTransformInstance": 20,
+								"DelayL1TransformationFlag": 0,
+								"SparkPool": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3651,6 +3759,10 @@
 					"StreamName": {
 						"type": "string",
 						"defaultValue": "analyze-sec-form10q"
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "smallMO"
 					}
 				},
 				"variables": {
@@ -3667,7 +3779,8 @@
 				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
 				"[concat(variables('workspaceId'), '/datasets/AIMLCustomModels_JSON')]",
-				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]"
+				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]",
+				"[concat(variables('workspaceId'), '/pipelines/Master L1Transform Generic')]"
 			]
 		},
 		{
@@ -3930,7 +4043,10 @@
 							},
 							"snapshot": true,
 							"sparkPool": {
-								"referenceName": "smallMO",
+								"referenceName": {
+									"value": "@pipeline().parameters.SparkPool",
+									"type": "Expression"
+								},
 								"type": "BigDataPoolReference"
 							},
 							"conf": {
@@ -3962,7 +4078,7 @@
 							"storedProcedureParameters": {
 								"IngestCount": {
 									"value": {
-										"value": "@activity('L1 Transform').output.status.Output.result.exitValue.IngestCount",
+										"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).IngestCount",
 										"type": "Expression"
 									},
 									"type": "Int32"
@@ -3976,7 +4092,7 @@
 								},
 								"L1TransformCount": {
 									"value": {
-										"value": "@activity('L1 Transform').output.status.Output.result.exitValue.L1TransformCount",
+										"value": "@json(activity('L1 Transform').output.status.Output.result.exitValue).L1TransformCount",
 										"type": "Expression"
 									},
 									"type": "Int32"
@@ -4066,6 +4182,328 @@
 						"linkedServiceName": {
 							"referenceName": "ControlDB",
 							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Get L2 Transform Definition",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Update L1 Instance - Success",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetTransformDefinition_L2]",
+								"storedProcedureParameters": {
+									"DeltaDate": {
+										"type": "DateTime",
+										"value": null
+									},
+									"IngestID": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.IngestID",
+											"type": "Expression"
+										}
+									},
+									"InputType": {
+										"type": "String",
+										"value": null
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "Not Applicable",
+									"Schema": "Not Applicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach L2 Definition",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get L2 Transform Definition",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get L2 Transform Definition').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Insert TransformInstance L2",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[ELT].[InsertTransformInstance_L2]",
+										"storedProcedureParameters": {
+											"CustomParameters": {
+												"value": {
+													"value": "@item().CustomParameters",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"DataFromNumber": {
+												"value": {
+													"value": "@item().DataFromNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"DataFromTimestamp": {
+												"value": {
+													"value": "@item().DataFromTimestamp",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"DataToNumber": {
+												"value": {
+													"value": "@item().DataToNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"DataToTimestamp": {
+												"value": {
+													"value": "@item().DataToTimestamp",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"DeltaName": {
+												"value": {
+													"value": "@item().DeltaName",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"IngestADFPipelineRunID": {
+												"value": {
+													"value": "@item().IngestADFPipelineRunID",
+													"type": "Expression"
+												},
+												"type": "Guid"
+											},
+											"IngestID": {
+												"value": {
+													"value": "@item().IngestID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"InputDWTable": {
+												"value": {
+													"value": "@item().InputDWTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFile": {
+												"value": {
+													"value": "@item().InputFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileDelimiter": {
+												"value": {
+													"value": "@item().InputFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileFolder": {
+												"value": {
+													"value": "@item().InputFileFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"InputFileHeaderFlag": {
+												"value": {
+													"value": "@item().InputFileHeaderFlag",
+													"type": "Expression"
+												},
+												"type": "Boolean"
+											},
+											"InputFileSystem": {
+												"value": {
+													"value": "@item().InputFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"L1TransformADFPipelineRunID": {
+												"value": {
+													"value": "@item().L1TransformADFPipelineRunID",
+													"type": "Expression"
+												},
+												"type": "Guid"
+											},
+											"L1TransformID": {
+												"value": {
+													"value": "@item().L1TransformID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"L2TransformID": {
+												"value": {
+													"value": "@item().L2TransformID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"LastDeltaDate": {
+												"value": {
+													"value": "@item().LastDeltaDate",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"LastDeltaNumber": {
+												"value": {
+													"value": "@item().LastDeltaNumber",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"LookupColumns": {
+												"value": {
+													"value": "@item().LookupColumns",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"MaxRetries": {
+												"value": {
+													"value": "@item().MaxRetries",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											},
+											"NotebookName": {
+												"value": {
+													"value": "@item().NotebookName",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"NotebookPath": {
+												"value": {
+													"value": "@item().NotebookPath",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWStagingTable": {
+												"value": {
+													"value": "@item().OutputDWStagingTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTable": {
+												"value": {
+													"value": "@item().OutputDWTable",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputDWTableWriteMode": {
+												"value": {
+													"value": "@item().OutputDWTableWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFile": {
+												"value": {
+													"value": "@item().OutputL2CuratedFile",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileDelimiter": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileDelimiter",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileFormat": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileFormat",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFileWriteMode": {
+												"value": {
+													"value": "@item().OutputL2CuratedFileWriteMode",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CuratedFolder": {
+												"value": {
+													"value": "@item().OutputL2CuratedFolder",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"OutputL2CurateFileSystem": {
+												"value": {
+													"value": "@item().OutputL2CurateFileSystem",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "ControlDB",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
 						}
 					}
 				],
@@ -4161,6 +4599,10 @@
 					},
 					"DeltaName": {
 						"type": "string"
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "SmallMO"
 					}
 				},
 				"variables": {
@@ -4176,36 +4618,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
-				"[concat(variables('workspaceId'), '/bigDataPools/smallMO')]"
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/L2Transform-Generic-Synapse')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"activities": [
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "Transform/L1 Transform Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-01-19T06:37:38Z"
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Manage-All-SQLPools')]",
@@ -4950,6 +5364,10 @@
 					"DelayL1TransformationFlag": {
 						"type": "int",
 						"defaultValue": 0
+					},
+					"SparkPool": {
+						"type": "string",
+						"defaultValue": "smallMO"
 					}
 				},
 				"folder": {
@@ -5757,7 +6175,7 @@
 			"properties": {
 				"description": "Event grid trigger for real estate statements processed by Form Recognizer custom model ",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -5769,7 +6187,8 @@
 							"SourceFileDropFolder": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
 							"SourceFileDropFile": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
 							"SourceSystemName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
-							"StreamName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]"
+							"StreamName": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]",
+							"SparkPool": "[parameters('Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool')]"
 						}
 					}
 				],
@@ -5779,6 +6198,45 @@
 					"blobPathEndsWith": ".json",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Real Estate Statement Event_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Ingest_AIML_CustomInferenceFile')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SEC Form10Q Event')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Event grid trigger for SEC Form 10Q summarization",
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Ingest_AIML_CustomInferenceFile",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFileDropFileSystem": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem')]",
+							"SourceFileDropFolder": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder')]",
+							"SourceFileDropFile": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile')]",
+							"SourceSystemName": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName')]",
+							"StreamName": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName')]",
+							"SparkPool": "[parameters('SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/inference/blobs/formrecognizer-sec-form10q-json/",
+					"blobPathEndsWith": ".json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('SEC Form10Q Event_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
