@@ -169,6 +169,13 @@
 							},
 							"type": "bool"
 						},
+						"OutputL1CurateFileSystem": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CurateFileSystem",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
 						"": {
 							"value": ""
 						}
