@@ -210,6 +210,48 @@
 								"type": "Expression"
 							},
 							"type": "string"
+						},
+						"OutputDWStagingTable": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWStagingTable",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"LookupColumns": {
+							"value": {
+								"value": "@pipeline().parameters.LookupColumns",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputDWTable": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWTable",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputDWTableWriteMode": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWTableWriteMode",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"ReRunL1TransformFlag": {
+							"value": {
+								"value": "@pipeline().parameters.ReRunL1TransformFlag",
+								"type": "Expression"
+							},
+							"type": "bool"
+						},
+						"DeltaName": {
+							"value": {
+								"value": "@pipeline().parameters.DeltaName",
+								"type": "Expression"
+							},
+							"type": "string"
 						}
 					},
 					"snapshot": true,
