@@ -13,6 +13,22 @@
 				}
 			}
 		],
+		"parameters": {
+			"SourceSystemName": {
+				"type": "string"
+			},
+			"StreamName": {
+				"type": "string"
+			},
+			"MaxTransformInstance": {
+				"type": "int",
+				"defaultValue": 20
+			},
+			"DelayL1TransformationFlag": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
 		"folder": {
 			"name": "Transform/L1 Transform Pipelines"
 		},
