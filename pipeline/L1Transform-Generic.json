@@ -106,9 +106,15 @@
 						"type": "NotebookReference"
 					},
 					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "smallMO",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
 					"conf": {
 						"spark.dynamicAllocation.enabled": false
-					}
+					},
+					"driverSize": "Small"
 				}
 			}
 		],
