@@ -13,6 +13,80 @@
 				}
 			}
 		],
+		"parameters": {
+			"L1TransformInstanceID": {
+				"type": "int"
+			},
+			"L1TransformID": {
+				"type": "int"
+			},
+			"IngestID": {
+				"type": "int"
+			},
+			"NotebookName": {
+				"type": "string"
+			},
+			"NotebookPath": {
+				"type": "string"
+			},
+			"CustomParameters": {
+				"type": "string"
+			},
+			"InputRawFileSystem": {
+				"type": "string"
+			},
+			"InputRawFileFolder": {
+				"type": "string"
+			},
+			"InputRawFile": {
+				"type": "string"
+			},
+			"InputRawFileDelimiter": {
+				"type": "string"
+			},
+			"InputFileHeaderFlag": {
+				"type": "string"
+			},
+			"OutputL1CurateFileSystem": {
+				"type": "string"
+			},
+			"OutputL1CuratedFolder": {
+				"type": "string"
+			},
+			"OutputL1CuratedFile": {
+				"type": "string"
+			},
+			"OutputL1CuratedFileDelimiter": {
+				"type": "string"
+			},
+			"OutputL1CuratedFileFormat": {
+				"type": "string"
+			},
+			"OutputL1CuratedFileWriteMode": {
+				"type": "string"
+			},
+			"OutputDWStagingTable": {
+				"type": "string"
+			},
+			"LookupColumns": {
+				"type": "string"
+			},
+			"OutputDWTable": {
+				"type": "string"
+			},
+			"OutputDWTableWriteMode": {
+				"type": "string"
+			},
+			"ReRunL1TransformFlag": {
+				"type": "bool"
+			},
+			"MaxRetries": {
+				"type": "int"
+			},
+			"DeltaName": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Transform/L1 Transform Pipelines"
 		},
