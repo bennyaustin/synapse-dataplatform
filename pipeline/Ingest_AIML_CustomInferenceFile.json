@@ -993,7 +993,7 @@
 			}
 		},
 		"folder": {
-			"name": "Upload File Pipelines"
+			"name": "Extract and Load/Upload File Pipelines"
 		},
 		"annotations": []
 	}
