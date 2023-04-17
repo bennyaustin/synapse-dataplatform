@@ -1,0 +1,500 @@
+{
+	"name": "L1Transform-Generic",
+	"properties": {
+		"description": "Generic pipeline to execute a single instance of L1 Transform",
+		"activities": [
+			{
+				"name": "Update L1 Instance - Running",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set PipelineRunID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+					"storedProcedureParameters": {
+						"IngestCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformADFPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"L1TransformCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformInstanceId": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformStatus": {
+							"value": "Running",
+							"type": "String"
+						},
+						"MaxRetries": {
+							"value": {
+								"value": "@pipeline().parameters.MaxRetries",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set PipelineRunID",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunID",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "L1 Transform",
+				"type": "SynapseNotebook",
+				"dependsOn": [
+					{
+						"activity": "Update L1 Instance - Running",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": {
+							"value": "@pipeline().parameters.NotebookName",
+							"type": "Expression"
+						},
+						"type": "NotebookReference"
+					},
+					"parameters": {
+						"L1TransformInstanceID": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"L1TransformID ": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"IngestID": {
+							"value": {
+								"value": "@pipeline().parameters.IngestID",
+								"type": "Expression"
+							},
+							"type": "int"
+						},
+						"CustomParameters": {
+							"value": {
+								"value": "@pipeline().parameters.CustomParameters",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileSystem": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileSystem",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileFolder": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileFolder",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFile": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFile",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputRawFileDelimiter": {
+							"value": {
+								"value": "@pipeline().parameters.InputRawFileDelimiter",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"InputFileHeaderFlag": {
+							"value": {
+								"value": "@pipeline().parameters.InputFileHeaderFlag",
+								"type": "Expression"
+							},
+							"type": "bool"
+						},
+						"OutputL1CurateFileSystem": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CurateFileSystem",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputL1CuratedFolder": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CuratedFolder",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputL1CuratedFile": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CuratedFile",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputL1CuratedFileDelimiter": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CuratedFileDelimiter",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputL1CuratedFileFormat": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CuratedFileFormat",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputL1CuratedFileWriteMode": {
+							"value": {
+								"value": "@pipeline().parameters.OutputL1CuratedFileWriteMode",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputDWStagingTable": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWStagingTable",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"LookupColumns": {
+							"value": {
+								"value": "@pipeline().parameters.LookupColumns",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputDWTable": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWTable",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"OutputDWTableWriteMode": {
+							"value": {
+								"value": "@pipeline().parameters.OutputDWTableWriteMode",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"ReRunL1TransformFlag": {
+							"value": {
+								"value": "@pipeline().parameters.ReRunL1TransformFlag",
+								"type": "Expression"
+							},
+							"type": "bool"
+						},
+						"DeltaName": {
+							"value": {
+								"value": "@pipeline().parameters.DeltaName",
+								"type": "Expression"
+							},
+							"type": "string"
+						}
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "smallMO",
+						"type": "BigDataPoolReference"
+					},
+					"conf": {
+						"spark.dynamicAllocation.enabled": false
+					}
+				}
+			},
+			{
+				"name": "Update L1 Instance - Success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "L1 Transform",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+					"storedProcedureParameters": {
+						"IngestCount": {
+							"value": {
+								"value": "@activity('L1 Transform').output.status.Output.result.exitValue.IngestCount",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformADFPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"L1TransformCount": {
+							"value": {
+								"value": "@activity('L1 Transform').output.status.Output.result.exitValue.L1TransformCount",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformInstanceId": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformStatus": {
+							"value": "Success",
+							"type": "String"
+						},
+						"MaxRetries": {
+							"value": {
+								"value": "@pipeline().parameters.MaxRetries",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Update L1 Instance - Failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "L1 Transform",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+					"storedProcedureParameters": {
+						"IngestCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformADFPipelineRunID": {
+							"value": {
+								"value": "@variables('PipelineRunID')",
+								"type": "Expression"
+							},
+							"type": "Guid"
+						},
+						"L1TransformCount": {
+							"value": null,
+							"type": "Int32"
+						},
+						"L1TransformInstanceId": {
+							"value": {
+								"value": "@pipeline().parameters.L1TransformInstanceID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"L1TransformStatus": {
+							"value": "Failure",
+							"type": "String"
+						},
+						"MaxRetries": {
+							"value": {
+								"value": "@pipeline().parameters.MaxRetries",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ControlDB",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"L1TransformInstanceID": {
+				"type": "int",
+				"defaultValue": 6
+			},
+			"L1TransformID": {
+				"type": "int",
+				"defaultValue": 8
+			},
+			"IngestID": {
+				"type": "int",
+				"defaultValue": 5
+			},
+			"NotebookName": {
+				"type": "string",
+				"defaultValue": "L1Transform-SEC-Form10Q"
+			},
+			"NotebookPath": {
+				"type": "string",
+				"defaultValue": "L1Transform"
+			},
+			"CustomParameters": {
+				"type": "string"
+			},
+			"InputRawFileSystem": {
+				"type": "string",
+				"defaultValue": "raw-bronze"
+			},
+			"InputRawFileFolder": {
+				"type": "string",
+				"defaultValue": "sec-form10q/2023/04"
+			},
+			"InputRawFile": {
+				"type": "string",
+				"defaultValue": "2023-04-15_204450_sec-form10q.json"
+			},
+			"InputRawFileDelimiter": {
+				"type": "string"
+			},
+			"InputFileHeaderFlag": {
+				"type": "bool",
+				"defaultValue": false
+			},
+			"OutputL1CurateFileSystem": {
+				"type": "string",
+				"defaultValue": "curated-silver"
+			},
+			"OutputL1CuratedFolder": {
+				"type": "string",
+				"defaultValue": "sec-form10q/2023/04"
+			},
+			"OutputL1CuratedFile": {
+				"type": "string",
+				"defaultValue": "standardized_2023-04-15_204525_sec-form10q.json"
+			},
+			"OutputL1CuratedFileDelimiter": {
+				"type": "string"
+			},
+			"OutputL1CuratedFileFormat": {
+				"type": "string",
+				"defaultValue": "json"
+			},
+			"OutputL1CuratedFileWriteMode": {
+				"type": "string",
+				"defaultValue": "overwrite"
+			},
+			"OutputDWStagingTable": {
+				"type": "string"
+			},
+			"LookupColumns": {
+				"type": "string"
+			},
+			"OutputDWTable": {
+				"type": "string"
+			},
+			"OutputDWTableWriteMode": {
+				"type": "string"
+			},
+			"ReRunL1TransformFlag": {
+				"type": "bool",
+				"defaultValue": false
+			},
+			"MaxRetries": {
+				"type": "int",
+				"defaultValue": 3
+			},
+			"DeltaName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineRunID": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Transform/L1 Transform Pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-01-19T06:37:38Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
