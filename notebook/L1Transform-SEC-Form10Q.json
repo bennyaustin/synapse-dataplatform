@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1e20f9d9-748b-4c2e-9d33-a8f9e6c30a1f"
+				"spark.autotune.trackingId": "7edcf4ce-60da-4250-b8b3-85e15b788ac3"
 			}
 		},
 		"metadata": {
@@ -245,6 +245,7 @@
 					"from pyspark.sql.functions import *\r\n",
 					"from pyspark.sql.types import *\r\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+					"ingestCount = df.count()\r\n",
 					"\r\n",
 					"# df.printSchema()\r\n",
 					"\r\n",
@@ -419,9 +420,46 @@
 					}
 				},
 				"source": [
+					"l1TransformCount = dfFinal.count()\r\n",
 					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
 				"execution_count": 9
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Return Values"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import json\r\n",
+					"mssparkutils.notebook.exit(json.dumps({\r\n",
+					"  \"IngestCount\": ingestCount,\r\n",
+					"  \"L1TransformCount\": l1TransformCount\r\n",
+					"}))\r\n",
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
