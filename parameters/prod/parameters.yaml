@@ -1,10 +1,12 @@
 workspaceName: ba-synapse01-o5rium4bfcf6a
 ControlDB_connectionString: Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-o5rium4bfcf6a.database.windows.net;Initial Catalog=controlDB
+AIMLCustomModels_properties_typeProperties_serviceEndpoint": https://bacustmodelstorage01q575.blob.core.windows.net/
 AtlasREST_properties_typeProperties_url: https://ba-purview01-6spfx5oytiivq.purview.azure.com
 AtlasREST_properties_typeProperties_servicePrincipalId: 5f2dc546-5728-4896-8055-a4853c8cc26b
 AtlasREST_properties_typeProperties_tenant: 45a126ff-7fc0-4528-ac6b-eefad687db2d
 AtlasREST_properties_typeProperties_aadResourceId: https://purview.azure.net
 Bronze_properties_typeProperties_url: https://badatalake01o5rium4bfcf6.dfs.core.windows.net/
+DropZone_properties_typeProperties_url": https://badatalake01o5rium4bfcf6.dfs.core.windows.net/
 REST_properties_typeProperties_url: '@{linkedService().BaseURL}'
 REST_properties_typeProperties_servicePrincipalId: '@{linkedService().ServicePrincipalID}'
 REST_properties_typeProperties_tenant: '@{linkedService().TenantID}'
