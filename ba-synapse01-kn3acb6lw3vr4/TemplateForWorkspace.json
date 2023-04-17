@@ -183,15 +183,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/smallMO')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/Copy from REST API')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -1648,7 +1639,7 @@
 					}
 				},
 				"folder": {
-					"name": "REST API Pipelines"
+					"name": "Extract and Load/REST API Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:39:23Z"
@@ -2656,7 +2647,7 @@
 					}
 				},
 				"folder": {
-					"name": "Upload File Pipelines"
+					"name": "Extract and Load/Upload File Pipelines"
 				},
 				"annotations": []
 			},
@@ -3668,7 +3659,7 @@
 					}
 				},
 				"folder": {
-					"name": "Upload File Pipelines"
+					"name": "Extract and Load/Upload File Pipelines"
 				},
 				"annotations": []
 			},
@@ -3677,6 +3668,515 @@
 				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
 				"[concat(variables('workspaceId'), '/datasets/AIMLCustomModels_JSON')]",
 				"[concat(variables('workspaceId'), '/datasets/Bronze_JSON')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/L1Transform-Generic')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "Generic pipeline to execute a single instance of L1 Transform",
+				"activities": [
+					{
+						"name": "Update L1 Instance - Running",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Set PipelineRunID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Running",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set PipelineRunID",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunID",
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "L1 Transform",
+						"type": "SynapseNotebook",
+						"dependsOn": [
+							{
+								"activity": "Update L1 Instance - Running",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": {
+									"value": "@pipeline().parameters.NotebookName",
+									"type": "Expression"
+								},
+								"type": "NotebookReference"
+							},
+							"parameters": {
+								"L1TransformInstanceID": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"L1TransformID ": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"IngestID": {
+									"value": {
+										"value": "@pipeline().parameters.IngestID",
+										"type": "Expression"
+									},
+									"type": "int"
+								},
+								"CustomParameters": {
+									"value": {
+										"value": "@pipeline().parameters.CustomParameters",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileSystem": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileSystem",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileFolder": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileFolder",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFile": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFile",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputRawFileDelimiter": {
+									"value": {
+										"value": "@pipeline().parameters.InputRawFileDelimiter",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"InputFileHeaderFlag": {
+									"value": {
+										"value": "@pipeline().parameters.InputFileHeaderFlag",
+										"type": "Expression"
+									},
+									"type": "bool"
+								},
+								"OutputL1CurateFileSystem": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CurateFileSystem",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFolder": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFolder",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFile": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFile",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileDelimiter": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileDelimiter",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileFormat": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileFormat",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputL1CuratedFileWriteMode": {
+									"value": {
+										"value": "@pipeline().parameters.OutputL1CuratedFileWriteMode",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWStagingTable": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWStagingTable",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"LookupColumns": {
+									"value": {
+										"value": "@pipeline().parameters.LookupColumns",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWTable": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWTable",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"OutputDWTableWriteMode": {
+									"value": {
+										"value": "@pipeline().parameters.OutputDWTableWriteMode",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"ReRunL1TransformFlag": {
+									"value": {
+										"value": "@pipeline().parameters.ReRunL1TransformFlag",
+										"type": "Expression"
+									},
+									"type": "bool"
+								},
+								"DeltaName": {
+									"value": {
+										"value": "@pipeline().parameters.DeltaName",
+										"type": "Expression"
+									},
+									"type": "string"
+								}
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": "smallMO",
+								"type": "BigDataPoolReference"
+							},
+							"conf": {
+								"spark.dynamicAllocation.enabled": false
+							}
+						}
+					},
+					{
+						"name": "Update L1 Instance - Success",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "L1 Transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": {
+										"value": "@activity('L1 Transform').output.status.Output.result.exitValue.IngestCount",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": {
+										"value": "@activity('L1 Transform').output.status.Output.result.exitValue.L1TransformCount",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Success",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Update L1 Instance - Failure",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "L1 Transform",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[ELT].[UpdateTransformInstance_L1]",
+							"storedProcedureParameters": {
+								"IngestCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformADFPipelineRunID": {
+									"value": {
+										"value": "@variables('PipelineRunID')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								},
+								"L1TransformCount": {
+									"value": null,
+									"type": "Int32"
+								},
+								"L1TransformInstanceId": {
+									"value": {
+										"value": "@pipeline().parameters.L1TransformInstanceID",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"L1TransformStatus": {
+									"value": "Failure",
+									"type": "String"
+								},
+								"MaxRetries": {
+									"value": {
+										"value": "@pipeline().parameters.MaxRetries",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ControlDB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"L1TransformInstanceID": {
+						"type": "int",
+						"defaultValue": 6
+					},
+					"L1TransformID": {
+						"type": "int",
+						"defaultValue": 8
+					},
+					"IngestID": {
+						"type": "int",
+						"defaultValue": 5
+					},
+					"NotebookName": {
+						"type": "string",
+						"defaultValue": "L1Transform-SEC-Form10Q"
+					},
+					"NotebookPath": {
+						"type": "string",
+						"defaultValue": "L1Transform"
+					},
+					"CustomParameters": {
+						"type": "string"
+					},
+					"InputRawFileSystem": {
+						"type": "string",
+						"defaultValue": "raw-bronze"
+					},
+					"InputRawFileFolder": {
+						"type": "string",
+						"defaultValue": "sec-form10q/2023/04"
+					},
+					"InputRawFile": {
+						"type": "string",
+						"defaultValue": "2023-04-15_204450_sec-form10q.json"
+					},
+					"InputRawFileDelimiter": {
+						"type": "string"
+					},
+					"InputFileHeaderFlag": {
+						"type": "bool",
+						"defaultValue": false
+					},
+					"OutputL1CurateFileSystem": {
+						"type": "string",
+						"defaultValue": "curated-silver"
+					},
+					"OutputL1CuratedFolder": {
+						"type": "string",
+						"defaultValue": "sec-form10q/2023/04"
+					},
+					"OutputL1CuratedFile": {
+						"type": "string",
+						"defaultValue": "standardized_2023-04-15_204525_sec-form10q.json"
+					},
+					"OutputL1CuratedFileDelimiter": {
+						"type": "string"
+					},
+					"OutputL1CuratedFileFormat": {
+						"type": "string",
+						"defaultValue": "json"
+					},
+					"OutputL1CuratedFileWriteMode": {
+						"type": "string",
+						"defaultValue": "overwrite"
+					},
+					"OutputDWStagingTable": {
+						"type": "string"
+					},
+					"LookupColumns": {
+						"type": "string"
+					},
+					"OutputDWTable": {
+						"type": "string"
+					},
+					"OutputDWTableWriteMode": {
+						"type": "string"
+					},
+					"ReRunL1TransformFlag": {
+						"type": "bool",
+						"defaultValue": false
+					},
+					"MaxRetries": {
+						"type": "int",
+						"defaultValue": 3
+					},
+					"DeltaName": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineRunID": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Transform/L1 Transform Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-01-19T06:37:38Z"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ControlDB')]",
+				"[concat(variables('workspaceId'), '/bigDataPools/smallMO')]"
 			]
 		},
 		{
@@ -3700,7 +4200,7 @@
 					"cancelAfter": {}
 				},
 				"folder": {
-					"name": "Transform Pipelines"
+					"name": "Transform/L1 Transform Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:37:38Z"
@@ -4215,7 +4715,7 @@
 					}
 				},
 				"folder": {
-					"name": "REST API Pipelines"
+					"name": "Extract and Load/REST API Pipelines"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-01-19T06:39:25Z"
@@ -4233,12 +4733,200 @@
 				"description": "Generic Level 1 Transformation Pipeline",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Get L1 Instances",
+						"type": "Lookup",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[ELT].[GetTransformInstance_L1]",
+								"storedProcedureParameters": {
+									"DelayL1TransformationFlag": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.DelayL1TransformationFlag",
+											"type": "Expression"
+										}
+									},
+									"L1TransformInstanceId": {
+										"type": "Int32",
+										"value": null
+									},
+									"MaxTransformInstance": {
+										"type": "Int32",
+										"value": {
+											"value": "@pipeline().parameters.MaxTransformInstance",
+											"type": "Expression"
+										}
+									},
+									"SourceSystemName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.SourceSystemName",
+											"type": "Expression"
+										}
+									},
+									"StreamName": {
+										"type": "String",
+										"value": {
+											"value": "@pipeline().parameters.StreamName",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ControlDB_Dataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"Table": "Not Applicable",
+									"Schema": "Not Applicable"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach L1 Instance",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get L1 Instances",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get L1 Instances').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Run L1 Transform Pipeline",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "L1Transform-Generic",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"L1TransformInstanceID": {
+												"value": "@item().L1TransformInstanceID",
+												"type": "Expression"
+											},
+											"L1TransformID": {
+												"value": "@item().L1TransformID",
+												"type": "Expression"
+											},
+											"IngestID": {
+												"value": "@item().IngestID",
+												"type": "Expression"
+											},
+											"NotebookName": {
+												"value": "@item().NotebookName",
+												"type": "Expression"
+											},
+											"NotebookPath": {
+												"value": "@item().NotebookPath",
+												"type": "Expression"
+											},
+											"CustomParameters": {
+												"value": "@item().CustomParameters",
+												"type": "Expression"
+											},
+											"InputRawFileSystem": {
+												"value": "@item().InputRawFileSystem",
+												"type": "Expression"
+											},
+											"InputRawFileFolder": {
+												"value": "@item().InputRawFileFolder",
+												"type": "Expression"
+											},
+											"InputRawFile": {
+												"value": "@item().InputRawFile",
+												"type": "Expression"
+											},
+											"InputRawFileDelimiter": {
+												"value": "@item().InputRawFileDelimiter",
+												"type": "Expression"
+											},
+											"InputFileHeaderFlag": {
+												"value": "@item().InputFileHeaderFlag",
+												"type": "Expression"
+											},
+											"OutputL1CurateFileSystem": {
+												"value": "@item().OutputL1CurateFileSystem",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFolder": {
+												"value": "@item().OutputL1CuratedFolder",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFile": {
+												"value": "@item().OutputL1CuratedFile",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileDelimiter": {
+												"value": "@item().OutputL1CuratedFileDelimiter",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileFormat": {
+												"value": "@item().OutputL1CuratedFileFormat",
+												"type": "Expression"
+											},
+											"OutputL1CuratedFileWriteMode": {
+												"value": "@item().OutputL1CuratedFileWriteMode",
+												"type": "Expression"
+											},
+											"OutputDWStagingTable": {
+												"value": "@item().OutputDWStagingTable",
+												"type": "Expression"
+											},
+											"LookupColumns": {
+												"value": "@item().LookupColumns",
+												"type": "Expression"
+											},
+											"OutputDWTable": {
+												"value": "@item().OutputDWTable",
+												"type": "Expression"
+											},
+											"OutputDWTableWriteMode": {
+												"value": "@item().OutputDWTableWriteMode",
+												"type": "Expression"
+											},
+											"ReRunL1TransformFlag": {
+												"value": "@item().ReRunL1TransformFlag",
+												"type": "Expression"
+											},
+											"MaxRetries": {
+												"value": "@item().MaxRetries",
+												"type": "Expression"
+											},
+											"DeltaName": {
+												"value": "@item().DeltaName",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
 						}
 					}
 				],
@@ -4246,12 +4934,33 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"SourceSystemName": {
+						"type": "string",
+						"defaultValue": "AIML-OCR"
+					},
+					"StreamName": {
+						"type": "string",
+						"defaultValue": "analyze-sec-form10q"
+					},
+					"MaxTransformInstance": {
+						"type": "int",
+						"defaultValue": 20
+					},
+					"DelayL1TransformationFlag": {
+						"type": "int",
+						"defaultValue": 0
+					}
+				},
 				"folder": {
-					"name": "Transform Pipelines"
+					"name": "Transform/L1 Transform Pipelines"
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/ControlDB_Dataset')]",
+				"[concat(variables('workspaceId'), '/pipelines/L1Transform-Generic')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/SQLPool-Pause-Resume-Scale')]",
@@ -5149,26 +5858,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "-- This is auto-generated code\nSELECT TOP 100\n    jsonContent\n/* --> place the keys that you see in JSON documents in the WITH clause:\n       , JSON_VALUE (jsonContent, '$.key1') AS header1\n       , JSON_VALUE (jsonContent, '$.key2') AS header2\n*/\nFROM\n    OPENROWSET(\n        BULK 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q/2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        FORMAT = 'CSV',\n        FIELDQUOTE = '0x0b',\n        FIELDTERMINATOR ='0x0b',\n        ROWTERMINATOR = '0x0b'\n    )\n    WITH (\n        jsonContent varchar(MAX)\n    ) AS [result]\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "master",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/Serverless - Query Parquet')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -5195,7 +5884,7 @@
 			"properties": {
 				"description": "SQL Script to query JSON files in datalake",
 				"content": {
-					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-kn3acb6lw3vr4')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='sec-form10q')\n    CREATE EXTERNAL DATA SOURCE [sec-form10q]\n    WITH (    LOCATION   = 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-kn3acb6lw3vr4]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n    ) \n\n\n    --Create View\n    IF NOT EXISTS (select 1 from sys.views where name ='vwSecForm10Q')\n        CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'sec-form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n            ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n            ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n            ) \n--Query View\nselect * from vwSecForm10Q\n\n",
+					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-kn3acb6lw3vr4')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-kn3acb6lw3vr4]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='sec-form10q')\n    CREATE EXTERNAL DATA SOURCE [sec-form10q]\n    WITH (    LOCATION   = 'https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/curated-silver/sec-form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-kn3acb6lw3vr4]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2023/04/standardized_2023-04-16_141247_sec-form10q.json/part-00000-f814e8bd-a2fe-4bbd-82d7-acef0a1625af-c000.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'sec-form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n    ) \n\n    DROP VIEW vwSecForm10Q\n    GO\n    --Create View\n    CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'sec-form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(MAX) '$.mgmt_analysis_summary'\n            ,risk_disclosure_summary varchar(MAX) '$.risk_disclosure_summary'\n            ,controls_procedures_summary varchar(MAX) '$.controls_procedures_summary'\n            ) \n--Query View\nselect * from vwSecForm10Q\n\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -5476,7 +6165,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "19fcb895-15d2-41dc-ad8c-d948be65da9d"
+						"spark.autotune.trackingId": "b7ff3dcb-4c45-4800-981e-e86aa41b2e59"
 					}
 				},
 				"metadata": {
@@ -5696,6 +6385,8 @@
 						},
 						"source": [
 							"df = readFile(container=InputRawFileSystem, path= InputRawFileFolder + '/' + InputRawFile, colSeparator=InputRawFileDelimiter, headerFlag=InputFileHeaderFlag)\r\n",
+							"ingestCount = df.count()\r\n",
+							"\r\n",
 							"ct=CommonTransforms(df)\r\n",
 							"\r\n",
 							"# Remove duplicates\r\n",
@@ -5738,6 +6429,8 @@
 							"stgSchemaName = OutputDWStagingTable[0:posStg]\r\n",
 							"stgTableName = OutputDWStagingTable[posStg+1:]\r\n",
 							"\r\n",
+							"l1TransformCount = df.count()\r\n",
+							"\r\n",
 							"if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\r\n",
 							"    upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \r\n",
 							"else:\r\n",
@@ -5745,6 +6438,42 @@
 						],
 						"outputs": [],
 						"execution_count": 79
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))"
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -5776,7 +6505,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2953cae2-a214-4ad2-8a95-f03f67108358"
+						"spark.autotune.trackingId": "c9aa0e07-a944-4bd3-afe9-eddb7d50ac90"
 					}
 				},
 				"metadata": {
@@ -5926,6 +6655,7 @@
 						"source": [
 							"import pyspark.sql.functions \r\n",
 							"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+							"ingestCount = df.count()\r\n",
 							"\r\n",
 							"# extract datapoints of interest and explode array\r\n",
 							"\r\n",
@@ -5946,10 +6676,47 @@
 							"df.printSchema()\r\n",
 							"\r\n",
 							"#write flattened json to curated zone of data lake\r\n",
+							"l1TransformCount = df.count()\r\n",
 							"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 						],
 						"outputs": [],
 						"execution_count": 93
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values   "
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))"
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -5981,7 +6748,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1e20f9d9-748b-4c2e-9d33-a8f9e6c30a1f"
+						"spark.autotune.trackingId": "7edcf4ce-60da-4250-b8b3-85e15b788ac3"
 					}
 				},
 				"metadata": {
@@ -6208,6 +6975,7 @@
 							"from pyspark.sql.functions import *\r\n",
 							"from pyspark.sql.types import *\r\n",
 							"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+							"ingestCount = df.count()\r\n",
 							"\r\n",
 							"# df.printSchema()\r\n",
 							"\r\n",
@@ -6385,10 +7153,48 @@
 							}
 						},
 						"source": [
+							"l1TransformCount = dfFinal.count()\r\n",
 							"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 						],
 						"outputs": [],
 						"execution_count": 9
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Return Values"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import json\r\n",
+							"mssparkutils.notebook.exit(json.dumps({\r\n",
+							"  \"IngestCount\": ingestCount,\r\n",
+							"  \"L1TransformCount\": l1TransformCount\r\n",
+							"}))\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
