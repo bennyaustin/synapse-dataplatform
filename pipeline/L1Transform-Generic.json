@@ -256,7 +256,10 @@
 					},
 					"snapshot": true,
 					"sparkPool": {
-						"referenceName": "smallMO",
+						"referenceName": {
+							"value": "@pipeline().parameters.SparkPool",
+							"type": "Expression"
+						},
 						"type": "BigDataPoolReference"
 					},
 					"conf": {
@@ -715,6 +718,10 @@
 			},
 			"DeltaName": {
 				"type": "string"
+			},
+			"SparkPool": {
+				"type": "string",
+				"defaultValue": "SmallMO"
 			}
 		},
 		"variables": {
