@@ -217,6 +217,10 @@
 			"DelayL1TransformationFlag": {
 				"type": "int",
 				"defaultValue": 0
+			},
+			"SparkPool": {
+				"type": "string",
+				"defaultValue": "smallMO"
 			}
 		},
 		"folder": {
