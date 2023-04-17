@@ -216,7 +216,7 @@
 				"type": "string"
 			},
 			"InputFileHeaderFlag": {
-				"type": "string"
+				"type": "bool"
 			},
 			"OutputL1CurateFileSystem": {
 				"type": "string"
