@@ -66,6 +66,26 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "ForEach L1 Instance",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get L1 Instances",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get L1 Instances').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true
+				}
 			}
 		],
 		"parameters": {

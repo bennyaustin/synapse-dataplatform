@@ -1,0 +1,23 @@
+{
+	"name": "L1Transform-Generic",
+	"properties": {
+		"description": "Generic pipeline to execute a single instance of L1 Transform",
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"folder": {
+			"name": "Transform/L1 Transform Pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-01-19T06:37:38Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
