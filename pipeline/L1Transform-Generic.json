@@ -77,6 +77,39 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "L1 Notebook",
+				"type": "SynapseNotebook",
+				"dependsOn": [
+					{
+						"activity": "Update L1 Instance - Running",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": {
+							"value": "@pipeline().parameters.NotebookName",
+							"type": "Expression"
+						},
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"conf": {
+						"spark.dynamicAllocation.enabled": false
+					}
+				}
 			}
 		],
 		"parameters": {
