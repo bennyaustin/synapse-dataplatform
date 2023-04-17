@@ -488,9 +488,6 @@
 		"variables": {
 			"PipelineRunID": {
 				"type": "String"
-			},
-			"ReturnValue": {
-				"type": "String"
 			}
 		},
 		"folder": {
