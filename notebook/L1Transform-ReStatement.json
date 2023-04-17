@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2953cae2-a214-4ad2-8a95-f03f67108358"
+				"spark.autotune.trackingId": "b5bfe5cc-9dbc-4919-afdb-1202e5b2d057"
 			}
 		},
 		"metadata": {
@@ -170,6 +170,7 @@
 				"source": [
 					"import pyspark.sql.functions \r\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
+					"ingestCount = df.count()\r\n",
 					"\r\n",
 					"# extract datapoints of interest and explode array\r\n",
 					"\r\n",
@@ -190,9 +191,32 @@
 					"df.printSchema()\r\n",
 					"\r\n",
 					"#write flattened json to curated zone of data lake\r\n",
+					"l1TransformCount = df.count()\r\n",
 					"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
 				"execution_count": 93
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import json\r\n",
+					"mssparkutils.notebook.exit(json.dumps({\r\n",
+					"  \"IngestCount\": ingestCount,\r\n",
+					"  \"L1TransformCount\": l1TransformCount\r\n",
+					"}))"
+				],
+				"execution_count": null
 			}
 		]
 	}
