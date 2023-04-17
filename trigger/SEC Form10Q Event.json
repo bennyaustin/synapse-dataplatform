@@ -1,7 +1,7 @@
 {
-	"name": "Real Estate Statement Event",
+	"name": "SEC Form10Q Event",
 	"properties": {
-		"description": "Event grid trigger for real estate statements processed by Form Recognizer custom model ",
+		"description": "Event grid trigger for SEC Form 10Q summarization",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
@@ -15,14 +15,14 @@
 					"SourceFileDropFolder": "@triggerBody().folderPath",
 					"SourceFileDropFile": "@triggerBody().fileName",
 					"SourceSystemName": "AIML-OCR",
-					"StreamName": "analyze",
+					"StreamName": "analyze-sec-form10q",
 					"SparkPool": "smallMO"
 				}
 			}
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
+			"blobPathBeginsWith": "/inference/blobs/formrecognizer-sec-form10q-json/",
 			"blobPathEndsWith": ".json",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575",

@@ -963,6 +963,42 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "L1 Transform",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ForEach L1Transform",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Master L1Transform Generic",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"SourceSystemName": {
+							"value": "@pipeline().parameters.SourceSystemName",
+							"type": "Expression"
+						},
+						"StreamName": {
+							"value": "@pipeline().parameters.StreamName",
+							"type": "Expression"
+						},
+						"MaxTransformInstance": 20,
+						"DelayL1TransformationFlag": 0,
+						"SparkPool": {
+							"value": "@pipeline().parameters.SparkPool",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -985,6 +1021,10 @@
 			"StreamName": {
 				"type": "string",
 				"defaultValue": "analyze-sec-form10q"
+			},
+			"SparkPool": {
+				"type": "string",
+				"defaultValue": "smallMO"
 			}
 		},
 		"variables": {
