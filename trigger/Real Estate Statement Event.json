@@ -15,7 +15,8 @@
 					"SourceFileDropFolder": "@triggerBody().folderPath",
 					"SourceFileDropFile": "@triggerBody().fileName",
 					"SourceSystemName": "AIML-OCR",
-					"StreamName": "analyze"
+					"StreamName": "analyze",
+					"SparkPool": "smallMO"
 				}
 			}
 		],
