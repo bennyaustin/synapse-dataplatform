@@ -1913,7 +1913,7 @@
 										"type": "Expression"
 									},
 									"Folder": {
-										"value": "@pipeline().parameters.SourceFileDropFolder",
+										"value": "@replace(pipeline().parameters.SourceFileDropFolder,concat(pipeline().parameters.SourceFileDropFileSystem,'/'),'')",
 										"type": "Expression"
 									},
 									"File": {
@@ -2960,7 +2960,7 @@
 										"type": "Expression"
 									},
 									"Folder": {
-										"value": "@pipeline().parameters.SourceFileDropFolder",
+										"value": "@replace(pipeline().parameters.SourceFileDropFolder,concat(pipeline().parameters.SourceFileDropFileSystem,'/'),'')",
 										"type": "Expression"
 									},
 									"File": {
@@ -6306,8 +6306,8 @@
 						"language": "sql"
 					},
 					"currentConnection": {
-						"databaseName": "dwh01",
-						"poolName": "dwh01"
+						"databaseName": "dlsql01",
+						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
 				},
@@ -7206,7 +7206,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "7edcf4ce-60da-4250-b8b3-85e15b788ac3"
+						"spark.autotune.trackingId": "0de3ba68-bd5b-4b97-9b9d-32bd9f3fe06b"
 					}
 				},
 				"metadata": {
@@ -7376,28 +7376,28 @@
 							}
 						},
 						"source": [
-							"# Parameters for Testing only, should be commented off\r\n",
-							"L1TransformInstanceID = 6\r\n",
-							"L1TransformID = 8\r\n",
-							"IngestID = 5\r\n",
-							"CustomParameters = None\r\n",
-							"InputRawFileSystem = 'raw-bronze'\r\n",
-							"InputRawFileFolder = 'sec-form10q/2023/04'\r\n",
-							"InputRawFile = '2023-04-16_141247_sec-form10q.json'\r\n",
-							"InputRawFileDelimiter = None\r\n",
-							"InputFileHeaderFlag = None\r\n",
-							"OutputL1CurateFileSystem = 'curated-silver'\r\n",
-							"OutputL1CuratedFolder = 'sec-form10q/2023/04'\r\n",
-							"OutputL1CuratedFile = 'standardized_2023-04-16_141247_sec-form10q.json'\r\n",
-							"OutputL1CuratedFileDelimiter = None\r\n",
-							"OutputL1CuratedFileFormat = 'json'\r\n",
-							"OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-							"OutputDWStagingTable = '[stg].[merge_sec_form10q]'\r\n",
-							"LookupColumns = ['org_name','reporting_quarter']\r\n",
-							"OutputDWTable = '[sec].[form10q]'\r\n",
-							"OutputDWTableWriteMode = 'append'\r\n",
-							"ReRunL1TransformFlag = None\r\n",
-							"DeltaName = None"
+							"# # Parameters for Testing only, should be commented off\r\n",
+							"# L1TransformInstanceID = 6\r\n",
+							"# L1TransformID = 8\r\n",
+							"# IngestID = 5\r\n",
+							"# CustomParameters = None\r\n",
+							"# InputRawFileSystem = 'raw-bronze'\r\n",
+							"# InputRawFileFolder = 'sec-form10q/2023/04'\r\n",
+							"# InputRawFile = '2023-04-16_141247_sec-form10q.json'\r\n",
+							"# InputRawFileDelimiter = None\r\n",
+							"# InputFileHeaderFlag = None\r\n",
+							"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
+							"# OutputL1CuratedFolder = 'sec-form10q/2023/04'\r\n",
+							"# OutputL1CuratedFile = 'standardized_2023-04-16_141247_sec-form10q.json'\r\n",
+							"# OutputL1CuratedFileDelimiter = None\r\n",
+							"# OutputL1CuratedFileFormat = 'json'\r\n",
+							"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
+							"# OutputDWStagingTable = '[stg].[merge_sec_form10q]'\r\n",
+							"# LookupColumns = ['org_name','reporting_quarter']\r\n",
+							"# OutputDWTable = '[sec].[form10q]'\r\n",
+							"# OutputDWTableWriteMode = 'append'\r\n",
+							"# ReRunL1TransformFlag = None\r\n",
+							"# DeltaName = None"
 						],
 						"outputs": [],
 						"execution_count": 5
