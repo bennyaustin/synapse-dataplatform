@@ -397,55 +397,69 @@
 		],
 		"parameters": {
 			"L1TransformInstanceID": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 6
 			},
 			"L1TransformID": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 8
 			},
 			"IngestID": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 5
 			},
 			"NotebookName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "L1Transform-SEC-Form10Q"
 			},
 			"NotebookPath": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "L1Transform"
 			},
 			"CustomParameters": {
 				"type": "string"
 			},
 			"InputRawFileSystem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "raw-bronze"
 			},
 			"InputRawFileFolder": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "sec-form10q/2023/04"
 			},
 			"InputRawFile": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "2023-04-15_204450_sec-form10q.json"
 			},
 			"InputRawFileDelimiter": {
 				"type": "string"
 			},
 			"InputFileHeaderFlag": {
-				"type": "bool"
+				"type": "bool",
+				"defaultValue": false
 			},
 			"OutputL1CurateFileSystem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "curated-silver"
 			},
 			"OutputL1CuratedFolder": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "sec-form10q/2023/04"
 			},
 			"OutputL1CuratedFile": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "standardized_2023-04-15_204525_sec-form10q.json"
 			},
 			"OutputL1CuratedFileDelimiter": {
 				"type": "string"
 			},
 			"OutputL1CuratedFileFormat": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "json"
 			},
 			"OutputL1CuratedFileWriteMode": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "overwrite"
 			},
 			"OutputDWStagingTable": {
 				"type": "string"
@@ -460,10 +474,12 @@
 				"type": "string"
 			},
 			"ReRunL1TransformFlag": {
-				"type": "bool"
+				"type": "bool",
+				"defaultValue": false
 			},
 			"MaxRetries": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 3
 			},
 			"DeltaName": {
 				"type": "string"
