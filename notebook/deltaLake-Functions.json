@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a703e272-5c13-494f-ac46-613673e198cf"
+				"spark.autotune.trackingId": "920ad21d-9e9d-4efa-ab06-99fd0269d6b8"
 			}
 		},
 		"metadata": {
@@ -65,6 +65,41 @@
 				},
 				"source": [
 					"deltaZone = GetLinkedServiceEndpoint(\"DataZone\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def readDeltaTable(TableName):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: readDeltaTable\r\n",
+					"    # Returns a Delta Table records as a dataframe\r\n",
+					"    # \r\n",
+					"    # Parameters:\r\n",
+					"    # TableName = A Valid Delta Table Name\r\n",
+					"    #\r\n",
+					"    # Returns:\r\n",
+					"    # Dataframe containing all rows and columns returned by query from Delta Lake\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    tableExist = False\r\n",
+					"    try:\r\n",
+					"        df = spark.read.table(TableName)\r\n",
+					"        tableExist = True\r\n",
+					"    except:\r\n",
+					"        print(\"Table does not exist - \" + TableName)\r\n",
+					"    return df"
 				],
 				"execution_count": null
 			},
