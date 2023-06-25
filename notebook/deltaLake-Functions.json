@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "68e60c40-79cb-4216-aa9b-a3afddcf4335"
+				"spark.autotune.trackingId": "963b867f-3d54-4978-8cb4-578f9bf54a08"
 			}
 		},
 		"metadata": {
@@ -294,6 +294,91 @@
 					"    elif pathExists == False and tableExists == False:\r\n",
 					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")\r\n",
 					""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def DeltaTableDeployment(TableName, StorageZoneLinkedServiceName, FileSystem, Folder, Schema):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: DeltaTableDeployment\r\n",
+					"    # Performs Delta Table Schema Deployments\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # TableName = DeltaTable Name\r\n",
+					"    # StorageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+					"    # FileSystem = FileSystem used for creating Delta table schema and merging new data\r\n",
+					"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
+					"    # Schema = Delta Table Schema\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # \r\n",
+					"    # ########################################################################################################################## \r\n",
+					"\r\n",
+					"    #Creates an Empty Dataframe with the desired Schema\r\n",
+					"    dfSchema = spark.createDataFrame([], Schema)\r\n",
+					"\r\n",
+					"    #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, deltapath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, TableName)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"\r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"        dfCurrentTable = spark.read.table(TableName)\r\n",
+					"\r\n",
+					"        if dfSchema.schema == dfCurrentTable.schema:\r\n",
+					"            print(\"Schema is Identical, no change required - \" + TableName)\r\n",
+					"        if dfSchema.schema != dfCurrentTable.schema:\r\n",
+					"            print(\"Schema changes required\")\r\n",
+					"            \r\n",
+					"            #Select Schema Columns\r\n",
+					"            dfFinal = dfSchema.unionByName(dfCurrentTable, allowMissingColumns=True)\r\n",
+					"            dfFinal = dfFinal.select(dfSchema.columns)\r\n",
+					"\r\n",
+					"            for field in dfSchema.schema.fields:\r\n",
+					"                dataType = str(field.dataType)\r\n",
+					"                columnName = str(field.name)\r\n",
+					"\r\n",
+					"                if search(\"Decimal\", str(field.dataType)):\r\n",
+					"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+					"                else:\r\n",
+					"                    dataType = dataType + \"()\"\r\n",
+					"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+					"\r\n",
+					"            spark.sql(\"Drop table IF EXISTS \" + TableName)\r\n",
+					"            dfFinal.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+					"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+					"            print(\"Schema updated - \" + TableName)      \r\n",
+					"\r\n",
+					"    #Create Table if not exists\r\n",
+					"    if pathExists == False and tableExists == False:\r\n",
+					"            dfSchema.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+					"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+					"            print(\"Delta Table did not exist, Table Created - \" + TableName)\r\n",
+					"    if (pathExists == False and tableExists == True) or (pathExists == True and tableExists == False):\r\n",
+					"        print(\"Path already exists - \" + str(pathExists))\r\n",
+					"        print(\"Table already exists - \" + str(tableExists))"
 				],
 				"execution_count": null
 			}
