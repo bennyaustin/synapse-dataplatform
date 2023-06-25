@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "dae13941-8494-4ed9-93d5-b6ffaba55899"
+				"spark.autotune.trackingId": "bf683815-96a7-4b32-a34d-3938b06310af"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -70,7 +70,7 @@
 				"source": [
 					"from notebookutils import mssparkutils"
 				],
-				"execution_count": null
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -88,7 +88,7 @@
 				"source": [
 					"%run /linkedServiceFunctions"
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -109,7 +109,7 @@
 				"source": [
 					"storageAccount = '<Storage Account Name>'"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "markdown",
@@ -173,7 +173,7 @@
 					"    return df\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 6
 			},
 			{
 				"cell_type": "markdown",
@@ -234,7 +234,7 @@
 					"    return\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -282,7 +282,7 @@
 					"    \r\n",
 					"    return folderPath"
 				],
-				"execution_count": null
+				"execution_count": 8
 			}
 		]
 	}
