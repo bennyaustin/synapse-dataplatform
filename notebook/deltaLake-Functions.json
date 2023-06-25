@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4179ec0c-61d0-41ee-b750-2fdbc64e6d87"
+				"spark.autotune.trackingId": "e4b77011-bc32-47da-9a74-0ef7169f338c"
 			}
 		},
 		"metadata": {
@@ -147,6 +147,89 @@
 					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
 					"    elif pathExists == False and tableExists == False:\r\n",
 					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def UpsertDeltaLake(df, TargetTable, Container, Folder, KeyColumns=None, DeltaColumn=None):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: UpsertDeltaLake\r\n",
+					"    # Performs a Merge/Upsert action on Delta Table\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = input dataframe\r\n",
+					"    # TargetTable = Name of Target Table\r\n",
+					"    # Container = Container used for creating Delta table schema and merging new data\r\n",
+					"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
+					"    # KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					"    # DeltaColumn = Name of watermark column in input dataframe\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # Print - Lookup Statement\r\n",
+					"      \r\n",
+					"    #DeltaLake Storge Account\r\n",
+					"    deltaZone = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
+					"\r\n",
+					"    #Read Columns Names from Dataframe\r\n",
+					"    targetDeltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
+					"    \r\n",
+					"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"\r\n",
+					"    uniqueCols = KeyColumns.split(\"|\")\r\n",
+					"\r\n",
+					"    #Create Schema\r\n",
+					"    DeltaTable.createIfNotExists(spark) \\\r\n",
+					"    .location(deltaPath) \\\r\n",
+					"    .addColumns(df.schema) \\\r\n",
+					"    .execute()\r\n",
+					"\r\n",
+					"    lookupStatement = \"\"  \r\n",
+					"    for lookupCol in uniqueCols:\r\n",
+					"        lookupStatement = lookupStatement + TargetTableAlias + \".\" + lookupCol  + \" = \" + stagingTableAlias + \".\" + lookupCol + \" and \" \r\n",
+					"\r\n",
+					"    watermarkLookup = \"\"\r\n",
+					"    if DeltaColumn is not None and  len(DeltaColumn) >0:\r\n",
+					"        lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ DeltaColumn  + \" >= \"+ TargetTableAlias + \".\" + DeltaColumn + \" and \" + TargetTableAlias  +\".\"+ DeltaColumn  + \" < \"+ stagingTableAlias + \".\" + DeltaColumn\r\n",
+					"        remove=\"and\"\r\n",
+					"        reverse_remove=remove[::-1]\r\n",
+					"        lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"\r\n",
+					"    if DeltaColumn is None or len(DeltaColumn)==0:\r\n",
+					"        remove=\"and\"\r\n",
+					"        reverse_remove=remove[::-1]\r\n",
+					"        lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"        lookupUpdateStatement = lookupStatement\r\n",
+					"\r\n",
+					"    #Update Expression\r\n",
+					"    updateStatement = \"\"\r\n",
+					"    updateColumns = columns.split(\",\")\r\n",
+					"    for updateCols in updateColumns:\r\n",
+					"        updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", ' \r\n",
+					"\r\n",
+					"    #Convert Insert and Update Expression in to Dict\r\n",
+					"    updateStatement = json.loads(\"{\"+updateStatement.rstrip(', ')+\"}\")\r\n",
+					"    \r\n",
+					"    # Write to DeltaPath\r\n",
+					"    deltaTable = DeltaTable.forPath(spark, deltaPath)\r\n",
+					"    deltaTable.alias(TargetTableAlias).merge(df.alias(stagingTableAlias), lookupUpdateStatement).whenMatchedUpdate(set = updateStatement).execute()\r\n",
+					"    deltaTable.alias(TargetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = updateStatement).execute()\r\n",
+					"    \r\n",
+					"    #Create Table\r\n",
+					"    spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TargetTable +\" USING DELTA LOCATION '\" + deltaPath + \"'\")\r\n",
+					"    print(lookupUpdateStatement +\"; \" + lookupStatement)"
 				],
 				"execution_count": null
 			}
