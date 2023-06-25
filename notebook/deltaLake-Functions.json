@@ -1,0 +1,120 @@
+{
+	"name": "deltaLake-Functions",
+	"properties": {
+		"folder": {
+			"name": "common"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "25455e33-825b-4b4e-a89a-e40396010f96"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "python"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"def SnapshotDelta(df, StorageZoneLinkedServiceName, TargetTable,  Container, Folder, LookupColumns):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: SnapshotDelta\r\n",
+					"    # Performs a Snapshot Delete reload action on Delta Table\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = input dataframe\r\n",
+					"    # StorageZoneLinkedServiceName = Linked Service Storage Account Name\r\n",
+					"    # TargetTable = Name of Target Table\r\n",
+					"    # Container = Container used for creating Delta table schema and merging new data\r\n",
+					"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
+					"    # LookupColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					" \r\n",
+					"    # Returns:\r\n",
+					"    # \r\n",
+					"    # ##########################################################################################################################\r\n",
+					"      \r\n",
+					"    #DeltaLake Storge Account\r\n",
+					"    deltaZone = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
+					"    \r\n",
+					"    #Source and Target Alias\r\n",
+					"    targetTableAlias = \"Target\"\r\n",
+					"    stagingTableAlias = \"Source\"\r\n",
+					"    \r\n",
+					"    targetDeltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
+					" \r\n",
+					"    uniqueCols = LookupColumns.split(\"|\")\r\n",
+					"\r\n",
+					"    #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, targetDeltaPath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, TargetTable)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"        \r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"                \r\n",
+					"        # Delete records from destination for the snapshot period being loaded\r\n",
+					"        deltaTable = DeltaTable.forName(spark, TargetTable)\r\n",
+					"        remove  = \"and\"\r\n",
+					"        reverse_remove = remove[::-1]\r\n",
+					"        \r\n",
+					"        distinctCols = df.select(uniqueCols).distinct().collect()\r\n",
+					"        for k in distinctCols :\r\n",
+					"            deleteCondn = \"\"\r\n",
+					"            for i in range(len(k)):\r\n",
+					"                deleteCondn = deleteCondn + str(uniqueCols[i]) + \" = '\" + str(k[i]) + \"' and \"\r\n",
+					"            deleteCondn = deleteCondn[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"            deltaTable.delete(deleteCondn)\r\n",
+					"            print(deleteCondn)\r\n",
+					"\r\n",
+					"        # Insert records from source\r\n",
+					"        columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"        insertStatement = \"\"\r\n",
+					"        insertColumns   = columns.split(\",\")\r\n",
+					"        for insertCols in insertColumns:\r\n",
+					"            insertStatement = insertStatement + '\"' + insertCols  + '\": \"' +  stagingTableAlias + \".\" + insertCols + '\", ' \r\n",
+					"\r\n",
+					"        # Convert Insert Expression in to Dict\r\n",
+					"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+					"\r\n",
+					"        lookupStatement = \" 1 = 2 \" \r\n",
+					"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+					"        \r\n",
+					"    elif pathExists == False and tableExists == True:\r\n",
+					"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == True and tableExists == False:\r\n",
+					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == False and tableExists == False:\r\n",
+					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
