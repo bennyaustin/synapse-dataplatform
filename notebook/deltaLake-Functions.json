@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f4bddecd-2e4a-46a6-a537-b6502c46e79d"
+				"spark.autotune.trackingId": "c4cd8b3f-3ffa-424c-b7f2-db5d950b323b"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 					}
 				},
 				"source": [
-					"deltaZone = GetLinkedServiceEndpoint(\"DataZone\")"
+					"deltaZone = getLinkedServiceEndpoint(\"DeltaZone\")"
 				],
 				"execution_count": null
 			},
