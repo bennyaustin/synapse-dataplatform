@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "accab423-6713-4d37-8713-0cec93c354b2"
+				"spark.autotune.trackingId": "1bca1884-fc38-4b07-93aa-04f21e4a0d31"
 			}
 		},
 		"metadata": {
@@ -86,9 +86,6 @@
 					"    # Returns:\r\n",
 					"    # \r\n",
 					"    # ##########################################################################################################################\r\n",
-					"      \r\n",
-					"    #DeltaLake Storge Account\r\n",
-					"    deltaZone = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
 					"    \r\n",
 					"    #Source and Target Alias\r\n",
 					"    targetTableAlias = \"Target\"\r\n",
@@ -179,9 +176,6 @@
 					"    # \r\n",
 					"    # Returns:\r\n",
 					"    # Print - Lookup Statement\r\n",
-					"      \r\n",
-					"    #DeltaLake Storge Account\r\n",
-					"    deltaZone = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
 					"\r\n",
 					"    #Read Columns Names from Dataframe\r\n",
 					"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
