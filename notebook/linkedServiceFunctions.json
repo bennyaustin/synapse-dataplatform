@@ -1,5 +1,5 @@
 {
-	"name": "linkedService-Functions",
+	"name": "linkedServiceFunctions",
 	"properties": {
 		"folder": {
 			"name": "common"
