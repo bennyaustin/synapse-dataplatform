@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2aaaa412-1392-42eb-9e00-33b383273ca6"
+				"spark.autotune.trackingId": "4179ec0c-61d0-41ee-b750-2fdbc64e6d87"
 			}
 		},
 		"metadata": {
@@ -71,9 +71,9 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"def SnapshotDelta(df, TargetTable,  Container, Folder, KeyColumns):\r\n",
+					"def snapshotDelta(df, TargetTable,  Container, Folder, KeyColumns):\r\n",
 					"    # ##########################################################################################################################  \r\n",
-					"    # Function: SnapshotDelta\r\n",
+					"    # Function: snapshotDelta\r\n",
 					"    # Performs a Snapshot Delete reload action on Delta Table\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
