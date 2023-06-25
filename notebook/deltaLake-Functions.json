@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "7562a386-2775-45ae-bccc-f9c9c464cb23"
+				"spark.autotune.trackingId": "b6ca69ae-2353-4a8f-b208-3bbc718422b2"
 			}
 		},
 		"metadata": {
@@ -161,7 +161,7 @@
 					}
 				},
 				"source": [
-					"def UpsertDelta(df, TargetTable, Container, Folder, LookupColumns=None, WatermarkName=None):\r\n",
+					"def upsertDelta(df, TargetTable, Container, Folder, LookupColumns=None, WatermarkName=None):\r\n",
 					"    # ##########################################################################################################################  \r\n",
 					"    # Function: upsertDeltaLake\r\n",
 					"    # Performs a Merge/Upsert action on Delta Table\r\n",
@@ -280,7 +280,7 @@
 				"source": [
 					"def insertDelta(df, TargetTable, Container, Folder):\r\n",
 					"    # ##########################################################################################################################  \r\n",
-					"    # Function: InsertDelta\r\n",
+					"    # Function: insertDelta\r\n",
 					"    # Performs an Insert action on Delta Table\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
