@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c78d4046-86ed-40d6-b668-e820ef7b12a3"
+				"spark.autotune.trackingId": "50393d6a-739b-47a1-9f0e-d4e78cb9cfad"
 			}
 		},
 		"metadata": {
@@ -246,7 +246,7 @@
 					"    # The fully qualified name of a folder in Storage Account of Azure Data Lake Storage\r\n",
 					"    # ##########################################################################################################################     \r\n",
 					"\r\n",
-					"    storageEndpoint = GetLinkedServiceEndpoint(storageZoneLinkedServiceName)\r\n",
+					"    storageEndpoint = getLinkedServiceEndpoint(storageZoneLinkedServiceName)\r\n",
 					"    folderPath = \"abfss://\" + container + \"@\" + storageEndpoint + folder\r\n",
 					"    \r\n",
 					"    return folderPath"
