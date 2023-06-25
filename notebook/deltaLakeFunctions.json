@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "ab578262-9d15-484e-a711-5a6f463768e9"
+				"spark.autotune.trackingId": "568ba830-3f10-44b8-9837-9c87922511c0"
 			}
 		},
 		"metadata": {
@@ -418,7 +418,7 @@
 					"    # Returns:\r\n",
 					"    # \r\n",
 					"    # ########################################################################################################################## \r\n",
-					"    deltapath = GetFolder(storageZoneLinkedServiceName, fileSystem, folder)\r\n",
+					"    deltapath = getFolder(storageZoneLinkedServiceName, fileSystem, folder)\r\n",
 					"\r\n",
 					"    #Creates an Empty Dataframe with the desired Schema\r\n",
 					"    dfSchema = spark.createDataFrame([], schema)\r\n",
