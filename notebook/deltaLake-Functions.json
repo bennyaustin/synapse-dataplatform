@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b6ca69ae-2353-4a8f-b208-3bbc718422b2"
+				"spark.autotune.trackingId": "a703e272-5c13-494f-ac46-613673e198cf"
 			}
 		},
 		"metadata": {
@@ -352,7 +352,7 @@
 				"source": [
 					"def deltaTableDeployment(TableName, StorageZoneLinkedServiceName, FileSystem, Folder, Schema):\r\n",
 					"    # ##########################################################################################################################  \r\n",
-					"    # Function: DeltaTableDeployment\r\n",
+					"    # Function: deltaTableDeployment\r\n",
 					"    # Performs Delta Table Schema Deployments\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
