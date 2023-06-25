@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e4b77011-bc32-47da-9a74-0ef7169f338c"
+				"spark.autotune.trackingId": "accab423-6713-4d37-8713-0cec93c354b2"
 			}
 		},
 		"metadata": {
@@ -94,7 +94,7 @@
 					"    targetTableAlias = \"Target\"\r\n",
 					"    stagingTableAlias = \"Source\"\r\n",
 					"    \r\n",
-					"    targetDeltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
+					"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
 					" \r\n",
 					"    uniqueCols = KeyColumns.split(\"|\")\r\n",
 					"\r\n",
@@ -102,7 +102,7 @@
 					"    pathExists = False\r\n",
 					"    tableExists = False\r\n",
 					"    try:\r\n",
-					"        DeltaTable.forPath(spark, targetDeltaPath)\r\n",
+					"        DeltaTable.forPath(spark, deltaPath)\r\n",
 					"        pathExists = True        \r\n",
 					"    except:\r\n",
 					"        pass\r\n",
@@ -184,9 +184,7 @@
 					"    deltaZone = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
 					"\r\n",
 					"    #Read Columns Names from Dataframe\r\n",
-					"    targetDeltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
-					"    \r\n",
-					"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + Folder\r\n",
 					"\r\n",
 					"    uniqueCols = KeyColumns.split(\"|\")\r\n",
 					"\r\n",
