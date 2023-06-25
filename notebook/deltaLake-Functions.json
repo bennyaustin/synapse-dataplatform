@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "93acc745-2e8a-4ece-a775-589207d63979"
+				"spark.autotune.trackingId": "0a227679-a85f-4fad-8fc9-c39255191ae3"
 			}
 		},
 		"metadata": {
@@ -269,6 +269,47 @@
 					"        df.write.option(\"mergeSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltaPath)\r\n",
 					"\r\n",
 					"    spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TargetTable +\" USING DELTA LOCATION '\" + deltaPath + \"'\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def deleteReRunDeltaLake(Table, ColumnName, TransformInstanceID):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: deleteReRunDeltaLake\r\n",
+					"    # Deletes records on Delta Table for a ReRun\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # Table = Name of Target Table\r\n",
+					"    # ColumnName = ColumnName of TransformInstanceID\r\n",
+					"    # TransformInstanceID = TransformInstanceID passed from Framework\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    TableExist = False\r\n",
+					"    try:\r\n",
+					"        deltaZone = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccount\")\r\n",
+					"        deltaZoneKey = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccessKey\")\r\n",
+					"        spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",  deltaZoneKey)\r\n",
+					"        spark.read.table(Table)\r\n",
+					"        TableExist = True\r\n",
+					"        deltaTable = DeltaTable.forName(spark, Table)\r\n",
+					"        deltaStatement = (ColumnName + ' = ' + str(TransformInstanceID))\r\n",
+					"        deltaTable.delete(deltaStatement)\r\n",
+					"        print(\"Records deleted: \" + Table)\r\n",
+					"    except:\r\n",
+					"        print(\"Table does not exist: \" + Table)"
 				],
 				"execution_count": null
 			}
