@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0b8d8626-cf7f-41cd-b9bb-395217f99da2"
+				"spark.autotune.trackingId": "f4bddecd-2e4a-46a6-a537-b6502c46e79d"
 			}
 		},
 		"metadata": {
@@ -207,7 +207,7 @@
 					"    # container = container used for creating Delta table schema and merging new data\r\n",
 					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
 					"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
-					"    # watermarkNames = Name of watermark column in input dataframe\r\n",
+					"    # watermarkNames = Name of watermark columns in input dataframe\r\n",
 					"    # \r\n",
 					"    # Returns:\r\n",
 					"    # Print - Lookup Statement\r\n",
