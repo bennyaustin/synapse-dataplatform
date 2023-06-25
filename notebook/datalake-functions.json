@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "9d464ddb-4507-4229-b3a5-39c6e06df211"
+				"spark.autotune.trackingId": "c78d4046-86ed-40d6-b668-e820ef7b12a3"
 			}
 		},
 		"metadata": {
@@ -232,22 +232,22 @@
 					}
 				},
 				"source": [
-					"def GetFolder(StorageZoneLinkedServiceName, FileSystem, Folder):\r\n",
+					"def getFolder(storageZoneLinkedServiceName, container, folder):\r\n",
 					"    # ##########################################################################################################################  \r\n",
-					"    # Function: GetFolder\r\n",
+					"    # Function: getFolder\r\n",
 					"    # Returns a fully qualified name of a folder in ADLS Gen2 Storage\r\n",
 					"    # \r\n",
 					"    # Parameters:\r\n",
-					"    # StorageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
-					"    # FileSystem = File System/Container of Azure Data Lake Storage\r\n",
-					"    # Folder = Folder name\r\n",
+					"    # storageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+					"    # container = File System/Container of Azure Data Lake Storage\r\n",
+					"    # folder = Folder name\r\n",
 					"    # \r\n",
 					"    # Returns:\r\n",
 					"    # The fully qualified name of a folder in Storage Account of Azure Data Lake Storage\r\n",
 					"    # ##########################################################################################################################     \r\n",
 					"\r\n",
-					"    storageEndpoint = GetLinkedServiceEndpoint(StorageZoneLinkedServiceName)\r\n",
-					"    folderPath = \"abfss://\" + FileSystem + \"@\" + storageEndpoint + Folder\r\n",
+					"    storageEndpoint = GetLinkedServiceEndpoint(storageZoneLinkedServiceName)\r\n",
+					"    folderPath = \"abfss://\" + container + \"@\" + storageEndpoint + folder\r\n",
 					"    \r\n",
 					"    return folderPath"
 				],
