@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "51ba0753-0757-4e39-8558-70b4bb5fd16b"
+				"spark.autotune.trackingId": "72f50406-7017-4c85-a1af-a19fc4b1d24d"
 			}
 		},
 		"metadata": {
@@ -53,17 +53,17 @@
 					}
 				},
 				"source": [
-					"def GetSDPDatabaseName(SDPLinkedServiceName):\r\n",
+					"def getSDPDatabaseName(sdpLinkedServiceName):\r\n",
 					"    # ##########################################################################################################################  \r\n",
 					"    # Function: GetSDPDatabaseName\r\n",
 					"    # \r\n",
 					"    # Parameters:\r\n",
-					"    # SDPLinkedServiceName = Linked service name for SQL Dedicated Pool\r\n",
+					"    # sdpLinkedServiceName = Linked service name for SQL Dedicated Pool\r\n",
 					"    # \r\n",
 					"    # Returns:\r\n",
 					"    # The name of SQL Dedicated Pool Database Name\r\n",
 					"    # ##########################################################################################################################     \r\n",
-					"    linkedServiceProperties = mssparkutils.credentials.getPropertiesAll(SDPLinkedServiceName)\r\n",
+					"    linkedServiceProperties = mssparkutils.credentials.getPropertiesAll(sdpLinkedServiceName)\r\n",
 					"    SDPDatabaseName = json.loads(linkedServiceProperties).get('Database')\r\n",
 					"    SDPDatabaseName = SDPDatabaseName.replace('https://','')\r\n",
 					"    return SDPDatabaseName"
