@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "557ac419-b61c-485b-a1dc-df3d367bd15a"
+				"spark.autotune.trackingId": "68e60c40-79cb-4216-aa9b-a3afddcf4335"
 			}
 		},
 		"metadata": {
@@ -239,7 +239,7 @@
 					}
 				},
 				"source": [
-					"def InsertDelta(df, TargetTable, Container, Folder):\r\n",
+					"def insertDelta(df, TargetTable, Container, Folder):\r\n",
 					"    # ##########################################################################################################################  \r\n",
 					"    # Function: InsertDelta\r\n",
 					"    # Performs an Insert action on Delta Table\r\n",
