@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "9923f068-0b5e-4404-9238-6bb5221a6123"
+				"spark.autotune.trackingId": "402933b1-073e-4f4b-a5d6-c91c2a8be7d5"
 			}
 		},
 		"metadata": {
@@ -196,7 +196,7 @@
 					}
 				},
 				"source": [
-					"def upsertDelta(df, targetTable, container, folder, keyColumns=None, WatermarkName=None):\r\n",
+					"def upsertDelta(df, targetTable, container, folder, keyColumns=None, watermarkNames=None):\r\n",
 					"    # ##########################################################################################################################  \r\n",
 					"    # Function: upsertDeltaLake\r\n",
 					"    # Performs a Merge/Upsert action on Delta Table\r\n",
@@ -207,7 +207,7 @@
 					"    # container = container used for creating Delta table schema and merging new data\r\n",
 					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
 					"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
-					"    # WatermarkName = Name of watermark column in input dataframe\r\n",
+					"    # watermarkNames = Name of watermark column in input dataframe\r\n",
 					"    # \r\n",
 					"    # Returns:\r\n",
 					"    # Print - Lookup Statement\r\n",
@@ -244,9 +244,9 @@
 					"        remove = \"and\"\r\n",
 					"        reverse_remove = remove[::-1]\r\n",
 					"        \r\n",
-					"        if WatermarkName is not None and  len(WatermarkName) >0:\r\n",
-					"            lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ WatermarkName  + \" >= \"+ targetTableAlias + \".\" + WatermarkName\r\n",
-					"            uniqueWatermarkCols = WatermarkName.split(\"|\") \r\n",
+					"        if watermarkNames is not None and  len(watermarkNames) >0:\r\n",
+					"            lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ watermarkNames  + \" >= \"+ targetTableAlias + \".\" + watermarkNames\r\n",
+					"            uniqueWatermarkCols = watermarkNames.split(\"|\") \r\n",
 					"\r\n",
 					"            if len(uniqueWatermarkCols) > 1:\r\n",
 					"                stgGreatestWatermark = [stagingTableAlias + \".\" + col  for col in uniqueWatermarkCols]\r\n",
@@ -256,7 +256,7 @@
 					"                \r\n",
 					"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
 					"\r\n",
-					"        if WatermarkName is None or len(WatermarkName)==0:\r\n",
+					"        if watermarkNames is None or len(watermarkNames)==0:\r\n",
 					"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
 					"            lookupUpdateStatement = lookupStatement\r\n",
 					"\r\n",
