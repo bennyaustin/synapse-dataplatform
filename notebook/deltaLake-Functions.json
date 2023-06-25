@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "25455e33-825b-4b4e-a89a-e40396010f96"
+				"spark.autotune.trackingId": "f26013ce-5c67-40da-87a8-96c722043342"
 			}
 		},
 		"metadata": {
@@ -34,15 +34,50 @@
 		"cells": [
 			{
 				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
 				"source": [
-					"def SnapshotDelta(df, StorageZoneLinkedServiceName, TargetTable,  Container, Folder, LookupColumns):\r\n",
+					"%run /LinkedServiceFunctions"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"deltaZone = GetLinkedServiceEndpoint(\"DataZone\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"def SnapshotDelta(df, TargetTable,  Container, Folder, LookupColumns):\r\n",
 					"    # ##########################################################################################################################  \r\n",
 					"    # Function: SnapshotDelta\r\n",
 					"    # Performs a Snapshot Delete reload action on Delta Table\r\n",
 					"    #\r\n",
 					"    # Parameters:\r\n",
 					"    # df = input dataframe\r\n",
-					"    # StorageZoneLinkedServiceName = Linked Service Storage Account Name\r\n",
 					"    # TargetTable = Name of Target Table\r\n",
 					"    # Container = Container used for creating Delta table schema and merging new data\r\n",
 					"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
