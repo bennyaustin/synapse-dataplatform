@@ -16,7 +16,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "d7c5fd42-50f5-4253-9a12-a3b2677402ae"
+				"spark.autotune.trackingId": "5d7d3e8d-6233-487f-aac3-7e8cbd09c85a"
 			}
 		},
 		"metadata": {
@@ -55,7 +55,7 @@
 				"source": [
 					"def getSDPDatabaseName(sdpLinkedServiceName):\r\n",
 					"    # ##########################################################################################################################  \r\n",
-					"    # Function: GetSDPDatabaseName\r\n",
+					"    # Function: getSDPDatabaseName\r\n",
 					"    # \r\n",
 					"    # Parameters:\r\n",
 					"    # sdpLinkedServiceName = Linked service name for SQL Dedicated Pool\r\n",
