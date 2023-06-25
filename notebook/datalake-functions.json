@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "001df769-afe9-486e-8133-e0b508b265af"
+				"spark.autotune.trackingId": "dae13941-8494-4ed9-93d5-b6ffaba55899"
 			}
 		},
 		"metadata": {
@@ -69,6 +69,24 @@
 				"cell_type": "code",
 				"source": [
 					"from notebookutils import mssparkutils"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /linkedServiceFunctions"
 				],
 				"execution_count": null
 			},
