@@ -41,6 +41,10 @@
 			"type": "string",
 			"defaultValue": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
 		},
+		"DeltaZone_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
 		"DropZone_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
@@ -5905,6 +5909,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/DeltaZone')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('DeltaZone_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/DropZone')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -8208,7 +8231,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1324316a-ea25-432b-996f-53011244cfd6"
+						"spark.autotune.trackingId": "4e983031-73bb-40b3-9422-56e55e9b94d7"
 					}
 				},
 				"metadata": {
@@ -8441,6 +8464,74 @@
 						],
 						"outputs": [],
 						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def flattenNested(df):\r\n",
+							"    ###########################################################################################################################  \r\n",
+							"    # Function: flattenNested\r\n",
+							"    # Returns a flattened version of XML, JSON\r\n",
+							"    #\r\n",
+							"    # Parameters:\r\n",
+							"    # df = Dataframe loaded with the Nested XML or JSON structure\r\n",
+							"    #\r\n",
+							"    # Returns:\r\n",
+							"    # The dataframe with the flattened version of the XML or JSON structure\r\n",
+							"    ##########################################################################################################################      \r\n",
+							"    structCols = []\r\n",
+							"    sep = \"_\"\r\n",
+							"\r\n",
+							"    for colName, colType in df.dtypes:\r\n",
+							"        if colType.startswith(\"struct\"):\r\n",
+							"            structCols.append(colName)\r\n",
+							"\r\n",
+							"    arrayCols = []\r\n",
+							"    for colName, colType in df.dtypes:\r\n",
+							"        if colType.startswith(\"array\"):\r\n",
+							"            arrayCols.append(colName)\r\n",
+							"\r\n",
+							"    if structCols:  \r\n",
+							"        structElement = []\r\n",
+							"        for colName, colType in df.dtypes:\r\n",
+							"            if colType.startswith(\"struct\"):\r\n",
+							"                structElement.append(colName)\r\n",
+							"        flattenCols = [fc for fc, _ in df.dtypes if fc not in structElement]\r\n",
+							"        for nc in structElement:\r\n",
+							"            for cc in df.select(f\"{nc}.*\").columns:\r\n",
+							"                 flattenCols.append(F.col(f\"{nc}.{cc}\").alias(f\"{nc}{sep}{cc}\"))\r\n",
+							"\r\n",
+							"        df = df.select(flattenCols)          \r\n",
+							"        return FlattenNested(df)\r\n",
+							"\r\n",
+							"    if arrayCols:\r\n",
+							"        arrayElement = []\r\n",
+							"        for colName, colType in df.dtypes:\r\n",
+							"            if colType.startswith(\"array\"):\r\n",
+							"                arrayElement.append(colName)\r\n",
+							"\r\n",
+							"        explodeddf = df\r\n",
+							"        for nc in arrayElement:\r\n",
+							"            explodeddf = explodeddf.withColumn(nc, F.explode_outer(F.col(nc)))     \r\n",
+							"\r\n",
+							"        df = explodeddf \r\n",
+							"        return FlattenNested(df) \r\n",
+							"\r\n",
+							"    return df    "
+						],
+						"outputs": [],
+						"execution_count": 3
 					}
 				]
 			},
@@ -8471,12 +8562,12 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a8efb45d-b2c0-47b4-8833-519df94a5e39"
+						"spark.autotune.trackingId": "bf683815-96a7-4b32-a34d-3938b06310af"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"enableDebugMode": false,
+					"enableDebugMode": true,
 					"kernelspec": {
 						"name": "synapse_pyspark",
 						"display_name": "Synapse PySpark"
@@ -8520,7 +8611,26 @@
 							"from notebookutils import mssparkutils"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 3
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run /linkedServiceFunctions"
+						],
+						"outputs": [],
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -8542,7 +8652,7 @@
 							"storageAccount = '<Storage Account Name>'"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -8607,7 +8717,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -8669,7 +8779,56 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 7
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# getFolder()"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def getFolder(storageZoneLinkedServiceName, container, folder):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: getFolder\r\n",
+							"    # Returns a fully qualified name of a folder in ADLS Gen2 Storage\r\n",
+							"    # \r\n",
+							"    # Parameters:\r\n",
+							"    # storageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+							"    # container = File System/Container of Azure Data Lake Storage\r\n",
+							"    # folder = Folder name\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # The fully qualified name of a folder in Storage Account of Azure Data Lake Storage\r\n",
+							"    # ##########################################################################################################################     \r\n",
+							"\r\n",
+							"    storageEndpoint = getLinkedServiceEndpoint(storageZoneLinkedServiceName)\r\n",
+							"    folderPath = \"abfss://\" + container + \"@\" + storageEndpoint + folder\r\n",
+							"    \r\n",
+							"    return folderPath"
+						],
+						"outputs": [],
+						"execution_count": 8
 					}
 				]
 			},
@@ -8951,7 +9110,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/deleteReRunDeltaLake-function')]",
+			"name": "[concat(parameters('workspaceName'), '/deltaLakeFunctions')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -8970,17 +9129,16 @@
 					"executorMemory": "56g",
 					"executorCores": 8,
 					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f3c2e220-b435-45c6-8f5e-98f5c34ee9a1"
+						"spark.autotune.trackingId": "d9f0597d-1178-4b5b-a42c-9342098c5790"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"enableDebugMode": false,
+					"enableDebugMode": true,
 					"kernelspec": {
 						"name": "synapse_pyspark",
 						"display_name": "Synapse PySpark"
@@ -9019,161 +9177,442 @@
 							}
 						},
 						"source": [
-							"from pyspark.sql.functions import *\r\n",
-							"import datetime\r\n",
-							"from pyspark.sql.window import *\r\n",
-							"from delta.Tables import *"
+							"%run /linkedServiceFunctions"
 						],
 						"outputs": [],
-						"execution_count": 34
+						"execution_count": 11
 					},
 					{
 						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
 						"source": [
-							"def deleteReRunDeltaLake(Table, ColumnName, TransformInstanceID):\r\n",
+							"%run /datalake-functions"
+						],
+						"outputs": [],
+						"execution_count": 12
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"deltaZone = getLinkedServiceEndpoint(\"DeltaZone\")"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def readDeltaTable(tableName):\r\n",
 							"    # ##########################################################################################################################  \r\n",
-							"    # Function: deleteReRunDeltaLake\r\n",
-							"    # Deletes records on Delta Table for a ReRun\r\n",
-							"    #\r\n",
-							"    # Parameters:\r\n",
-							"    # Table = Name of Target Table\r\n",
-							"    # ColumnName = ColumnName of TransformInstanceID\r\n",
-							"    # TransformInstanceID = TransformInstanceID passed from Framework\r\n",
+							"    # Function: readDeltaTable\r\n",
+							"    # Returns a Delta Table records as a dataframe\r\n",
 							"    # \r\n",
+							"    # Parameters:\r\n",
+							"    # tableName = A Valid Delta Table Name\r\n",
+							"    #\r\n",
 							"    # Returns:\r\n",
-							"    TableExist = False\r\n",
-							"    try:\r\n",
-							"        deltaZone = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccount\")\r\n",
-							"        deltaZoneKey = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccessKey\")\r\n",
-							"        spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",  deltaZoneKey)\r\n",
-							"        spark.read.table(Table)\r\n",
-							"        TableExist = True\r\n",
-							"        deltaTable = DeltaTable.forName(spark, Table)\r\n",
-							"        deltaStatement = (ColumnName + ' = ' + str(TransformInstanceID))\r\n",
-							"        deltaTable.delete(deltaStatement)\r\n",
-							"        print(\"Records deleted: \" + Table)\r\n",
-							"    except:\r\n",
-							"        print(\"Table does not exist: \" + Table)"
-						],
-						"outputs": [],
-						"execution_count": 62
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/insertDeltaLake-function')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"folder": {
-					"name": "common"
-				},
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "mediumMO",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "56g",
-					"driverCores": 8,
-					"executorMemory": "56g",
-					"executorCores": 8,
-					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": false,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a83a3def-ca7b-4b13-871c-b17d295fa5f8"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "python"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
-						"name": "mediumMO",
-						"type": "Spark",
-						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "3.2",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"from pyspark.sql.functions import *\r\n",
-							"import datetime\r\n",
-							"from pyspark.sql.window import *"
-						],
-						"outputs": [],
-						"execution_count": 2
-					},
-					{
-						"cell_type": "code",
-						"source": [
-							"def insertDeltaLake(df, TargetTable, Container, Folder, WriteMode):\r\n",
+							"    # Dataframe containing all rows and columns returned by query from Delta Lake\r\n",
 							"    # ##########################################################################################################################  \r\n",
-							"    # Function: insertDeltaLake\r\n",
-							"    # Performs a Insert/Overwrite action on Delta Table\r\n",
+							"    tableExist = False\r\n",
+							"    try:\r\n",
+							"        df = spark.read.table(tableName)\r\n",
+							"        tableExist = True\r\n",
+							"    except:\r\n",
+							"        print(\"Table does not exist - \" + tableName)\r\n",
+							"    return df"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"def snapshotDelta(df, targetTable,  container, folder, keyColumns):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: snapshotDelta\r\n",
+							"    # Performs a Snapshot Delete reload action on Delta Table\r\n",
 							"    #\r\n",
 							"    # Parameters:\r\n",
 							"    # df = input dataframe\r\n",
-							"    # TargetTable = Name of Target Table\r\n",
-							"    # Container = Container used for creating Delta table schema and merging new data\r\n",
-							"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
-							"    # WriteMode = Wether the write option is Overwrite/Append\r\n",
-							"    # Need to Enable Schema Evolution\r\n",
-							"    # spark.sql(\"SET spark.databricks.delta.schema.autoMerge.enabled = true\") \r\n",
-							"    # \r\n",
+							"    # targetTable = Name of Target Table\r\n",
+							"    # container = container used for creating Delta table schema and merging new data\r\n",
+							"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+							"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+							" \r\n",
 							"    # Returns:\r\n",
-							"    deltaZone = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccount\")\r\n",
-							"    deltaZoneKey = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccessKey\")\r\n",
-							"    spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",  deltaZoneKey)\r\n",
-							"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + \".dfs.core.windows.net/\" + Folder\r\n",
+							"    # \r\n",
+							"    # ##########################################################################################################################\r\n",
 							"\r\n",
-							"    if WriteMode == \"append\" :\r\n",
-							"        try:\r\n",
-							"            df.write.option(\"mergeSchema\", \"true\").format(\"delta\").mode(\"append\").insertInto(TargetTable)\r\n",
-							"        except:\r\n",
-							"            df.write.format(\"delta\").save(deltaPath)\r\n",
+							"    #Source and Target Alias\r\n",
+							"    targetTableAlias = \"Target\"\r\n",
+							"    stagingTableAlias = \"Source\"\r\n",
+							"    \r\n",
+							"    deltaPath = \"abfss://\" + container + \"@\"+ deltaZone + folder\r\n",
+							" \r\n",
+							"    uniqueCols = keyColumns.split(\"|\")\r\n",
 							"\r\n",
-							"    if WriteMode == \"overwrite\" :\r\n",
-							"        df.write.option(\"mergeSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltaPath)\r\n",
+							"    #Check the Table/Path is a Delta Table \r\n",
+							"    pathExists = False\r\n",
+							"    tableExists = False\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forPath(spark, deltaPath)\r\n",
+							"        pathExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forName(spark, targetTable)\r\n",
+							"        tableExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"        \r\n",
+							"    if pathExists == True and tableExists == True:\r\n",
+							"                \r\n",
+							"        # Delete records from destination for the snapshot period being loaded\r\n",
+							"        deltaTable = DeltaTable.forName(spark, targetTable)\r\n",
+							"        remove  = \"and\"\r\n",
+							"        reverse_remove = remove[::-1]\r\n",
+							"        \r\n",
+							"        distinctCols = df.select(uniqueCols).distinct().collect()\r\n",
+							"        for k in distinctCols :\r\n",
+							"            deleteCondn = \"\"\r\n",
+							"            for i in range(len(k)):\r\n",
+							"                deleteCondn = deleteCondn + str(uniqueCols[i]) + \" = '\" + str(k[i]) + \"' and \"\r\n",
+							"            deleteCondn = deleteCondn[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+							"            deltaTable.delete(deleteCondn)\r\n",
+							"            print(deleteCondn)\r\n",
 							"\r\n",
-							"    spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TargetTable +\" USING DELTA LOCATION '\" + deltaPath + \"'\")"
+							"        # Insert records from source\r\n",
+							"        columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+							"        insertStatement = \"\"\r\n",
+							"        insertColumns   = columns.split(\",\")\r\n",
+							"        for insertCols in insertColumns:\r\n",
+							"            insertStatement = insertStatement + '\"' + insertCols  + '\": \"' +  stagingTableAlias + \".\" + insertCols + '\", ' \r\n",
+							"\r\n",
+							"        # Convert Insert Expression in to Dict\r\n",
+							"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+							"\r\n",
+							"        lookupStatement = \" 1 = 2 \" \r\n",
+							"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+							"        \r\n",
+							"    elif pathExists == False and tableExists == True:\r\n",
+							"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == True and tableExists == False:\r\n",
+							"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == False and tableExists == False:\r\n",
+							"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def upsertDelta(df, targetTable, container, folder, keyColumns=None, watermarkNames=None):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: upsertDeltaLake\r\n",
+							"    # Performs a Merge/Upsert action on Delta Table\r\n",
+							"    #\r\n",
+							"    # Parameters:\r\n",
+							"    # df = input dataframe\r\n",
+							"    # targetTable = Name of Target Table\r\n",
+							"    # container = container used for creating Delta table schema and merging new data\r\n",
+							"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+							"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+							"    # watermarkNames = Name of watermark columns in input dataframe\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # Print - Lookup Statement\r\n",
+							"\r\n",
+							"    #Source and Target Alias\r\n",
+							"    targetTableAlias = \"Target\"\r\n",
+							"    stagingTableAlias = \"Source\"\r\n",
+							"\r\n",
+							"    #Read Columns Names from Dataframe\r\n",
+							"    deltaPath    = \"abfss://\" + container + \"@\"+ deltaZone  + folder\r\n",
+							"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+							"    \r\n",
+							"    #Check the Table/Path is a Delta Table \r\n",
+							"    pathExists = False\r\n",
+							"    tableExists = False\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forPath(spark, deltaPath)\r\n",
+							"        pathExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forName(spark, targetTable)\r\n",
+							"        tableExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"        \r\n",
+							"    if pathExists == True and tableExists == True:\r\n",
+							"        uniqueCols = keyColumns.split(\"|\")\r\n",
+							"        \r\n",
+							"        lookupStatement = \"\"  \r\n",
+							"        for lookupCol in uniqueCols:\r\n",
+							"            lookupStatement = lookupStatement + targetTableAlias + \".\" + lookupCol  + \" = \" + stagingTableAlias + \".\" + lookupCol + \" and \" \r\n",
+							"        \r\n",
+							"        remove = \"and\"\r\n",
+							"        reverse_remove = remove[::-1]\r\n",
+							"        \r\n",
+							"        if watermarkNames is not None and  len(watermarkNames) >0:\r\n",
+							"            lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ watermarkNames  + \" >= \"+ targetTableAlias + \".\" + watermarkNames\r\n",
+							"            uniqueWatermarkCols = watermarkNames.split(\"|\") \r\n",
+							"\r\n",
+							"            if len(uniqueWatermarkCols) > 1:\r\n",
+							"                stgGreatestWatermark = [stagingTableAlias + \".\" + col  for col in uniqueWatermarkCols]\r\n",
+							"                tgtGreatestWatermark = [targetTableAlias + \".\" + col  for col in uniqueWatermarkCols]\r\n",
+							"                uniqueWatermarkColsExpr = \"greatest(\" + \",\".join(stgGreatestWatermark) + \") >= \" + \"greatest(\" + \",\".join(tgtGreatestWatermark) + \")\"\r\n",
+							"                lookupUpdateStatement   = lookupStatement + uniqueWatermarkColsExpr\r\n",
+							"                \r\n",
+							"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+							"\r\n",
+							"        if watermarkNames is None or len(watermarkNames)==0:\r\n",
+							"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+							"            lookupUpdateStatement = lookupStatement\r\n",
+							"\r\n",
+							"        #Update Expression\r\n",
+							"        updateStatement = \"\"\r\n",
+							"        insertStatement = \"\"\r\n",
+							"        updateColumns = columns.split(\",\")\r\n",
+							"        \r\n",
+							"        for updateCols in updateColumns:\r\n",
+							"            if updateCols == \"ActivityUpdateLogId\" :\r\n",
+							"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".ActivityLogId\" + '\", '\r\n",
+							"            elif updateCols == \"MetaUpdateDt\" :\r\n",
+							"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".MetaLoadDt\" + '\", '\r\n",
+							"            elif updateCols == \"MetaLoadDt\" or updateCols == \"ActivityLogId\" :\r\n",
+							"                updateStatement = updateStatement            \r\n",
+							"            else :\r\n",
+							"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", '\r\n",
+							"            insertStatement = insertStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", '\r\n",
+							"\r\n",
+							"        #Convert Insert and Update Expression in to Dict\r\n",
+							"        updateStatement = json.loads(\"{\"+updateStatement.rstrip(', ')+\"}\")\r\n",
+							"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+							"\r\n",
+							"        updateCondition = stagingTableAlias + \".MetaRowHash <> \" + targetTableAlias + \".MetaRowHash\"\r\n",
+							"\r\n",
+							"        print(lookupUpdateStatement +\"; \" + lookupStatement)\r\n",
+							"    \r\n",
+							"        # Write to DeltaPath\r\n",
+							"        deltaTable = DeltaTable.forPath(spark, deltaPath)\r\n",
+							"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupUpdateStatement)\\\r\n",
+							"        .whenMatchedUpdate(condition = updateCondition, set = updateStatement).execute()\r\n",
+							"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+							"        \r\n",
+							"    elif pathExists == False and tableExists == True:\r\n",
+							"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == True and tableExists == False:\r\n",
+							"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == False and tableExists == False:\r\n",
+							"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def insertDelta(df, targetTable, container, folder):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: insertDelta\r\n",
+							"    # Performs an Insert action on Delta Table\r\n",
+							"    #\r\n",
+							"    # Parameters:\r\n",
+							"    # df = input dataframe\r\n",
+							"    # targetTable = Name of Target Table\r\n",
+							"    # container = container used for creating Delta table schema and merging new data\r\n",
+							"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # \r\n",
+							"    # ########################################################################################################################## \r\n",
+							"    \r\n",
+							"    deltaPath = \"abfss://\" + container + \"@\"+ deltaZone + folder\r\n",
+							"    targetTableAlias = \"tgt\"\r\n",
+							"    stagingTableAlias = \"stg\"\r\n",
+							"    \r\n",
+							"     #Check the Table/Path is a Delta Table \r\n",
+							"    pathExists = False\r\n",
+							"    tableExists = False\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forPath(spark, deltaPath)\r\n",
+							"        pathExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forName(spark, targetTable)\r\n",
+							"        tableExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"        \r\n",
+							"    #Write to targetTable - Append records from source\r\n",
+							"    if pathExists == True and tableExists == True:\r\n",
+							"        deltaTable = DeltaTable.forName(spark, targetTable)\r\n",
+							"        columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+							"        insertStatement = \"\"\r\n",
+							"        insertColumns   = columns.split(\",\")\r\n",
+							"        for insertCols in insertColumns:\r\n",
+							"            insertStatement = insertStatement + '\"' + insertCols  + '\": \"' +  stagingTableAlias + \".\" + insertCols + '\", ' \r\n",
+							"\r\n",
+							"        # Convert Insert Expression in to Dict\r\n",
+							"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+							"\r\n",
+							"        lookupStatement = \" 1 = 2 \" \r\n",
+							"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+							"        \r\n",
+							"    elif pathExists == False and tableExists == True:\r\n",
+							"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == True and tableExists == False:\r\n",
+							"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+							"    elif pathExists == False and tableExists == False:\r\n",
+							"        raise Exception(\"Table does not exist - Please create through deployment configuration\")\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def deltaTableDeployment(tableName, storageZoneLinkedServiceName, fileSystem, folder, schema):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: deltaTableDeployment\r\n",
+							"    # Performs Delta Table Schema Deployments\r\n",
+							"    #\r\n",
+							"    # Parameters:\r\n",
+							"    # tableName = DeltaTable Name\r\n",
+							"    # storageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+							"    # fileSystem = fileSystem used for creating Delta table schema and merging new data\r\n",
+							"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+							"    # schema = Delta Table Schema\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # \r\n",
+							"    # ########################################################################################################################## \r\n",
+							"    deltapath = getFolder(storageZoneLinkedServiceName, fileSystem, folder)\r\n",
+							"\r\n",
+							"    #Creates an Empty Dataframe with the desired Schema\r\n",
+							"    dfSchema = spark.createDataFrame([], schema)\r\n",
+							"\r\n",
+							"    #Check the Table/Path is a Delta Table \r\n",
+							"    pathExists = False\r\n",
+							"    tableExists = False\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forPath(spark, deltapath)\r\n",
+							"        pathExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"    try:\r\n",
+							"        DeltaTable.forName(spark, tableName)\r\n",
+							"        tableExists = True        \r\n",
+							"    except:\r\n",
+							"        pass\r\n",
+							"\r\n",
+							"    if pathExists == True and tableExists == True:\r\n",
+							"        dfCurrentTable = spark.read.table(tableName)\r\n",
+							"\r\n",
+							"        if dfSchema.schema == dfCurrentTable.schema:\r\n",
+							"            print(\"Schema is Identical, no change required - \" + tableName)\r\n",
+							"        if dfSchema.schema != dfCurrentTable.schema:\r\n",
+							"            print(\"Schema changes required\")\r\n",
+							"            \r\n",
+							"            #Select Schema Columns\r\n",
+							"            dfFinal = dfSchema.unionByName(dfCurrentTable, allowMissingColumns=True)\r\n",
+							"            dfFinal = dfFinal.select(dfSchema.columns)\r\n",
+							"\r\n",
+							"            for field in dfSchema.schema.fields:\r\n",
+							"                dataType = str(field.dataType)\r\n",
+							"                columnName = str(field.name)\r\n",
+							"\r\n",
+							"                if search(\"Decimal\", str(field.dataType)):\r\n",
+							"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+							"                else:\r\n",
+							"                    dataType = dataType + \"()\"\r\n",
+							"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+							"\r\n",
+							"            spark.sql(\"Drop table IF EXISTS \" + tableName)\r\n",
+							"            dfFinal.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+							"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + tableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+							"            print(\"Schema updated - \" + tableName)      \r\n",
+							"\r\n",
+							"    #Create Table if not exists\r\n",
+							"    if pathExists == False and tableExists == False:\r\n",
+							"            dfSchema.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+							"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + tableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+							"            print(\"Delta Table did not exist, Table Created - \" + tableName)\r\n",
+							"    if (pathExists == False and tableExists == True) or (pathExists == True and tableExists == False):\r\n",
+							"        print(\"Path already exists - \" + str(pathExists))\r\n",
+							"        print(\"Table already exists - \" + str(tableExists))"
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
@@ -9341,6 +9780,118 @@
 							"    except Exception as e:\n",
 							"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
 							"        raise e"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/linkedServiceFunctions')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "common"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "5d7d3e8d-6233-487f-aac3-7e8cbd09c85a"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "python"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"import json"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def getSDPDatabaseName(sdpLinkedServiceName):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: getSDPDatabaseName\r\n",
+							"    # \r\n",
+							"    # Parameters:\r\n",
+							"    # sdpLinkedServiceName = Linked service name for SQL Dedicated Pool\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # The name of SQL Dedicated Pool Database Name\r\n",
+							"    # ##########################################################################################################################     \r\n",
+							"    linkedServiceProperties = mssparkutils.credentials.getPropertiesAll(sdpLinkedServiceName)\r\n",
+							"    SDPDatabaseName = json.loads(linkedServiceProperties).get('Database')\r\n",
+							"    SDPDatabaseName = SDPDatabaseName.replace('https://','')\r\n",
+							"    return SDPDatabaseName"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"def getLinkedServiceEndpoint(linkedServiceName):\r\n",
+							"    # ##########################################################################################################################  \r\n",
+							"    # Function: getLinkedServiceEndpoint\r\n",
+							"    # \r\n",
+							"    # Parameters:\r\n",
+							"    # linkedServiceName = Linked service name Storage Account\r\n",
+							"    # \r\n",
+							"    # Returns:\r\n",
+							"    # The Endpoint of the Linked Service Properties\r\n",
+							"    # ##########################################################################################################################     \r\n",
+							"    linkedServiceProperties = mssparkutils.credentials.getPropertiesAll(linkedServiceName)\r\n",
+							"    endpoint = json.loads(linkedServiceProperties).get('Endpoint')\r\n",
+							"    endpoint = endpoint.replace('https://','')\r\n",
+							"    return endpoint"
 						],
 						"outputs": [],
 						"execution_count": null
@@ -10793,170 +11344,6 @@
 						],
 						"outputs": [],
 						"execution_count": 16
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/upsertDeltaLake-function')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"folder": {
-					"name": "common"
-				},
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "mediumMO",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "56g",
-					"driverCores": 8,
-					"executorMemory": "56g",
-					"executorCores": 8,
-					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": false,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1d4f2bae-0bf5-4ce2-9429-7bc08a5f4e63"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "python"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
-						"name": "mediumMO",
-						"type": "Spark",
-						"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "3.2",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"from pyspark.sql.functions import *\r\n",
-							"import datetime\r\n",
-							"from pyspark.sql.window import *"
-						],
-						"outputs": [],
-						"execution_count": null
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"def upsertDeltaLake(df, TargetTable, Container, Folder, KeyColumns=None, DeltaColumn=None):\r\n",
-							"    # ##########################################################################################################################  \r\n",
-							"    # Function: upsertDeltaLake\r\n",
-							"    # Performs a Merge/Upsert action on Delta Table\r\n",
-							"    #\r\n",
-							"    # Parameters:\r\n",
-							"    # df = input dataframe\r\n",
-							"    # TargetTable = Name of Target Table\r\n",
-							"    # Container = Container used for creating Delta table schema and merging new data\r\n",
-							"    # Folder = Folder used for creating Delta table schema and merging new data\r\n",
-							"    # KeyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
-							"    # DeltaColumn = Name of watermark column in input dataframe\r\n",
-							"    # \r\n",
-							"    # Returns:\r\n",
-							"    # Print - Lookup Statement\r\n",
-							"      \r\n",
-							"    deltaZone = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccount\")\r\n",
-							"    deltaZoneKey = mssparkutils.credentials.getSecretWithLS(\"Key Vault\",\"DeltaLake-StorageAccessKey\")\r\n",
-							"    spark.conf.set(\"fs.azure.account.key.\" + deltaZone + \".dfs.core.windows.net\",   deltaZoneKey)\r\n",
-							"\r\n",
-							"    #Read Columns Names from Dataframe\r\n",
-							"    deltaPath = \"abfss://\" + Container + \"@\"+ deltaZone + \".dfs.core.windows.net/\" + Folder\r\n",
-							"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
-							"\r\n",
-							"    uniqueCols = KeyColumns.split(\"|\")\r\n",
-							"\r\n",
-							"    #Create Schema\r\n",
-							"    DeltaTable.createIfNotExists(spark) \\\r\n",
-							"    .location(deltaPath) \\\r\n",
-							"    .addColumns(df.schema) \\\r\n",
-							"    .execute()\r\n",
-							"\r\n",
-							"    lookupStatement = \"\"  \r\n",
-							"    for lookupCol in uniqueCols:\r\n",
-							"        lookupStatement = lookupStatement + TargetTableAlias + \".\" + lookupCol  + \" = \" + stagingTableAlias + \".\" + lookupCol + \" and \" \r\n",
-							"\r\n",
-							"    watermarkLookup = \"\"\r\n",
-							"    if DeltaColumn is not None and  len(DeltaColumn) >0:\r\n",
-							"        lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ DeltaColumn  + \" >= \"+ TargetTableAlias + \".\" + DeltaColumn + \" and \" + TargetTableAlias  +\".\"+ DeltaColumn  + \" < \"+ stagingTableAlias + \".\" + DeltaColumn\r\n",
-							"        remove=\"and\"\r\n",
-							"        reverse_remove=remove[::-1]\r\n",
-							"        lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
-							"\r\n",
-							"    if DeltaColumn is None or len(DeltaColumn)==0:\r\n",
-							"        remove=\"and\"\r\n",
-							"        reverse_remove=remove[::-1]\r\n",
-							"        lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
-							"        lookupUpdateStatement = lookupStatement\r\n",
-							"\r\n",
-							"    #Update Expression\r\n",
-							"    updateStatement = \"\"\r\n",
-							"    updateColumns = columns.split(\",\")\r\n",
-							"    for updateCols in updateColumns:\r\n",
-							"        updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", ' \r\n",
-							"\r\n",
-							"    #Convert Insert and Update Expression in to Dict\r\n",
-							"    updateStatement = json.loads(\"{\"+updateStatement.rstrip(', ')+\"}\")\r\n",
-							"    \r\n",
-							"    # Write to DeltaPath\r\n",
-							"    deltaTable = DeltaTable.forPath(spark, deltaPath)\r\n",
-							"    deltaTable.alias(TargetTableAlias).merge(df.alias(stagingTableAlias), lookupUpdateStatement).whenMatchedUpdate(set = updateStatement).execute()\r\n",
-							"    deltaTable.alias(TargetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = updateStatement).execute()\r\n",
-							"    \r\n",
-							"    #Create Table\r\n",
-							"    spark.sql(\"CREATE TABLE IF NOT EXISTS \" + TargetTable +\" USING DELTA LOCATION '\" + deltaPath + \"'\")\r\n",
-							"    print(lookupUpdateStatement +\"; \" + lookupStatement)"
-						],
-						"outputs": [],
-						"execution_count": 3
 					}
 				]
 			},

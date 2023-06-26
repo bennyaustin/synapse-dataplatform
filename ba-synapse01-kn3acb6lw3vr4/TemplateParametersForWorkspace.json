@@ -29,6 +29,9 @@
 		"Bronze_properties_typeProperties_url": {
 			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
 		},
+		"DeltaZone_properties_typeProperties_url": {
+			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+		},
 		"DropZone_properties_typeProperties_url": {
 			"value": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
 		},
