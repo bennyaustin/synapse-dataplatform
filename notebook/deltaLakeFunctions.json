@@ -1,0 +1,499 @@
+{
+	"name": "deltaLakeFunctions",
+	"properties": {
+		"folder": {
+			"name": "common"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "mediumMO",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "d9f0597d-1178-4b5b-a42c-9342098c5790"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+				"name": "mediumMO",
+				"type": "Spark",
+				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /linkedServiceFunctions"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /datalake-functions"
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"deltaZone = getLinkedServiceEndpoint(\"DeltaZone\")"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def readDeltaTable(tableName):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: readDeltaTable\r\n",
+					"    # Returns a Delta Table records as a dataframe\r\n",
+					"    # \r\n",
+					"    # Parameters:\r\n",
+					"    # tableName = A Valid Delta Table Name\r\n",
+					"    #\r\n",
+					"    # Returns:\r\n",
+					"    # Dataframe containing all rows and columns returned by query from Delta Lake\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    tableExist = False\r\n",
+					"    try:\r\n",
+					"        df = spark.read.table(tableName)\r\n",
+					"        tableExist = True\r\n",
+					"    except:\r\n",
+					"        print(\"Table does not exist - \" + tableName)\r\n",
+					"    return df"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"def snapshotDelta(df, targetTable,  container, folder, keyColumns):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: snapshotDelta\r\n",
+					"    # Performs a Snapshot Delete reload action on Delta Table\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = input dataframe\r\n",
+					"    # targetTable = Name of Target Table\r\n",
+					"    # container = container used for creating Delta table schema and merging new data\r\n",
+					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+					"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					" \r\n",
+					"    # Returns:\r\n",
+					"    # \r\n",
+					"    # ##########################################################################################################################\r\n",
+					"\r\n",
+					"    #Source and Target Alias\r\n",
+					"    targetTableAlias = \"Target\"\r\n",
+					"    stagingTableAlias = \"Source\"\r\n",
+					"    \r\n",
+					"    deltaPath = \"abfss://\" + container + \"@\"+ deltaZone + folder\r\n",
+					" \r\n",
+					"    uniqueCols = keyColumns.split(\"|\")\r\n",
+					"\r\n",
+					"    #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, deltaPath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, targetTable)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"        \r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"                \r\n",
+					"        # Delete records from destination for the snapshot period being loaded\r\n",
+					"        deltaTable = DeltaTable.forName(spark, targetTable)\r\n",
+					"        remove  = \"and\"\r\n",
+					"        reverse_remove = remove[::-1]\r\n",
+					"        \r\n",
+					"        distinctCols = df.select(uniqueCols).distinct().collect()\r\n",
+					"        for k in distinctCols :\r\n",
+					"            deleteCondn = \"\"\r\n",
+					"            for i in range(len(k)):\r\n",
+					"                deleteCondn = deleteCondn + str(uniqueCols[i]) + \" = '\" + str(k[i]) + \"' and \"\r\n",
+					"            deleteCondn = deleteCondn[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"            deltaTable.delete(deleteCondn)\r\n",
+					"            print(deleteCondn)\r\n",
+					"\r\n",
+					"        # Insert records from source\r\n",
+					"        columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"        insertStatement = \"\"\r\n",
+					"        insertColumns   = columns.split(\",\")\r\n",
+					"        for insertCols in insertColumns:\r\n",
+					"            insertStatement = insertStatement + '\"' + insertCols  + '\": \"' +  stagingTableAlias + \".\" + insertCols + '\", ' \r\n",
+					"\r\n",
+					"        # Convert Insert Expression in to Dict\r\n",
+					"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+					"\r\n",
+					"        lookupStatement = \" 1 = 2 \" \r\n",
+					"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+					"        \r\n",
+					"    elif pathExists == False and tableExists == True:\r\n",
+					"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == True and tableExists == False:\r\n",
+					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == False and tableExists == False:\r\n",
+					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def upsertDelta(df, targetTable, container, folder, keyColumns=None, watermarkNames=None):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: upsertDeltaLake\r\n",
+					"    # Performs a Merge/Upsert action on Delta Table\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = input dataframe\r\n",
+					"    # targetTable = Name of Target Table\r\n",
+					"    # container = container used for creating Delta table schema and merging new data\r\n",
+					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+					"    # keyColumns = List of columns that uniquely defines a record in input dataframe\r\n",
+					"    # watermarkNames = Name of watermark columns in input dataframe\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # Print - Lookup Statement\r\n",
+					"\r\n",
+					"    #Source and Target Alias\r\n",
+					"    targetTableAlias = \"Target\"\r\n",
+					"    stagingTableAlias = \"Source\"\r\n",
+					"\r\n",
+					"    #Read Columns Names from Dataframe\r\n",
+					"    deltaPath    = \"abfss://\" + container + \"@\"+ deltaZone  + folder\r\n",
+					"    columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"    \r\n",
+					"    #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, deltaPath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, targetTable)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"        \r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"        uniqueCols = keyColumns.split(\"|\")\r\n",
+					"        \r\n",
+					"        lookupStatement = \"\"  \r\n",
+					"        for lookupCol in uniqueCols:\r\n",
+					"            lookupStatement = lookupStatement + targetTableAlias + \".\" + lookupCol  + \" = \" + stagingTableAlias + \".\" + lookupCol + \" and \" \r\n",
+					"        \r\n",
+					"        remove = \"and\"\r\n",
+					"        reverse_remove = remove[::-1]\r\n",
+					"        \r\n",
+					"        if watermarkNames is not None and  len(watermarkNames) >0:\r\n",
+					"            lookupUpdateStatement = lookupStatement + stagingTableAlias  +\".\"+ watermarkNames  + \" >= \"+ targetTableAlias + \".\" + watermarkNames\r\n",
+					"            uniqueWatermarkCols = watermarkNames.split(\"|\") \r\n",
+					"\r\n",
+					"            if len(uniqueWatermarkCols) > 1:\r\n",
+					"                stgGreatestWatermark = [stagingTableAlias + \".\" + col  for col in uniqueWatermarkCols]\r\n",
+					"                tgtGreatestWatermark = [targetTableAlias + \".\" + col  for col in uniqueWatermarkCols]\r\n",
+					"                uniqueWatermarkColsExpr = \"greatest(\" + \",\".join(stgGreatestWatermark) + \") >= \" + \"greatest(\" + \",\".join(tgtGreatestWatermark) + \")\"\r\n",
+					"                lookupUpdateStatement   = lookupStatement + uniqueWatermarkColsExpr\r\n",
+					"                \r\n",
+					"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"\r\n",
+					"        if watermarkNames is None or len(watermarkNames)==0:\r\n",
+					"            lookupStatement = lookupStatement[::-1].replace(reverse_remove,\"\",1)[::-1]\r\n",
+					"            lookupUpdateStatement = lookupStatement\r\n",
+					"\r\n",
+					"        #Update Expression\r\n",
+					"        updateStatement = \"\"\r\n",
+					"        insertStatement = \"\"\r\n",
+					"        updateColumns = columns.split(\",\")\r\n",
+					"        \r\n",
+					"        for updateCols in updateColumns:\r\n",
+					"            if updateCols == \"ActivityUpdateLogId\" :\r\n",
+					"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".ActivityLogId\" + '\", '\r\n",
+					"            elif updateCols == \"MetaUpdateDt\" :\r\n",
+					"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".MetaLoadDt\" + '\", '\r\n",
+					"            elif updateCols == \"MetaLoadDt\" or updateCols == \"ActivityLogId\" :\r\n",
+					"                updateStatement = updateStatement            \r\n",
+					"            else :\r\n",
+					"                updateStatement = updateStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", '\r\n",
+					"            insertStatement = insertStatement + '\"' +updateCols  + '\": \"' +  stagingTableAlias + \".\" + updateCols + '\", '\r\n",
+					"\r\n",
+					"        #Convert Insert and Update Expression in to Dict\r\n",
+					"        updateStatement = json.loads(\"{\"+updateStatement.rstrip(', ')+\"}\")\r\n",
+					"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+					"\r\n",
+					"        updateCondition = stagingTableAlias + \".MetaRowHash <> \" + targetTableAlias + \".MetaRowHash\"\r\n",
+					"\r\n",
+					"        print(lookupUpdateStatement +\"; \" + lookupStatement)\r\n",
+					"    \r\n",
+					"        # Write to DeltaPath\r\n",
+					"        deltaTable = DeltaTable.forPath(spark, deltaPath)\r\n",
+					"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupUpdateStatement)\\\r\n",
+					"        .whenMatchedUpdate(condition = updateCondition, set = updateStatement).execute()\r\n",
+					"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+					"        \r\n",
+					"    elif pathExists == False and tableExists == True:\r\n",
+					"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == True and tableExists == False:\r\n",
+					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == False and tableExists == False:\r\n",
+					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def insertDelta(df, targetTable, container, folder):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: insertDelta\r\n",
+					"    # Performs an Insert action on Delta Table\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = input dataframe\r\n",
+					"    # targetTable = Name of Target Table\r\n",
+					"    # container = container used for creating Delta table schema and merging new data\r\n",
+					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # \r\n",
+					"    # ########################################################################################################################## \r\n",
+					"    \r\n",
+					"    deltaPath = \"abfss://\" + container + \"@\"+ deltaZone + folder\r\n",
+					"    targetTableAlias = \"tgt\"\r\n",
+					"    stagingTableAlias = \"stg\"\r\n",
+					"    \r\n",
+					"     #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, deltaPath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, targetTable)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"        \r\n",
+					"    #Write to targetTable - Append records from source\r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"        deltaTable = DeltaTable.forName(spark, targetTable)\r\n",
+					"        columns = (((str(df.columns).replace(\"'\", \"\")).replace(\"[\",\"\")).replace(\"]\",\"\")).replace(\" \",\"\")\r\n",
+					"        insertStatement = \"\"\r\n",
+					"        insertColumns   = columns.split(\",\")\r\n",
+					"        for insertCols in insertColumns:\r\n",
+					"            insertStatement = insertStatement + '\"' + insertCols  + '\": \"' +  stagingTableAlias + \".\" + insertCols + '\", ' \r\n",
+					"\r\n",
+					"        # Convert Insert Expression in to Dict\r\n",
+					"        insertStatement = json.loads(\"{\"+insertStatement.rstrip(', ')+\"}\")\r\n",
+					"\r\n",
+					"        lookupStatement = \" 1 = 2 \" \r\n",
+					"        deltaTable.alias(targetTableAlias).merge(df.alias(stagingTableAlias), lookupStatement).whenNotMatchedInsert(values = insertStatement).execute()\r\n",
+					"        \r\n",
+					"    elif pathExists == False and tableExists == True:\r\n",
+					"        raise Exception(\"Table Exists.Path Does Not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == True and tableExists == False:\r\n",
+					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
+					"    elif pathExists == False and tableExists == False:\r\n",
+					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")\r\n",
+					""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def deltaTableDeployment(tableName, storageZoneLinkedServiceName, fileSystem, folder, schema):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: deltaTableDeployment\r\n",
+					"    # Performs Delta Table Schema Deployments\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # tableName = DeltaTable Name\r\n",
+					"    # storageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+					"    # fileSystem = fileSystem used for creating Delta table schema and merging new data\r\n",
+					"    # folder = folder used for creating Delta table schema and merging new data\r\n",
+					"    # schema = Delta Table Schema\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # \r\n",
+					"    # ########################################################################################################################## \r\n",
+					"    deltapath = getFolder(storageZoneLinkedServiceName, fileSystem, folder)\r\n",
+					"\r\n",
+					"    #Creates an Empty Dataframe with the desired Schema\r\n",
+					"    dfSchema = spark.createDataFrame([], schema)\r\n",
+					"\r\n",
+					"    #Check the Table/Path is a Delta Table \r\n",
+					"    pathExists = False\r\n",
+					"    tableExists = False\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forPath(spark, deltapath)\r\n",
+					"        pathExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"    try:\r\n",
+					"        DeltaTable.forName(spark, tableName)\r\n",
+					"        tableExists = True        \r\n",
+					"    except:\r\n",
+					"        pass\r\n",
+					"\r\n",
+					"    if pathExists == True and tableExists == True:\r\n",
+					"        dfCurrentTable = spark.read.table(tableName)\r\n",
+					"\r\n",
+					"        if dfSchema.schema == dfCurrentTable.schema:\r\n",
+					"            print(\"Schema is Identical, no change required - \" + tableName)\r\n",
+					"        if dfSchema.schema != dfCurrentTable.schema:\r\n",
+					"            print(\"Schema changes required\")\r\n",
+					"            \r\n",
+					"            #Select Schema Columns\r\n",
+					"            dfFinal = dfSchema.unionByName(dfCurrentTable, allowMissingColumns=True)\r\n",
+					"            dfFinal = dfFinal.select(dfSchema.columns)\r\n",
+					"\r\n",
+					"            for field in dfSchema.schema.fields:\r\n",
+					"                dataType = str(field.dataType)\r\n",
+					"                columnName = str(field.name)\r\n",
+					"\r\n",
+					"                if search(\"Decimal\", str(field.dataType)):\r\n",
+					"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+					"                else:\r\n",
+					"                    dataType = dataType + \"()\"\r\n",
+					"                    dfFinal = dfFinal.withColumn(columnName, col(columnName).cast(eval(dataType)))\r\n",
+					"\r\n",
+					"            spark.sql(\"Drop table IF EXISTS \" + tableName)\r\n",
+					"            dfFinal.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+					"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + tableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+					"            print(\"Schema updated - \" + tableName)      \r\n",
+					"\r\n",
+					"    #Create Table if not exists\r\n",
+					"    if pathExists == False and tableExists == False:\r\n",
+					"            dfSchema.write.option(\"overwriteSchema\", \"true\").format(\"delta\").mode(\"overwrite\").save(deltapath)\r\n",
+					"            spark.sql(\"CREATE TABLE IF NOT EXISTS \" + tableName +\" USING DELTA LOCATION '\" + deltapath + \"'\")\r\n",
+					"            print(\"Delta Table did not exist, Table Created - \" + tableName)\r\n",
+					"    if (pathExists == False and tableExists == True) or (pathExists == True and tableExists == False):\r\n",
+					"        print(\"Path already exists - \" + str(pathExists))\r\n",
+					"        print(\"Table already exists - \" + str(tableExists))"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}

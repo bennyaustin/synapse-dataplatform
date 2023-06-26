@@ -21,12 +21,12 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a8efb45d-b2c0-47b4-8833-519df94a5e39"
+				"spark.autotune.trackingId": "bf683815-96a7-4b32-a34d-3938b06310af"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
-			"enableDebugMode": false,
+			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
 				"display_name": "Synapse PySpark"
@@ -70,7 +70,25 @@
 				"source": [
 					"from notebookutils import mssparkutils"
 				],
-				"execution_count": null
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /linkedServiceFunctions"
+				],
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -91,7 +109,7 @@
 				"source": [
 					"storageAccount = '<Storage Account Name>'"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "markdown",
@@ -155,7 +173,7 @@
 					"    return df\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 6
 			},
 			{
 				"cell_type": "markdown",
@@ -216,7 +234,55 @@
 					"    return\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# getFolder()"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def getFolder(storageZoneLinkedServiceName, container, folder):\r\n",
+					"    # ##########################################################################################################################  \r\n",
+					"    # Function: getFolder\r\n",
+					"    # Returns a fully qualified name of a folder in ADLS Gen2 Storage\r\n",
+					"    # \r\n",
+					"    # Parameters:\r\n",
+					"    # storageZoneLinkedServiceName = Linked service name for the storage zone\r\n",
+					"    # container = File System/Container of Azure Data Lake Storage\r\n",
+					"    # folder = Folder name\r\n",
+					"    # \r\n",
+					"    # Returns:\r\n",
+					"    # The fully qualified name of a folder in Storage Account of Azure Data Lake Storage\r\n",
+					"    # ##########################################################################################################################     \r\n",
+					"\r\n",
+					"    storageEndpoint = getLinkedServiceEndpoint(storageZoneLinkedServiceName)\r\n",
+					"    folderPath = \"abfss://\" + container + \"@\" + storageEndpoint + folder\r\n",
+					"    \r\n",
+					"    return folderPath"
+				],
+				"execution_count": 8
 			}
 		]
 	}
