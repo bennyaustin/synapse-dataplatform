@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1324316a-ea25-432b-996f-53011244cfd6"
+				"spark.autotune.trackingId": "4e983031-73bb-40b3-9422-56e55e9b94d7"
 			}
 		},
 		"metadata": {
@@ -254,6 +254,73 @@
 					"    return self.inputDf"
 				],
 				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def flattenNested(df):\r\n",
+					"    ###########################################################################################################################  \r\n",
+					"    # Function: flattenNested\r\n",
+					"    # Returns a flattened version of XML, JSON\r\n",
+					"    #\r\n",
+					"    # Parameters:\r\n",
+					"    # df = Dataframe loaded with the Nested XML or JSON structure\r\n",
+					"    #\r\n",
+					"    # Returns:\r\n",
+					"    # The dataframe with the flattened version of the XML or JSON structure\r\n",
+					"    ##########################################################################################################################      \r\n",
+					"    structCols = []\r\n",
+					"    sep = \"_\"\r\n",
+					"\r\n",
+					"    for colName, colType in df.dtypes:\r\n",
+					"        if colType.startswith(\"struct\"):\r\n",
+					"            structCols.append(colName)\r\n",
+					"\r\n",
+					"    arrayCols = []\r\n",
+					"    for colName, colType in df.dtypes:\r\n",
+					"        if colType.startswith(\"array\"):\r\n",
+					"            arrayCols.append(colName)\r\n",
+					"\r\n",
+					"    if structCols:  \r\n",
+					"        structElement = []\r\n",
+					"        for colName, colType in df.dtypes:\r\n",
+					"            if colType.startswith(\"struct\"):\r\n",
+					"                structElement.append(colName)\r\n",
+					"        flattenCols = [fc for fc, _ in df.dtypes if fc not in structElement]\r\n",
+					"        for nc in structElement:\r\n",
+					"            for cc in df.select(f\"{nc}.*\").columns:\r\n",
+					"                 flattenCols.append(F.col(f\"{nc}.{cc}\").alias(f\"{nc}{sep}{cc}\"))\r\n",
+					"\r\n",
+					"        df = df.select(flattenCols)          \r\n",
+					"        return FlattenNested(df)\r\n",
+					"\r\n",
+					"    if arrayCols:\r\n",
+					"        arrayElement = []\r\n",
+					"        for colName, colType in df.dtypes:\r\n",
+					"            if colType.startswith(\"array\"):\r\n",
+					"                arrayElement.append(colName)\r\n",
+					"\r\n",
+					"        explodeddf = df\r\n",
+					"        for nc in arrayElement:\r\n",
+					"            explodeddf = explodeddf.withColumn(nc, F.explode_outer(F.col(nc)))     \r\n",
+					"\r\n",
+					"        df = explodeddf \r\n",
+					"        return FlattenNested(df) \r\n",
+					"\r\n",
+					"    return df    "
+				],
+				"execution_count": 3
 			}
 		]
 	}
