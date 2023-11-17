@@ -1,0 +1,9 @@
+{
+	"name": "Copy From SharePoint List",
+	"properties": {
+		"folder": {
+			"name": "Sandbox"
+		},
+		"annotations": []
+	}
+}
