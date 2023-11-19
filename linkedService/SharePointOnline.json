@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "SharePointOnlineList",
 		"typeProperties": {
-			"siteUrl": "https://mngenvmcap158064.sharepoint.com/sites/Contosomcap158064",
+			"siteUrl": "https://mngenvmcap158064.sharepoint.com/sites/Contosomcap158064public",
 			"tenantId": "45a126ff-7fc0-4528-ac6b-eefad687db2d",
 			"servicePrincipalId": "2eb3da54-eff8-4e23-876c-1343469c14a9",
 			"servicePrincipalKey": {
