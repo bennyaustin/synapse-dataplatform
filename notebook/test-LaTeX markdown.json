@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "de815e40-8b82-487e-8b7b-74081eb9f4d5"
+				"spark.autotune.trackingId": "36a3c58d-78eb-43ae-8aec-edc03d025dd1"
 			}
 		},
 		"metadata": {
@@ -52,11 +52,45 @@
 		},
 		"cells": [
 			{
-				"cell_type": "code",
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
 				"source": [
-					""
-				],
-				"execution_count": null
+					"\\documentclass{article}%\r\n",
+					"\\usepackage[T1]{fontenc}%\r\n",
+					"\\usepackage[utf8]{inputenc}%\r\n",
+					"\\usepackage{lmodern}%\r\n",
+					"\\usepackage{textcomp}%\r\n",
+					"\\usepackage{lastpage}%\r\n",
+					"%\r\n",
+					"\\title{Awesome Title}%\r\n",
+					"\\author{Anonymous author}%\r\n",
+					"\\date{\\today}%\r\n",
+					"%\r\n",
+					"\\begin{document}%\r\n",
+					"\\normalsize%\r\n",
+					"\\maketitle%\r\n",
+					"\\section{A section}%\r\n",
+					"\\label{sec:Asection}%\r\n",
+					"Some regular text and some %\r\n",
+					"\\textit{italic text. }%\r\n",
+					"\\subsection{A subsection}%\r\n",
+					"\\label{subsec:Asubsection}%\r\n",
+					"Also some crazy characters: \\$\\&\\#\\{\\}\r\n",
+					"\r\n",
+					"%\r\n",
+					"\\section{A second section}%\r\n",
+					"\\label{sec:Asecondsection}%\r\n",
+					"Some text.\r\n",
+					"\r\n",
+					"%\r\n",
+					"\\end{document}"
+				]
 			}
 		]
 	}
