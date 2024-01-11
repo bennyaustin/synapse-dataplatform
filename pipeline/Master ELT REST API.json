@@ -264,7 +264,7 @@
 			"name": "Extract and Load/REST API Pipelines"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:39:25Z"
+		"lastPublishTime": "2023-06-25T08:43:14Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

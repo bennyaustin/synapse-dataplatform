@@ -226,6 +226,8 @@
 		"folder": {
 			"name": "Transform/L1 Transform Pipelines"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-06-25T08:43:02Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

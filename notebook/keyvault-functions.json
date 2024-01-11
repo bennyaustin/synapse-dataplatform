@@ -41,13 +41,14 @@
 				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net"
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"automaticScaleJobs": false
+				"extraHeader": null
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -96,8 +97,7 @@
 				},
 				"source": [
 					"kvLinkedService ='your Azure Key Vault Linked Service referenced by this Synapse Workspace'"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -115,8 +115,7 @@
 				},
 				"source": [
 					"from notebookutils import mssparkutils"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "markdown",
@@ -157,8 +156,7 @@
 					"    except Exception as e:\n",
 					"        print(\"Either Linked Service: \" + kvLinkedService + \" does not exist or Secret: \" + secretName + \" does not exist\")\n",
 					"        raise e"
-				],
-				"execution_count": null
+				]
 			}
 		]
 	}

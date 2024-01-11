@@ -12,6 +12,7 @@
 			"executorMemory": "28g",
 			"executorCores": 4,
 			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
@@ -36,8 +37,7 @@
 				"cell_type": "code",
 				"source": [
 					"import json"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -67,8 +67,7 @@
 					"    SDPDatabaseName = json.loads(linkedServiceProperties).get('Database')\r\n",
 					"    SDPDatabaseName = SDPDatabaseName.replace('https://','')\r\n",
 					"    return SDPDatabaseName"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -98,8 +97,7 @@
 					"    endpoint = json.loads(linkedServiceProperties).get('Endpoint')\r\n",
 					"    endpoint = endpoint.replace('https://','')\r\n",
 					"    return endpoint"
-				],
-				"execution_count": null
+				]
 			}
 		]
 	}

@@ -41,6 +41,10 @@
 				"name": "Set Logic App Parameters",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "parameters",
@@ -73,6 +77,10 @@
 							"name": "resourceGroupName",
 							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "resourceGroupName",
@@ -86,6 +94,10 @@
 							"name": "workspaceName",
 							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "workspaceName",
@@ -99,6 +111,10 @@
 							"name": "sqlPoolName",
 							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "sqlPoolName",
@@ -223,7 +239,7 @@
 			"name": "Manage-SQLPool"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:39:05Z"
+		"lastPublishTime": "2023-06-25T08:41:52Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

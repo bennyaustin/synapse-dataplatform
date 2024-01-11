@@ -1,5 +1,6 @@
 {
 	"name": "AIMLCustomModels",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureBlobStorage",

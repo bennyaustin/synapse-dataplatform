@@ -1,5 +1,6 @@
 {
 	"name": "DropZone",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Linked service for external files uploaded to the data platform",
 		"annotations": [],

@@ -165,6 +165,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "PipelineRunID",
@@ -1029,6 +1033,8 @@
 		"folder": {
 			"name": "Extract and Load/Upload File Pipelines"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-06-25T08:43:05Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

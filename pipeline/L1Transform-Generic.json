@@ -69,6 +69,10 @@
 				"name": "Set PipelineRunID",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "PipelineRunID",
@@ -500,123 +504,213 @@
 										"type": "Int32"
 									},
 									"DataFromTimestamp": {
-										"value": "@item().DataFromTimestamp",
+										"value": {
+											"value": "@item().DataFromTimestamp",
+											"type": "Expression"
+										},
 										"type": "DateTime"
 									},
 									"DataToNumber": {
-										"value": "@item().DataToNumber",
+										"value": {
+											"value": "@item().DataToNumber",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"DataToTimestamp": {
-										"value": "@item().DataToTimestamp",
+										"value": {
+											"value": "@item().DataToTimestamp",
+											"type": "Expression"
+										},
 										"type": "DateTime"
 									},
 									"DeltaName": {
-										"value": "@item().DeltaName",
+										"value": {
+											"value": "@item().DeltaName",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"IngestADFPipelineRunID": {
-										"value": "@item().IngestADFPipelineRunID",
+										"value": {
+											"value": "@item().IngestADFPipelineRunID",
+											"type": "Expression"
+										},
 										"type": "Guid"
 									},
 									"IngestID": {
-										"value": "@item().IngestID",
+										"value": {
+											"value": "@item().IngestID",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"InputDWTable": {
-										"value": "@item().InputDWTable",
+										"value": {
+											"value": "@item().InputDWTable",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"InputFile": {
-										"value": "@item().InputFile",
+										"value": {
+											"value": "@item().InputFile",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"InputFileDelimiter": {
-										"value": "@item().InputFileDelimiter",
+										"value": {
+											"value": "@item().InputFileDelimiter",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"InputFileFolder": {
-										"value": "@item().InputFileFolder",
+										"value": {
+											"value": "@item().InputFileFolder",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"InputFileHeaderFlag": {
-										"value": "@item().InputFileHeaderFlag",
+										"value": {
+											"value": "@item().InputFileHeaderFlag",
+											"type": "Expression"
+										},
 										"type": "Boolean"
 									},
 									"InputFileSystem": {
-										"value": "@item().InputFileSystem",
+										"value": {
+											"value": "@item().InputFileSystem",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"L1TransformADFPipelineRunID": {
-										"value": "@item().L1TransformADFPipelineRunID",
+										"value": {
+											"value": "@item().L1TransformADFPipelineRunID",
+											"type": "Expression"
+										},
 										"type": "Guid"
 									},
 									"L1TransformID": {
-										"value": "@item().L1TransformID",
+										"value": {
+											"value": "@item().L1TransformID",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"L2TransformID": {
-										"value": "@item().L2TransformID",
+										"value": {
+											"value": "@item().L2TransformID",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"LastDeltaDate": {
-										"value": "@item().LastDeltaDate",
+										"value": {
+											"value": "@item().LastDeltaDate",
+											"type": "Expression"
+										},
 										"type": "DateTime"
 									},
 									"LastDeltaNumber": {
-										"value": "@item().LastDeltaNumber",
+										"value": {
+											"value": "@item().LastDeltaNumber",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"LookupColumns": {
-										"value": "@item().LookupColumns",
+										"value": {
+											"value": "@item().LookupColumns",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"MaxRetries": {
-										"value": "@item().MaxRetries",
+										"value": {
+											"value": "@item().MaxRetries",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"NotebookName": {
-										"value": "@item().NotebookName",
+										"value": {
+											"value": "@item().NotebookName",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"NotebookPath": {
-										"value": "@item().NotebookPath",
+										"value": {
+											"value": "@item().NotebookPath",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWStagingTable": {
-										"value": "@item().OutputDWStagingTable",
+										"value": {
+											"value": "@item().OutputDWStagingTable",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWTable": {
-										"value": "@item().OutputDWTable",
+										"value": {
+											"value": "@item().OutputDWTable",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputDWTableWriteMode": {
-										"value": "@item().OutputDWTableWriteMode",
+										"value": {
+											"value": "@item().OutputDWTableWriteMode",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CuratedFile": {
-										"value": "@item().OutputL2CuratedFile",
+										"value": {
+											"value": "@item().OutputL2CuratedFile",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CuratedFileDelimiter": {
-										"value": "@item().OutputL2CuratedFileDelimiter",
+										"value": {
+											"value": "@item().OutputL2CuratedFileDelimiter",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CuratedFileFormat": {
-										"value": "@item().OutputL2CuratedFileFormat",
+										"value": {
+											"value": "@item().OutputL2CuratedFileFormat",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CuratedFileWriteMode": {
-										"value": "@item().OutputL2CuratedFileWriteMode",
+										"value": {
+											"value": "@item().OutputL2CuratedFileWriteMode",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CuratedFolder": {
-										"value": "@item().OutputL2CuratedFolder",
+										"value": {
+											"value": "@item().OutputL2CuratedFolder",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"OutputL2CurateFileSystem": {
-										"value": "@item().OutputL2CurateFileSystem",
+										"value": {
+											"value": "@item().OutputL2CurateFileSystem",
+											"type": "Expression"
+										},
 										"type": "String"
 									}
 								}
@@ -733,7 +827,7 @@
 			"name": "Transform/L1 Transform Pipelines"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:37:38Z"
+		"lastPublishTime": "2023-06-25T08:42:27Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

@@ -183,6 +183,10 @@
 				"name": "ADFPipelineRunID",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "ADFPipelineRunID",
@@ -1025,7 +1029,7 @@
 			"name": "Extract and Load/REST API Pipelines"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:39:23Z"
+		"lastPublishTime": "2023-06-25T08:42:57Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

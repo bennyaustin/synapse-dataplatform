@@ -81,6 +81,10 @@
 				"name": "Set datamapping",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "datamapping",
@@ -115,7 +119,7 @@
 			"name": "Sandbox"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:39:22Z"
+		"lastPublishTime": "2023-06-25T08:42:52Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

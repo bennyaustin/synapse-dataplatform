@@ -16,6 +16,7 @@
 			"executorMemory": "56g",
 			"executorCores": 8,
 			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
@@ -40,13 +41,14 @@
 				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net"
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"automaticScaleJobs": false
+				"extraHeader": null
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -137,8 +139,7 @@
 					"    except:\r\n",
 					"        print(\"Table does not exist - \" + tableName)\r\n",
 					"    return df"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -216,8 +217,7 @@
 					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
 					"    elif pathExists == False and tableExists == False:\r\n",
 					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -333,8 +333,7 @@
 					"        raise Exception(\"Path Exists.Table does not Exist - Please check deployment configuration\")\r\n",
 					"    elif pathExists == False and tableExists == False:\r\n",
 					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")"
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -405,8 +404,7 @@
 					"    elif pathExists == False and tableExists == False:\r\n",
 					"        raise Exception(\"Table does not exist - Please create through deployment configuration\")\r\n",
 					""
-				],
-				"execution_count": null
+				]
 			},
 			{
 				"cell_type": "code",
@@ -491,8 +489,7 @@
 					"    if (pathExists == False and tableExists == True) or (pathExists == True and tableExists == False):\r\n",
 					"        print(\"Path already exists - \" + str(pathExists))\r\n",
 					"        print(\"Table already exists - \" + str(tableExists))"
-				],
-				"execution_count": null
+				]
 			}
 		]
 	}

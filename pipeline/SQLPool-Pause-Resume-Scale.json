@@ -41,6 +41,10 @@
 				"name": "Set Logic App Parameters",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "parameters",
@@ -89,7 +93,7 @@
 			"name": "Manage-SQLPool"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-01-19T06:38:47Z"
+		"lastPublishTime": "2023-06-25T08:39:24Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }
