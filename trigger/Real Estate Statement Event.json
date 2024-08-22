@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Event grid trigger for real estate statements processed by Form Recognizer custom model ",
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
