@@ -1,16 +1,16 @@
 {
 	"name": "DropZone",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Linked service for external files uploaded to the data platform",
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://badatalake01kn3acb6lw3vr.dfs.core.windows.net/"
+			"url": "https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
