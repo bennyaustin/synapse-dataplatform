@@ -12,13 +12,13 @@ jobs:
         
       - name : Build dacpac
         run: |
-          msbuild.exe '${{github.workspace}}\dedicated-sqlpools\dw01\dw01.sqlproj' /p:Configuration=Release
+          msbuild.exe '${{github.workspace}}\dedicated-sqlpools\dw01\dwh01.sqlproj' /p:Configuration=Release
           
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: SQLPool
-          path: ${{ github.workspace }}\dedicated-sqlpools\dw01\bin\Release\
+          path: ${{ github.workspace }}\dedicated-sqlpools\dwh01\bin\Release\
       
   deploy:
     needs: build
