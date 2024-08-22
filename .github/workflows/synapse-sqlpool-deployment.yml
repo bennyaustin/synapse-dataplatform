@@ -42,7 +42,7 @@ jobs:
            connection-string: ${{secrets.DWH_CONNECTIONSTRING}}
            path: './dwh01.dacpac'
            action: 'publish'
-           arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="bastoragedatalake01.dfs.core.windows.net"'
+           arguments: '/p:DropPermissionsNotInSource=false /p:DropRoleMembersNotInSource=false /p:DropObjectsNotInSource=true /p:IgnoreColumnOrder=true /p:IgnorePermissions=true /v:DatalakeEndpoint="badatalake01lhf7sbrgc3jr.dfs.core.windows.net"'
       - name: Azure Logout
         run: |
             az logout
