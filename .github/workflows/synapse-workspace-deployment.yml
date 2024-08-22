@@ -17,12 +17,12 @@ jobs:
         - run: Get-ChildItem ${{github.workspace}} -Recurse
         - uses: Azure/Synapse-workspace-deployment@V1.7.0
           with:
-            TargetWorkspaceName: 'ba-synapse01-o5rium4bfcf6a'
-            TemplateFile: ${{github.workspace}}\arm\ba-synapse01-kn3acb6lw3vr4\TemplateForWorkspace.json
-            ParametersFile: ${{github.workspace}}\arm\ba-synapse01-kn3acb6lw3vr4\TemplateParametersForWorkspace.json
+            TargetWorkspaceName: 'ba-synapse01-fy6y766k45k4k'
+            TemplateFile: ${{github.workspace}}\arm\ba-synapse01-lhf7sbrgc3jru\TemplateForWorkspace.json
+            ParametersFile: ${{github.workspace}}\arm\ba-synapse01-lhf7sbrgc3jru\TemplateParametersForWorkspace.json
             OverrideArmParameters:  ${{github.workspace}}\arm\parameters\prod\parameters.yaml
             environment: 'Azure Public'
-            resourceGroup: 'prg-synapse-dataplatform'
+            resourceGroup: 'prg-synapse-dp'
             clientId: ${{secrets.ACTION_SPN_CLIENTID}}
             clientSecret: ${{secrets.ACTION_SPN_SECRET}}
             subscriptionId: ${{secrets.SUBSCRIPTION_ID}}
