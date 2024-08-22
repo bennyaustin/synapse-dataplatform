@@ -18,7 +18,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: SQLPool
-          path: ${{ github.workspace }}\dedicated-sqlpools\dwh01\bin\Release\
+          path: ${{ github.workspace }}\dedicated-sqlpools\dw01\bin\Release\
       
   deploy:
     needs: build
