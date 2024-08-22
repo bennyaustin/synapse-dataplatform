@@ -1,26 +1,26 @@
-workspaceName: ba-synapse01-o5rium4bfcf6a
-ControlDB_connectionString: Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-o5rium4bfcf6a.database.windows.net;Initial Catalog=controlDB
+workspaceName: ba-synapse01-fy6y766k45k4k
+ControlDB_connectionString: Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-fy6y766k45k4k.database.windows.net;Initial Catalog=controlDB
 AIMLCustomModels_properties_typeProperties_serviceEndpoint": https://bacustmodelstorage01q575.blob.core.windows.net/
-AtlasREST_properties_typeProperties_url: https://ba-purview01-6spfx5oytiivq.purview.azure.com
+AtlasREST_properties_typeProperties_url: https://4e921ed2-9b1c-457c-a917-16ef468eb90a-api.purview-service.microsoft.com/catalog
 AtlasREST_properties_typeProperties_servicePrincipalId: 5f2dc546-5728-4896-8055-a4853c8cc26b
-AtlasREST_properties_typeProperties_tenant: 45a126ff-7fc0-4528-ac6b-eefad687db2d
+AtlasREST_properties_typeProperties_tenant: 4e921ed2-9b1c-457c-a917-16ef468eb90a
 AtlasREST_properties_typeProperties_aadResourceId: https://purview.azure.net
-Bronze_properties_typeProperties_url: https://badatalake01o5rium4bfcf6.dfs.core.windows.net/
-DropZone_properties_typeProperties_url": https://badatalake01o5rium4bfcf6.dfs.core.windows.net/
+Bronze_properties_typeProperties_url: https://badatalake01fy6y766k45k4.dfs.core.windows.net/
+DropZone_properties_typeProperties_url": https://badatalake01fy6y766k45k4.dfs.core.windows.net/
 REST_properties_typeProperties_url: '@{linkedService().BaseURL}'
 REST_properties_typeProperties_servicePrincipalId: '@{linkedService().ServicePrincipalID}'
 REST_properties_typeProperties_tenant: '@{linkedService().TenantID}'
 REST_properties_typeProperties_aadResourceId: '@{linkedService().AADResource}'
-keyvault01_properties_typeProperties_baseUrl: https://ba-kv01-o5rium4bfcf6a.vault.azure.net/
+keyvault01_properties_typeProperties_baseUrl: https://ba-kv01-fy6y766k45k4k.vault.azure.net/
 Azure Daily_properties_Master ELT REST API_parameters_SourceSystemName: Azure
 Azure Daily_properties_Master ELT REST API_parameters_StreamName: '%'
 Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: '100'
 Azure Daily_properties_Master ELT REST API_parameters_BaseURL: https://management.azure.com
 Azure Daily_properties_Master ELT REST API_parameters_ServicePrincipalID: 5e07b142-92b4-4671-83c0-e824bc93da6c
-Azure Daily_properties_Master ELT REST API_parameters_TenantID: 45a126ff-7fc0-4528-ac6b-eefad687db2d
+Azure Daily_properties_Master ELT REST API_parameters_TenantID: 4e921ed2-9b1c-457c-a917-16ef468eb90a
 Azure Daily_properties_Master ELT REST API_parameters_AADResource: https://management.azure.com
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint: https://prod-14.australiaeast.logic.azure.com:443/workflows/98c4e193092141f5a2cd40195a3daa8d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Q7FnVqPC0bpPi6rTO4OkMV8DxWJx3uKAqyLrLyiqMvM
-Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId: e836675f-2508-4873-ad4f-754d70253b22
+Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId: 735994b1-b3b0-46d5-96bc-c9b30ddb4265
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType: Microsoft.Synapse/workspaces/sqlPools
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion: '2021-04-01'
 Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action: pause
@@ -29,9 +29,9 @@ Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_l
 Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName: Purview
 Purview Daily_properties_Master ELT REST API_parameters_StreamName: '%'
 Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance: '50'
-Purview Daily_properties_Master ELT REST API_parameters_BaseURL: https://ba-purview01-6spfx5oytiivq.purview.azure.com
+Purview Daily_properties_Master ELT REST API_parameters_BaseURL: https://4e921ed2-9b1c-457c-a917-16ef468eb90a-api.purview-service.microsoft.com/catalog
 Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID: 5f2dc546-5728-4896-8055-a4853c8cc26b
-Purview Daily_properties_Master ELT REST API_parameters_TenantID: 45a126ff-7fc0-4528-ac6b-eefad687db2d
+Purview Daily_properties_Master ELT REST API_parameters_TenantID: 4e921ed2-9b1c-457c-a917-16ef468eb90a
 Purview Daily_properties_Master ELT REST API_parameters_AADResource: https://purview.azure.net
 Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem: inference
 Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": AIML-OCR
