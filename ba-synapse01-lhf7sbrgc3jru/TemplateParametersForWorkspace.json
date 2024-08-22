@@ -1,0 +1,162 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "ba-synapse01-lhf7sbrgc3jru"
+		},
+		"ControlDB_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-kn3acb6lw3vr4.database.windows.net;Initial Catalog=ControlDB"
+		},
+		"ba-synapse01-lhf7sbrgc3jru-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ba-synapse01-lhf7sbrgc3jru.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"AIMLCustomModels_properties_typeProperties_serviceEndpoint": {
+			"value": "https://bacustmodelstorage01q575.blob.core.windows.net/"
+		},
+		"AtlasREST_properties_typeProperties_url": {
+			"value": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
+		},
+		"AtlasREST_properties_typeProperties_servicePrincipalId": {
+			"value": "5f2dc546-5728-4896-8055-a4853c8cc26b"
+		},
+		"AtlasREST_properties_typeProperties_tenant": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"AtlasREST_properties_typeProperties_aadResourceId": {
+			"value": "https://purview.azure.net"
+		},
+		"Bronze_properties_typeProperties_url": {
+			"value": "https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/"
+		},
+		"DeltaZone_properties_typeProperties_url": {
+			"value": "https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/"
+		},
+		"DropZone_properties_typeProperties_url": {
+			"value": "https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/"
+		},
+		"REST_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
+		"REST_properties_typeProperties_servicePrincipalId": {
+			"value": "@{linkedService().ServicePrincipalID}"
+		},
+		"REST_properties_typeProperties_tenant": {
+			"value": "@{linkedService().TenantID}"
+		},
+		"REST_properties_typeProperties_aadResourceId": {
+			"value": "@{linkedService().AADResource}"
+		},
+		"ba-synapse01-lhf7sbrgc3jru-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/"
+		},
+		"keyvault01_properties_typeProperties_baseUrl": {
+			"value": "https://ba-kv01-lhf7sbrgc3jru.vault.azure.net/"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Azure"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "100"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://management.azure.com"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"Azure Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://management.azure.com"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceList_logicapp_endpoint": {
+			"value": "https://prod-14.australiaeast.logic.azure.com:443/workflows/98c4e193092141f5a2cd40195a3daa8d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Q7FnVqPC0bpPi6rTO4OkMV8DxWJx3uKAqyLrLyiqMvM"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_subscriptionId": {
+			"value": "e836675f-2508-4873-ad4f-754d70253b22"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_resourceType": {
+			"value": "Microsoft.Synapse/workspaces/sqlPools"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_apiVersion": {
+			"value": "2021-04-01"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_action": {
+			"value": "pause"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sku": {
+			"value": "DW100c"
+		},
+		"Pause-ALL-Dedicated-SQLPools_properties_Manage-All-SQLPools_parameters_sqlPool_logicapp_endpoint": {
+			"value": "https://prod-11.australiaeast.logic.azure.com:443/workflows/c0d126b3b92f432f8135708ebf1c1aea/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=l9xj5wIjJ48UJp_RfzTg3TrrqSvUfQ9OVY9SX77Z30Q"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_SourceSystemName": {
+			"value": "Purview"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_StreamName": {
+			"value": "%"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_MaxIngestInstance": {
+			"value": "50"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_BaseURL": {
+			"value": "https://ba-purview01-6spfx5oytiivq.purview.azure.com"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_ServicePrincipalID": {
+			"value": "5e07b142-92b4-4671-83c0-e824bc93da6c"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_TenantID": {
+			"value": "45a126ff-7fc0-4528-ac6b-eefad687db2d"
+		},
+		"Purview Daily_properties_Master ELT REST API_parameters_AADResource": {
+			"value": "https://purview.azure.net"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"value": "inference"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"value": "@triggerBody().folderPath"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"value": "@triggerBody().fileName"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"value": "AIML-OCR"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"value": "analyze"
+		},
+		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"value": "smallMO"
+		},
+		"Real Estate Statement Event_properties_typeProperties_scope": {
+			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
+			"value": "inference"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
+			"value": "@triggerBody().folderPath"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFile": {
+			"value": "@triggerBody().fileName"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceSystemName": {
+			"value": "AIML-OCR"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
+			"value": "analyze-sec-form10q"
+		},
+		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
+			"value": "smallMO"
+		},
+		"SEC Form10Q Event_properties_typeProperties_scope": {
+			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+		}
+	}
+}
