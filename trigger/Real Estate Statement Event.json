@@ -11,11 +11,11 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"SourceFileDropFileSystem": "inference",
+					"SourceFileDropFileSystem": "doci",
 					"SourceFileDropFolder": "@triggerBody().folderPath",
 					"SourceFileDropFile": "@triggerBody().fileName",
 					"SourceSystemName": "AIML-OCR",
-					"StreamName": "analyze",
+					"StreamName": "restatements",
 					"SparkPool": "smallMO"
 				}
 			}
