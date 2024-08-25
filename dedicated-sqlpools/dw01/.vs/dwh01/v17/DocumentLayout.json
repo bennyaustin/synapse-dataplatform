@@ -1,0 +1,119 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\datasources.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Purview\\Tables\\datasources.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Purview\\Tables\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\sec\\form10q.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:sec\\form10q.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Azure\\Tables\\operations.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Azure\\Tables\\operations.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|dwh01||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\dwh01.sqlproj||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|004af6c6-aa5b-4367-86df-153f9f79d6fc",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:dwh01.sqlproj||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|004af6c6-aa5b-4367-86df-153f9f79d6fc"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Azure\\Tables\\operations.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Azure\\Tables\\operations.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\sec\\form10q.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:sec\\form10q.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Purview\\Tables\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\datasources.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{BD3399B3-DC59-4694-A780-56F041EEA617}|dwh01.sqlproj|solutionrelative:Purview\\Tables\\datasources.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "datasources.sql ",
+              "DocumentMoniker": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\datasources.sql",
+              "RelativeDocumentMoniker": "Purview\\Tables\\datasources.sql",
+              "ToolTip": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\datasources.sql\r\n(localdb)\\ProjectModels.dwh01\r\n(SOUTHPACIFIC\\bennyaustin)",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-22T12:47:07.728Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "collections.sql ",
+              "DocumentMoniker": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\collections.sql",
+              "RelativeDocumentMoniker": "Purview\\Tables\\collections.sql",
+              "ToolTip": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Purview\\Tables\\collections.sql\r\n(localdb)\\ProjectModels.dwh01\r\n(SOUTHPACIFIC\\bennyaustin)",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-22T12:47:06.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "form10q.sql ",
+              "DocumentMoniker": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\sec\\form10q.sql",
+              "RelativeDocumentMoniker": "sec\\form10q.sql",
+              "ToolTip": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\sec\\form10q.sql\r\n(localdb)\\ProjectModels.dwh01\r\n(SOUTHPACIFIC\\bennyaustin)",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-22T12:46:59.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "operations.sql ",
+              "DocumentMoniker": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Azure\\Tables\\operations.sql",
+              "RelativeDocumentMoniker": "Azure\\Tables\\operations.sql",
+              "ToolTip": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\Azure\\Tables\\operations.sql\r\n(localdb)\\ProjectModels.dwh01\r\n(SOUTHPACIFIC\\bennyaustin)",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-08-22T12:46:52.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "dwh01",
+              "DocumentMoniker": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\dwh01.sqlproj",
+              "RelativeDocumentMoniker": "dwh01.sqlproj",
+              "ToolTip": "C:\\Git Repos\\synapse-dataplatform\\dedicated-sqlpools\\dw01\\dwh01.sqlproj",
+              "RelativeToolTip": "dwh01.sqlproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-02-28T00:11:16.576Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
