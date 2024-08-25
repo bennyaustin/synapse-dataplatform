@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c72386c5-d047-4d00-9057-f394c04ab46a"
+				"spark.autotune.trackingId": "ca2f87fb-9e97-4f43-a2b2-e1b84d7690df"
 			}
 		},
 		"metadata": {
@@ -36,20 +36,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+				"id": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-synapse-dp/providers/Microsoft.Synapse/workspaces/ba-synapse01-lhf7sbrgc3jru/bigDataPools/mediumMO",
 				"name": "mediumMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"endpoint": "https://ba-synapse01-lhf7sbrgc3jru.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -81,7 +80,7 @@
 					}
 				},
 				"source": [
-					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"ba-kv01-lhf7sbrgc3jru\"}"
 				],
 				"execution_count": 5
 			},
@@ -102,10 +101,10 @@
 					]
 				},
 				"source": [
-					"tenandIdSecret = \"<Azure Key Vault Secret for TenantID>\"\r\n",
-					"servicePrincipalIdSecret = \"<Azure Key Vault Secret for Service Principal ID>\"\r\n",
-					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\"\r\n",
-					"authUrl = \"https://login.windows.net\"\r\n",
+					"tenandIdSecret = \"<Azure Key Vault Secret for TenantID>\"\n",
+					"servicePrincipalIdSecret = \"<Azure Key Vault Secret for Service Principal ID>\"\n",
+					"servicePrincipalSecret = \"<Azure Key Vault Secret for Service Principal secret>\"\n",
+					"authUrl = \"https://login.windows.net\"\n",
 					"resourceUrl = \"https://database.windows.net/\""
 				],
 				"execution_count": 6
@@ -124,8 +123,8 @@
 					}
 				},
 				"source": [
-					"import adal\r\n",
-					"\r\n",
+					"import adal\n",
+					"\n",
 					""
 				],
 				"execution_count": 7
@@ -157,36 +156,36 @@
 					}
 				},
 				"source": [
-					"def getBearerToken():\r\n",
-					"    ############################################################################\r\n",
-					"    # getBearerToken\r\n",
-					"    # Returns a bearer token for a service principal AAD authentication\r\n",
-					"    #\r\n",
-					"    # Parameters:\r\n",
-					"    #       None\r\n",
-					"    #\r\n",
-					"    # Returns:\r\n",
-					"    #     Bearer Token  \r\n",
-					"    ############################################################################\r\n",
-					"\r\n",
-					"    tenantId = getSecret(tenandIdSecret)\r\n",
-					"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\r\n",
-					"    secret = getSecret(servicePrincipalSecret)\r\n",
-					"\r\n",
-					"    assert tenantId is not None, \"tenantId not specified\"\r\n",
-					"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\r\n",
-					"    assert secret is not None, \"secret not specified\"\r\n",
-					"    assert authUrl is not None, \"authUrl not specified\"\r\n",
-					"    assert resourceUrl is not None, \"resourceUrl not specified\"\r\n",
-					"\r\n",
-					"    authority = authUrl + \"/\" + tenantId\r\n",
-					"    try:\r\n",
-					"        context = adal.AuthenticationContext(authority)\r\n",
-					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\r\n",
-					"        accessToken = token[\"accessToken\"]\r\n",
-					"    except Exception as e:\r\n",
-					"        print(\"getBearerToken failed with exception:\")\r\n",
-					"        raise e\r\n",
+					"def getBearerToken():\n",
+					"    ############################################################################\n",
+					"    # getBearerToken\n",
+					"    # Returns a bearer token for a service principal AAD authentication\n",
+					"    #\n",
+					"    # Parameters:\n",
+					"    #       None\n",
+					"    #\n",
+					"    # Returns:\n",
+					"    #     Bearer Token  \n",
+					"    ############################################################################\n",
+					"\n",
+					"    tenantId = getSecret(tenandIdSecret)\n",
+					"    servicePrincipalId = getSecret(servicePrincipalIdSecret)\n",
+					"    secret = getSecret(servicePrincipalSecret)\n",
+					"\n",
+					"    assert tenantId is not None, \"tenantId not specified\"\n",
+					"    assert servicePrincipalId is not None, \"servicePrincipalId not specified\"\n",
+					"    assert secret is not None, \"secret not specified\"\n",
+					"    assert authUrl is not None, \"authUrl not specified\"\n",
+					"    assert resourceUrl is not None, \"resourceUrl not specified\"\n",
+					"\n",
+					"    authority = authUrl + \"/\" + tenantId\n",
+					"    try:\n",
+					"        context = adal.AuthenticationContext(authority)\n",
+					"        token = context.acquire_token_with_client_credentials(resourceUrl, servicePrincipalId, secret)\n",
+					"        accessToken = token[\"accessToken\"]\n",
+					"    except Exception as e:\n",
+					"        print(\"getBearerToken failed with exception:\")\n",
+					"        raise e\n",
 					"    return accessToken"
 				],
 				"execution_count": 9
@@ -206,7 +205,8 @@
 				},
 				"source": [
 					""
-				]
+				],
+				"execution_count": null
 			}
 		]
 	}
