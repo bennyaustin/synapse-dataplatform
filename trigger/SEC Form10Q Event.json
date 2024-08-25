@@ -22,10 +22,10 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/inference/blobs/formrecognizer-sec-form10q-json/",
+			"blobPathBeginsWith": "/doci/blobs/inference/form10q/",
 			"blobPathEndsWith": ".json",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575",
+			"scope": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/baaimlstorage01o2katdvwv",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]
