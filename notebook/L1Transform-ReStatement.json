@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c9aa0e07-a944-4bd3-afe9-eddb7d50ac90"
+				"spark.autotune.trackingId": "72f59ba3-fc91-491c-9686-ed826cd1229b"
 			}
 		},
 		"metadata": {
@@ -36,20 +36,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-synapse-dataplatform/providers/Microsoft.Synapse/workspaces/ba-synapse01-kn3acb6lw3vr4/bigDataPools/mediumMO",
+				"id": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-synapse-dp/providers/Microsoft.Synapse/workspaces/ba-synapse01-lhf7sbrgc3jru/bigDataPools/mediumMO",
 				"name": "mediumMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapse01-kn3acb6lw3vr4.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"endpoint": "https://ba-synapse01-lhf7sbrgc3jru.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 8,
 				"memory": 56,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -57,7 +56,7 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01kn3acb6lw3vr\" }"
+					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
 				],
 				"execution_count": 89
 			},
@@ -91,26 +90,26 @@
 					]
 				},
 				"source": [
-					"L1TransformInstanceID = None\r\n",
-					"L1TransformID = None\r\n",
-					"IngestID = None\r\n",
-					"CustomParameters = None\r\n",
-					"InputRawFileSystem = None\r\n",
-					"InputRawFileFolder = None\r\n",
-					"InputRawFile = None\r\n",
-					"InputRawFileDelimiter = None\r\n",
-					"InputFileHeaderFlag = None\r\n",
-					"OutputL1CurateFileSystem = None\r\n",
-					"OutputL1CuratedFolder = None\r\n",
-					"OutputL1CuratedFile = None\r\n",
-					"OutputL1CuratedFileDelimiter = None\r\n",
-					"OutputL1CuratedFileFormat = None\r\n",
-					"OutputL1CuratedFileWriteMode = None\r\n",
-					"OutputDWStagingTable = None\r\n",
-					"LookupColumns = None\r\n",
-					"OutputDWTable = None\r\n",
-					"OutputDWTableWriteMode = None\r\n",
-					"ReRunL1TransformFlag = None\r\n",
+					"L1TransformInstanceID = None\n",
+					"L1TransformID = None\n",
+					"IngestID = None\n",
+					"CustomParameters = None\n",
+					"InputRawFileSystem = None\n",
+					"InputRawFileFolder = None\n",
+					"InputRawFile = None\n",
+					"InputRawFileDelimiter = None\n",
+					"InputFileHeaderFlag = None\n",
+					"OutputL1CurateFileSystem = None\n",
+					"OutputL1CuratedFolder = None\n",
+					"OutputL1CuratedFile = None\n",
+					"OutputL1CuratedFileDelimiter = None\n",
+					"OutputL1CuratedFileFormat = None\n",
+					"OutputL1CuratedFileWriteMode = None\n",
+					"OutputDWStagingTable = None\n",
+					"LookupColumns = None\n",
+					"OutputDWTable = None\n",
+					"OutputDWTableWriteMode = None\n",
+					"ReRunL1TransformFlag = None\n",
 					"DeltaName = None"
 				],
 				"execution_count": 90
@@ -129,27 +128,27 @@
 					}
 				},
 				"source": [
-					"# # Parameters for Testing only, should be commented off\r\n",
-					"# L1TransformInstanceID = 1\r\n",
-					"# L1TransformID = 4\r\n",
-					"# IngestID = 4\r\n",
-					"# CustomParameters = None\r\n",
-					"# InputRawFileSystem = 'raw-bronze'\r\n",
-					"# InputRawFileFolder = 're-statements/2023/04'\r\n",
-					"# InputRawFile = '2023-04-05_194935_re-statement.json'\r\n",
-					"# InputRawFileDelimiter = None\r\n",
-					"# InputFileHeaderFlag = None\r\n",
-					"# OutputL1CurateFileSystem = 'curated-silver'\r\n",
-					"# OutputL1CuratedFolder = 're-statements/2023/04'\r\n",
-					"# OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\r\n",
-					"# OutputL1CuratedFileDelimiter = None\r\n",
-					"# OutputL1CuratedFileFormat = 'json'\r\n",
-					"# OutputL1CuratedFileWriteMode = 'overwrite'\r\n",
-					"# OutputDWStagingTable = None\r\n",
-					"# LookupColumns = None\r\n",
-					"# OutputDWTable = None\r\n",
-					"# OutputDWTableWriteMode = None\r\n",
-					"# ReRunL1TransformFlag = None\r\n",
+					"# # Parameters for Testing only, should be commented off\n",
+					"# L1TransformInstanceID = 1\n",
+					"# L1TransformID = 4\n",
+					"# IngestID = 4\n",
+					"# CustomParameters = None\n",
+					"# InputRawFileSystem = 'raw-bronze'\n",
+					"# InputRawFileFolder = 're-statements/2023/04'\n",
+					"# InputRawFile = '2023-04-05_194935_re-statement.json'\n",
+					"# InputRawFileDelimiter = None\n",
+					"# InputFileHeaderFlag = None\n",
+					"# OutputL1CurateFileSystem = 'curated-silver'\n",
+					"# OutputL1CuratedFolder = 're-statements/2023/04'\n",
+					"# OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\n",
+					"# OutputL1CuratedFileDelimiter = None\n",
+					"# OutputL1CuratedFileFormat = 'json'\n",
+					"# OutputL1CuratedFileWriteMode = 'overwrite'\n",
+					"# OutputDWStagingTable = None\n",
+					"# LookupColumns = None\n",
+					"# OutputDWTable = None\n",
+					"# OutputDWTableWriteMode = None\n",
+					"# ReRunL1TransformFlag = None\n",
 					"# DeltaName = None"
 				],
 				"execution_count": 91
@@ -169,30 +168,30 @@
 					"collapsed": false
 				},
 				"source": [
-					"import pyspark.sql.functions \r\n",
-					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\r\n",
-					"ingestCount = df.count()\r\n",
-					"\r\n",
-					"# extract datapoints of interest and explode array\r\n",
-					"\r\n",
-					"# df.printSchema()\r\n",
-					"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\r\n",
-					"            ,col(\"fields.owner.valueString\").alias(\"owner\")\r\n",
-					"            ,col(\"fields.owner address.valueString\").alias(\"re_agency_address\")\r\n",
-					"            ,col(\"fields.rental address.valueString\").alias(\"rental_address\")\r\n",
-					"            ,col(\"fields.statement date.valueString\").alias(\"statement_date\")\r\n",
-					"            ,col(\"fields.tenant.valueString\").alias(\"tenant\")\r\n",
-					"            ,col(\"fields.total payment.valueString\").alias(\"total_payment\")\r\n",
-					"            ,explode(col(\"fields.statement details.valueArray\")).alias(\"statement details\")\r\n",
-					"            )\r\n",
-					"\r\n",
-					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\r\n",
-					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\r\n",
-					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\r\n",
-					"df.printSchema()\r\n",
-					"\r\n",
-					"#write flattened json to curated zone of data lake\r\n",
-					"l1TransformCount = df.count()\r\n",
+					"import pyspark.sql.functions \n",
+					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\n",
+					"ingestCount = df.count()\n",
+					"\n",
+					"# extract datapoints of interest and explode array\n",
+					"\n",
+					"# df.printSchema()\n",
+					"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\n",
+					"            ,col(\"fields.owner.valueString\").alias(\"owner\")\n",
+					"            ,col(\"fields.owner address.valueString\").alias(\"re_agency_address\")\n",
+					"            ,col(\"fields.rental address.valueString\").alias(\"rental_address\")\n",
+					"            ,col(\"fields.statement date.valueString\").alias(\"statement_date\")\n",
+					"            ,col(\"fields.tenant.valueString\").alias(\"tenant\")\n",
+					"            ,col(\"fields.total payment.valueString\").alias(\"total_payment\")\n",
+					"            ,explode(col(\"fields.statement details.valueArray\")).alias(\"statement details\")\n",
+					"            )\n",
+					"\n",
+					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\n",
+					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\n",
+					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\n",
+					"df.printSchema()\n",
+					"\n",
+					"#write flattened json to curated zone of data lake\n",
+					"l1TransformCount = df.count()\n",
 					"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
 				"execution_count": 93
@@ -224,12 +223,13 @@
 					}
 				},
 				"source": [
-					"import json\r\n",
-					"mssparkutils.notebook.exit(json.dumps({\r\n",
-					"  \"IngestCount\": ingestCount,\r\n",
-					"  \"L1TransformCount\": l1TransformCount\r\n",
+					"import json\n",
+					"mssparkutils.notebook.exit(json.dumps({\n",
+					"  \"IngestCount\": ingestCount,\n",
+					"  \"L1TransformCount\": l1TransformCount\n",
 					"}))"
-				]
+				],
+				"execution_count": null
 			}
 		]
 	}
