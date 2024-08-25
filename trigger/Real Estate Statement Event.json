@@ -11,21 +11,21 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"SourceFileDropFileSystem": "inference",
+					"SourceFileDropFileSystem": "doci",
 					"SourceFileDropFolder": "@triggerBody().folderPath",
 					"SourceFileDropFile": "@triggerBody().fileName",
 					"SourceSystemName": "AIML-OCR",
-					"StreamName": "analyze",
+					"StreamName": "restatements",
 					"SparkPool": "smallMO"
 				}
 			}
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/inference/blobs/formrecognizer-re-json/",
+			"blobPathBeginsWith": "/doci/blobs/inference/re-statements/",
 			"blobPathEndsWith": ".json",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575",
+			"scope": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/baaimlstorage01o2katdvwv",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]

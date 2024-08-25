@@ -1,5 +1,5 @@
 {
-	"name": "L1Transform-SEC-Form10Q",
+	"name": "L1Transform-SEC-Form10Q_9761d944-ac30-4c33-828f-e7c8b92905f2",
 	"properties": {
 		"description": "Notebook to summarize SEC Form 10Q statement using AOAI",
 		"folder": {
@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c05c56a3-3ba4-49b1-b5bc-4a5ecaece80a"
+				"spark.autotune.trackingId": "3f11854d-45d9-4b47-af4f-f68321472e73"
 			}
 		},
 		"metadata": {
@@ -30,7 +30,7 @@
 			"enableDebugMode": true,
 			"kernelspec": {
 				"name": "synapse_pyspark",
-				"display_name": "Synapse PySpark"
+				"display_name": "python"
 			},
 			"language_info": {
 				"name": "python"
@@ -99,7 +99,8 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
+					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }\n",
+					""
 				],
 				"execution_count": 2
 			},
@@ -178,6 +179,40 @@
 			{
 				"cell_type": "code",
 				"metadata": {
+					"tags": [
+						"parameters_overwritten"
+					]
+				},
+				"source": [
+					"# This cell is generated from runtime parameters. Learn more: https://go.microsoft.com/fwlink/?linkid=2161015\n",
+					"L1TransformInstanceID = 8\n",
+					"L1TransformID  = 2\n",
+					"IngestID = 1\n",
+					"CustomParameters = None\n",
+					"InputRawFileSystem = \"raw-bronze\"\n",
+					"InputRawFileFolder = \"form10q/2024/08\"\n",
+					"InputRawFile = \"2024-08-25_200636_form10q.json\"\n",
+					"InputRawFileDelimiter = None\n",
+					"InputFileHeaderFlag = None\n",
+					"OutputL1CurateFileSystem = \"curated-silver\"\n",
+					"OutputL1CuratedFolder = \"form10q/2024/08\"\n",
+					"OutputL1CuratedFile = \"standardized_2024-08-25_200724_form10q.json\"\n",
+					"OutputL1CuratedFileDelimiter = None\n",
+					"OutputL1CuratedFileFormat = \"json\"\n",
+					"OutputL1CuratedFileWriteMode = \"overwrite\"\n",
+					"OutputDWStagingTable = None\n",
+					"LookupColumns = None\n",
+					"OutputDWTable = None\n",
+					"OutputDWTableWriteMode = None\n",
+					"ReRunL1TransformFlag = None\n",
+					"DeltaName = None\n",
+					""
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
 					"jupyter": {
 						"source_hidden": false,
 						"outputs_hidden": false
@@ -212,7 +247,7 @@
 					"# ReRunL1TransformFlag = None\n",
 					"# DeltaName = None"
 				],
-				"execution_count": 5
+				"execution_count": 6
 			},
 			{
 				"cell_type": "markdown",
@@ -264,7 +299,7 @@
 					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\n",
 					"            )"
 				],
-				"execution_count": 6
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -276,7 +311,7 @@
 					}
 				},
 				"source": [
-					"# AOAI Summarization"
+					"# AOAI Summarization GPT3.5"
 				]
 			},
 			{
@@ -299,12 +334,12 @@
 					"from synapse.ml.cognitive import OpenAICompletion\n",
 					"\n",
 					"aoaiEndpoint = getSecret(\"aoai-endpoint\")\n",
-					"aoaiDeploymentName = \"gpt-35-turbo\"\n",
+					"aoaiDeploymentName = \"gpt35\"\n",
 					"aoaiApiKey = getSecret(\"aoai-api-key\")\n",
 					"\n",
 					"#Summary1\n",
 					"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -325,7 +360,7 @@
 					"\n",
 					"#Summary2\n",
 					"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights.\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -346,7 +381,7 @@
 					"\n",
 					"#Summary3\n",
 					"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below.\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -365,7 +400,7 @@
 					"\n",
 					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
 				],
-				"execution_count": 7
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
