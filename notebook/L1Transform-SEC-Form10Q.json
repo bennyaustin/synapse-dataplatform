@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "5a00c4e1-fcc3-46c2-ac4a-2f461929155f"
+				"spark.autotune.trackingId": "c05c56a3-3ba4-49b1-b5bc-4a5ecaece80a"
 			}
 		},
 		"metadata": {
@@ -117,7 +117,7 @@
 					}
 				},
 				"source": [
-					"%run /common/keyvault-functions {\"kvLinkedService\": \"ba-kv01-lhf7sbrgc3jru\"}"
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 				],
 				"execution_count": 3
 			},
