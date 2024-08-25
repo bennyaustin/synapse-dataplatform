@@ -117,7 +117,7 @@
 			"value": "https://purview.azure.net"
 		},
 		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
-			"value": "inference"
+			"value": "doci"
 		},
 		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
 			"value": "@triggerBody().folderPath"
@@ -129,16 +129,16 @@
 			"value": "AIML-OCR"
 		},
 		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
-			"value": "analyze"
+			"value": "restatements"
 		},
 		"Real Estate Statement Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
 			"value": "smallMO"
 		},
 		"Real Estate Statement Event_properties_typeProperties_scope": {
-			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+			"value": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/baaimlstorage01o2katdvwv"
 		},
 		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFileSystem": {
-			"value": "inference"
+			"value": "doci"
 		},
 		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SourceFileDropFolder": {
 			"value": "@triggerBody().folderPath"
@@ -150,13 +150,13 @@
 			"value": "AIML-OCR"
 		},
 		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_StreamName": {
-			"value": "analyze-sec-form10q"
+			"value": "form10q"
 		},
 		"SEC Form10Q Event_properties_Ingest_AIML_CustomInferenceFile_parameters_SparkPool": {
 			"value": "smallMO"
 		},
 		"SEC Form10Q Event_properties_typeProperties_scope": {
-			"value": "/subscriptions/e836675f-2508-4873-ad4f-754d70253b22/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/bacustmodelstorage01q575"
+			"value": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-aiml/providers/Microsoft.Storage/storageAccounts/baaimlstorage01o2katdvwv"
 		}
 	}
 }
