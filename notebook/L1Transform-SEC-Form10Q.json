@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "8f6149df-78ee-4780-a141-3f200ad2b80e"
+				"spark.autotune.trackingId": "5a00c4e1-fcc3-46c2-ac4a-2f461929155f"
 			}
 		},
 		"metadata": {
@@ -276,7 +276,7 @@
 					}
 				},
 				"source": [
-					"# AOAI Summarization GPT3.5"
+					"# AOAI Summarization"
 				]
 			},
 			{
@@ -299,7 +299,7 @@
 					"from synapse.ml.cognitive import OpenAICompletion\n",
 					"\n",
 					"aoaiEndpoint = getSecret(\"aoai-endpoint\")\n",
-					"aoaiDeploymentName = \"gpt35\"\n",
+					"aoaiDeploymentName = \"gpt-35-turbo\"\n",
 					"aoaiApiKey = getSecret(\"aoai-api-key\")\n",
 					"\n",
 					"#Summary1\n",
