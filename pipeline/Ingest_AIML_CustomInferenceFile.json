@@ -1015,11 +1015,11 @@
 			},
 			"SourceFileDropFolder": {
 				"type": "string",
-				"defaultValue": "inference/re-statements"
+				"defaultValue": "inference/form10q"
 			},
 			"SourceFileDropFile": {
 				"type": "string",
-				"defaultValue": "Statement #52 - OWN00426-1 .json"
+				"defaultValue": "MA_202209Sep.json"
 			},
 			"SourceSystemName": {
 				"type": "string",
@@ -1027,7 +1027,7 @@
 			},
 			"StreamName": {
 				"type": "string",
-				"defaultValue": "restatements"
+				"defaultValue": "form10q"
 			},
 			"SparkPool": {
 				"type": "string",
