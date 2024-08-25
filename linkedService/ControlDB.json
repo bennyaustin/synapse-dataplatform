@@ -1,12 +1,11 @@
 {
 	"name": "ControlDB",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"description": "Linked service for ELT Framework database",
 		"annotations": [],
 		"type": "AzureSqlDatabase",
 		"typeProperties": {
-			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-kn3acb6lw3vr4.database.windows.net;Initial Catalog=ControlDB",
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=ba-sql01-lhf7sbrgc3jru.database.windows.net;Initial Catalog=controlDB",
 			"alwaysEncryptedSettings": {
 				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
 			}
@@ -15,5 +14,6 @@
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }

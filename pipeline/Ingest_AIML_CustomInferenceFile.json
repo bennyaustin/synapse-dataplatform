@@ -979,6 +979,9 @@
 						]
 					}
 				],
+				"policy": {
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -1008,15 +1011,15 @@
 		"parameters": {
 			"SourceFileDropFileSystem": {
 				"type": "string",
-				"defaultValue": "inference"
+				"defaultValue": "doci"
 			},
 			"SourceFileDropFolder": {
 				"type": "string",
-				"defaultValue": "formrecognizer-sec-form10q-json"
+				"defaultValue": "inference/re-statements"
 			},
 			"SourceFileDropFile": {
 				"type": "string",
-				"defaultValue": "NVIDIA_202105May.json"
+				"defaultValue": "Statement #52 - OWN00426-1 .json"
 			},
 			"SourceSystemName": {
 				"type": "string",
@@ -1024,7 +1027,7 @@
 			},
 			"StreamName": {
 				"type": "string",
-				"defaultValue": "analyze-sec-form10q"
+				"defaultValue": "restatements"
 			},
 			"SparkPool": {
 				"type": "string",
