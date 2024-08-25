@@ -1,0 +1,500 @@
+{
+	"name": "L1Transform-SEC-Form10Q_dbc7755d-d7a1-4b42-8018-950aae4f9f1f",
+	"properties": {
+		"description": "Notebook to summarize SEC Form 10Q statement using AOAI",
+		"folder": {
+			"name": "L1Transform"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "smallMO",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": true,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "0a88df3f-a07a-48ba-b6de-c514bdb9db37"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "python"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-synapse-dp/providers/Microsoft.Synapse/workspaces/ba-synapse01-lhf7sbrgc3jru/bigDataPools/smallMO",
+				"name": "smallMO",
+				"type": "Spark",
+				"endpoint": "https://ba-synapse01-lhf7sbrgc3jru.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Install SynapseML for this spark session\n",
+					"https://microsoft.github.io/SynapseML/docs/getting_started/installation/"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%%configure -f\n",
+					"{\n",
+					"  \"name\": \"synapseml\",\n",
+					"  \"conf\": {\n",
+					"      \"spark.jars.packages\": \"com.microsoft.azure:synapseml_2.12:0.11.0,org.apache.spark:spark-avro_2.12:3.3.1\",\n",
+					"      \"spark.jars.repositories\": \"https://mmlspark.azureedge.net/maven\",\n",
+					"      \"spark.jars.excludes\": \"org.scala-lang:scala-reflect,org.apache.spark:spark-tags_2.12,org.scalactic:scalactic_2.12,org.scalatest:scalatest_2.12,com.fasterxml.jackson.core:jackson-databind\",\n",
+					"      \"spark.yarn.user.classpath.first\": \"true\",\n",
+					"      \"spark.sql.parquet.enableVectorizedReader\": \"false\",\n",
+					"      \"spark.sql.legacy.replaceDatabricksSparkAvro.enabled\": \"true\"\n",
+					"  }\n",
+					"}"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Notebook Parameters"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"L1TransformInstanceID = None\n",
+					"L1TransformID = None\n",
+					"IngestID = None\n",
+					"CustomParameters = None\n",
+					"InputRawFileSystem = None\n",
+					"InputRawFileFolder = None\n",
+					"InputRawFile = None\n",
+					"InputRawFileDelimiter = None\n",
+					"InputFileHeaderFlag = None\n",
+					"OutputL1CurateFileSystem = None\n",
+					"OutputL1CuratedFolder = None\n",
+					"OutputL1CuratedFile = None\n",
+					"OutputL1CuratedFileDelimiter = None\n",
+					"OutputL1CuratedFileFormat = None\n",
+					"OutputL1CuratedFileWriteMode = None\n",
+					"OutputDWStagingTable = None\n",
+					"LookupColumns = None\n",
+					"OutputDWTable = None\n",
+					"OutputDWTableWriteMode = None\n",
+					"ReRunL1TransformFlag = None\n",
+					"DeltaName = None"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"tags": [
+						"parameters_overwritten"
+					]
+				},
+				"source": [
+					"# This cell is generated from runtime parameters. Learn more: https://go.microsoft.com/fwlink/?linkid=2161015\n",
+					"L1TransformInstanceID = 11\n",
+					"L1TransformID  = 2\n",
+					"IngestID = 1\n",
+					"CustomParameters = None\n",
+					"InputRawFileSystem = \"raw-bronze\"\n",
+					"InputRawFileFolder = \"form10q/2024/08\"\n",
+					"InputRawFile = \"2024-08-25_211827_form10q.json\"\n",
+					"InputRawFileDelimiter = None\n",
+					"InputFileHeaderFlag = None\n",
+					"OutputL1CurateFileSystem = \"curated-silver\"\n",
+					"OutputL1CuratedFolder = \"form10q/2024/08\"\n",
+					"OutputL1CuratedFile = \"standardized_2024-08-25_211913_form10q.json\"\n",
+					"OutputL1CuratedFileDelimiter = None\n",
+					"OutputL1CuratedFileFormat = \"json\"\n",
+					"OutputL1CuratedFileWriteMode = \"overwrite\"\n",
+					"OutputDWStagingTable = None\n",
+					"LookupColumns = None\n",
+					"OutputDWTable = None\n",
+					"OutputDWTableWriteMode = None\n",
+					"ReRunL1TransformFlag = None\n",
+					"DeltaName = None\n",
+					""
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# # Parameters for Testing only, should be commented off\n",
+					"# L1TransformInstanceID = 6\n",
+					"# L1TransformID = 8\n",
+					"# IngestID = 5\n",
+					"# CustomParameters = None\n",
+					"# InputRawFileSystem = 'raw-bronze'\n",
+					"# InputRawFileFolder = 'sec-form10q/2023/04'\n",
+					"# InputRawFile = '2023-04-16_141247_sec-form10q.json'\n",
+					"# InputRawFileDelimiter = None\n",
+					"# InputFileHeaderFlag = None\n",
+					"# OutputL1CurateFileSystem = 'curated-silver'\n",
+					"# OutputL1CuratedFolder = 'sec-form10q/2023/04'\n",
+					"# OutputL1CuratedFile = 'standardized_2023-04-16_141247_sec-form10q.json'\n",
+					"# OutputL1CuratedFileDelimiter = None\n",
+					"# OutputL1CuratedFileFormat = 'json'\n",
+					"# OutputL1CuratedFileWriteMode = 'overwrite'\n",
+					"# OutputDWStagingTable = '[stg].[merge_sec_form10q]'\n",
+					"# LookupColumns = ['org_name','reporting_quarter']\n",
+					"# OutputDWTable = '[sec].[form10q]'\n",
+					"# OutputDWTableWriteMode = 'append'\n",
+					"# ReRunL1TransformFlag = None\n",
+					"# DeltaName = None"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Extract datapoints of interest"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"from pyspark.sql.functions import *\n",
+					"from pyspark.sql.types import *\n",
+					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\n",
+					"ingestCount = df.count()\n",
+					"\n",
+					"# df.printSchema()\n",
+					"\n",
+					"df = df.select( col(\"org_name.content\").alias(\"org_name\")\n",
+					"                ,col(\"org_address.content\").alias(\"org_address\")\n",
+					"                ,col(\"org_jurisdiction.content\").alias(\"org_jurisdiction\")\n",
+					"                ,col(\"org_stock_ticker.content\").alias(\"org_stock_ticker\")\n",
+					"                ,col(\"reporting_quarter.content\").alias(\"reporting_quarter\")\n",
+					"                ,col(\"stock_exchange.content\").alias(\"stock_exchange\")\n",
+					"                ,regexp_replace(col(\"total_assets.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_assets\")\n",
+					"                ,regexp_replace(col(\"total_comprehensive_income.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_comprehensive_income\")\n",
+					"                ,regexp_replace(col(\"total_equity.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_equity\")\n",
+					"                ,regexp_replace(col(\"total_liabilities.content\"),\",\",\"\").cast(IntegerType()).alias(\"total_liabilities\")                \n",
+					"                ,col(\"mgmt_analysis.content\").alias(\"mgmt_analysis\")\n",
+					"                ,col(\"risk_disclosure.content\").alias(\"risk_disclosure\")\n",
+					"                ,col(\"controls_procedures.content\").alias(\"controls_procedures\")\n",
+					"            )"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# AOAI Summarization"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"import os\n",
+					"from synapse.ml.core.platform import running_on_synapse, find_secret\n",
+					"from synapse.ml.cognitive import OpenAICompletion\n",
+					"\n",
+					"aoaiEndpoint = getSecret(\"aoai-endpoint\")\n",
+					"aoaiDeploymentName = \"gpt-35-turbo\"\n",
+					"aoaiApiKey = getSecret(\"aoai-api-key\")\n",
+					"\n",
+					"#Summary1\n",
+					"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\n",
+					"                                    , concat(lit(\"summarize the text below as bullet list\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
+					"completion = (\n",
+					"    OpenAICompletion()\n",
+					"    .setSubscriptionKey(aoaiApiKey)\n",
+					"    .setDeploymentName(aoaiDeploymentName)\n",
+					"    .setUrl(aoaiEndpoint)\n",
+					"    .setMaxTokens(100)\n",
+					"    .setPromptCol(\"mgmt_analysis_prompt\")\n",
+					"    .setErrorCol(\"error\")\n",
+					"    .setOutputCol(\"mgmt_analysis_summary\")\n",
+					")\n",
+					"\n",
+					"dfSummaryMgmtAnalysis = completion.transform(dfPrompt_mgmt_analysis).cache()\n",
+					"# display(dfSummaryMgmtAnalysis.select(\n",
+					"#   col(\"mgmt_analysis_prompt\"), col(\"error\"), col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"text\")))\n",
+					"# dfSummaryMgmtAnalysis.printSchema()\n",
+					"\n",
+					"dfSummaryMgmtAnalysis = dfSummaryMgmtAnalysis.select(col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"mgmt_analysis_summary\"))\n",
+					"\n",
+					"#Summary2\n",
+					"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\n",
+					"                                    , concat(lit(\"summarize the text below as bullet list\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
+					"completion = (\n",
+					"    OpenAICompletion()\n",
+					"    .setSubscriptionKey(aoaiApiKey)\n",
+					"    .setDeploymentName(aoaiDeploymentName)\n",
+					"    .setUrl(aoaiEndpoint)\n",
+					"    .setMaxTokens(100)\n",
+					"    .setPromptCol(\"risk_disclosure_prompt\")\n",
+					"    .setErrorCol(\"error\")\n",
+					"    .setOutputCol(\"risk_disclosure_summary\")\n",
+					")\n",
+					"\n",
+					"dfSummaryRisk = completion.transform(dfPrompt_risk_disclosure).cache()\n",
+					"# display(dfSummaryRisk.select(\n",
+					"#   col(\"risk_disclosure_prompt\"), col(\"error\"), col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"text\")))\n",
+					"# dfSummaryRisk.printSchema()\n",
+					"\n",
+					"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\n",
+					"\n",
+					"#Summary3\n",
+					"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\n",
+					"                                    , concat(lit(\"summarize the text below as bullet list\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
+					"completion = (\n",
+					"    OpenAICompletion()\n",
+					"    .setSubscriptionKey(aoaiApiKey)\n",
+					"    .setDeploymentName(aoaiDeploymentName)\n",
+					"    .setUrl(aoaiEndpoint)\n",
+					"    .setMaxTokens(100)\n",
+					"    .setPromptCol(\"controls_procedures_prompt\")\n",
+					"    .setErrorCol(\"error\")\n",
+					"    .setOutputCol(\"controls_procedures_summary\")\n",
+					")\n",
+					"\n",
+					"dfSummaryCP = completion.transform(dfPrompt_controls_procedures).cache()\n",
+					"# display(dfSummaryCP.select(\n",
+					"#   col(\"controls_procedures_prompt\"), col(\"error\"), col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"text\")))\n",
+					"# dfSummaryCP.printSchema()\n",
+					"\n",
+					"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"from functools import reduce\n",
+					"from pyspark.sql import DataFrame\n",
+					"\n",
+					"#Merge all the dataframes\n",
+					"dfs = [df,dfSummaryMgmtAnalysis,dfSummaryRisk,dfSummaryCP]\n",
+					"dfFinal = reduce(DataFrame.crossJoin, dfs)\n",
+					"display(dfFinal)\n",
+					""
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Write summarized json to curated zone of data lake"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"l1TransformCount = dfFinal.count()\n",
+					"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Return Values"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import json\n",
+					"mssparkutils.notebook.exit(json.dumps({\n",
+					"  \"IngestCount\": ingestCount,\n",
+					"  \"L1TransformCount\": l1TransformCount\n",
+					"}))\n",
+					""
+				],
+				"execution_count": 11
+			}
+		]
+	}
+}
