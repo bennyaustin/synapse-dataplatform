@@ -8,21 +8,21 @@
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
-			"referenceName": "mediumMO",
+			"referenceName": "smallMO",
 			"type": "BigDataPoolReference"
 		},
 		"sessionProperties": {
-			"driverMemory": "56g",
-			"driverCores": 8,
-			"executorMemory": "56g",
-			"executorCores": 8,
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
 			"numExecutors": 2,
 			"runAsWorkspaceSystemIdentity": true,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "72f59ba3-fc91-491c-9686-ed826cd1229b"
+				"spark.autotune.trackingId": "e22dc338-d44b-4bed-9b07-0935b8e5c1fe"
 			}
 		},
 		"metadata": {
@@ -36,18 +36,18 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-synapse-dp/providers/Microsoft.Synapse/workspaces/ba-synapse01-lhf7sbrgc3jru/bigDataPools/mediumMO",
-				"name": "mediumMO",
+				"id": "/subscriptions/735994b1-b3b0-46d5-96bc-c9b30ddb4265/resourceGroups/rg-synapse-dp/providers/Microsoft.Synapse/workspaces/ba-synapse01-lhf7sbrgc3jru/bigDataPools/smallMO",
+				"name": "smallMO",
 				"type": "Spark",
-				"endpoint": "https://ba-synapse01-lhf7sbrgc3jru.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/mediumMO",
+				"endpoint": "https://ba-synapse01-lhf7sbrgc3jru.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/smallMO",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
-				"cores": 8,
-				"memory": 56,
+				"cores": 4,
+				"memory": 28,
 				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
@@ -58,7 +58,7 @@
 				"source": [
 					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
 				],
-				"execution_count": 89
+				"execution_count": 1
 			},
 			{
 				"cell_type": "markdown",
@@ -112,7 +112,7 @@
 					"ReRunL1TransformFlag = None\n",
 					"DeltaName = None"
 				],
-				"execution_count": 90
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -128,30 +128,30 @@
 					}
 				},
 				"source": [
-					"# # Parameters for Testing only, should be commented off\n",
-					"# L1TransformInstanceID = 1\n",
-					"# L1TransformID = 4\n",
-					"# IngestID = 4\n",
-					"# CustomParameters = None\n",
-					"# InputRawFileSystem = 'raw-bronze'\n",
-					"# InputRawFileFolder = 're-statements/2023/04'\n",
-					"# InputRawFile = '2023-04-05_194935_re-statement.json'\n",
-					"# InputRawFileDelimiter = None\n",
-					"# InputFileHeaderFlag = None\n",
-					"# OutputL1CurateFileSystem = 'curated-silver'\n",
-					"# OutputL1CuratedFolder = 're-statements/2023/04'\n",
-					"# OutputL1CuratedFile = 'standardized_2023-04-05_194935_re-statement.json'\n",
-					"# OutputL1CuratedFileDelimiter = None\n",
-					"# OutputL1CuratedFileFormat = 'json'\n",
-					"# OutputL1CuratedFileWriteMode = 'overwrite'\n",
-					"# OutputDWStagingTable = None\n",
-					"# LookupColumns = None\n",
-					"# OutputDWTable = None\n",
-					"# OutputDWTableWriteMode = None\n",
-					"# ReRunL1TransformFlag = None\n",
-					"# DeltaName = None"
+					"# Parameters for Testing only, should be commented off\n",
+					"L1TransformInstanceID = 2\n",
+					"L1TransformID = 1\n",
+					"IngestID = 2\n",
+					"CustomParameters = None\n",
+					"InputRawFileSystem = 'raw-bronze'\n",
+					"InputRawFileFolder = 're-statements/2024/08'\n",
+					"InputRawFile = '2024-08-25_182410_re-statement.json'\n",
+					"InputRawFileDelimiter = None\n",
+					"InputFileHeaderFlag = None\n",
+					"OutputL1CurateFileSystem = 'curated-silver'\n",
+					"OutputL1CuratedFolder = 're-statements/2024/08'\n",
+					"OutputL1CuratedFile = 'standardized_2024-08-25_182504_re-statement.json'\n",
+					"OutputL1CuratedFileDelimiter = None\n",
+					"OutputL1CuratedFileFormat = 'json'\n",
+					"OutputL1CuratedFileWriteMode = 'overwrite'\n",
+					"OutputDWStagingTable = None\n",
+					"LookupColumns = None\n",
+					"OutputDWTable = None\n",
+					"OutputDWTableWriteMode = None\n",
+					"ReRunL1TransformFlag = None\n",
+					"DeltaName = None"
 				],
-				"execution_count": 91
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -168,33 +168,33 @@
 					"collapsed": false
 				},
 				"source": [
-					"import pyspark.sql.functions \n",
+					"from pyspark.sql.functions import col, explode\n",
 					"df = readFile(InputRawFileSystem, InputRawFileFolder +\"/\" + InputRawFile, None, None)\n",
 					"ingestCount = df.count()\n",
 					"\n",
 					"# extract datapoints of interest and explode array\n",
 					"\n",
 					"# df.printSchema()\n",
-					"df = df.select(col(\"fields.RE agency.valueString\").alias(\"re_agency\")\n",
-					"            ,col(\"fields.owner.valueString\").alias(\"owner\")\n",
-					"            ,col(\"fields.owner address.valueString\").alias(\"re_agency_address\")\n",
-					"            ,col(\"fields.rental address.valueString\").alias(\"rental_address\")\n",
-					"            ,col(\"fields.statement date.valueString\").alias(\"statement_date\")\n",
-					"            ,col(\"fields.tenant.valueString\").alias(\"tenant\")\n",
-					"            ,col(\"fields.total payment.valueString\").alias(\"total_payment\")\n",
-					"            ,explode(col(\"fields.statement details.valueArray\")).alias(\"statement details\")\n",
+					"df = df.select(col(\"RE agency.valueString\").alias(\"re_agency\")\n",
+					"            ,col(\"owner.valueString\").alias(\"owner\")\n",
+					"            ,col(\"owner address.valueString\").alias(\"re_agency_address\")\n",
+					"            ,col(\"rental address.valueString\").alias(\"rental_address\")\n",
+					"            ,col(\"statement date.valueString\").alias(\"statement_date\")\n",
+					"            ,col(\"tenant.valueString\").alias(\"tenant\")\n",
+					"            ,col(\"total payment.valueNumber\").alias(\"total_payment\")\n",
+					"            ,explode(col(\"statement details.valueArray\")).alias(\"statement details\")\n",
 					"            )\n",
 					"\n",
 					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\n",
-					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\n",
-					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\n",
-					"df.printSchema()\n",
+					"                ,col(\"statement details.valueObject.COLUMN2.valueString\").alias(\"item_amount\")\n",
+					"                ,col(\"statement details.valueObject.COLUMN1.valueString\").alias(\"item_description\"))\n",
+					"# df.printSchema()\n",
 					"\n",
 					"#write flattened json to curated zone of data lake\n",
 					"l1TransformCount = df.count()\n",
 					"writeFile(df,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 				],
-				"execution_count": 93
+				"execution_count": 17
 			},
 			{
 				"cell_type": "markdown",
@@ -229,7 +229,7 @@
 					"  \"L1TransformCount\": l1TransformCount\n",
 					"}))"
 				],
-				"execution_count": null
+				"execution_count": 18
 			}
 		]
 	}
