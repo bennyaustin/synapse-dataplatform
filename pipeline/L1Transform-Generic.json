@@ -104,7 +104,7 @@
 				"typeProperties": {
 					"notebook": {
 						"referenceName": {
-							"value": "@pipeline().parameters.NotebookName",
+							"value": "@concat(pipeline().parameters.NotebookPath,'/',pipeline().parameters.NotebookName)",
 							"type": "Expression"
 						},
 						"type": "NotebookReference"
