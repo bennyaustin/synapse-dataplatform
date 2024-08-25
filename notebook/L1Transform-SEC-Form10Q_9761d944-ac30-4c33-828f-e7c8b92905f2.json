@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a3ddaff4-d406-4902-96a3-6425e947365e"
+				"spark.autotune.trackingId": "481d6f31-02ab-4d6b-951f-f6daefadb120"
 			}
 		},
 		"metadata": {
@@ -99,7 +99,7 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"%run /common/datalake-functions {\"storageAccount\": \"ba-kv01-lhf7sbrgc3jru\" }\n",
+					"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }\n",
 					""
 				],
 				"execution_count": 2
