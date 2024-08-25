@@ -1,16 +1,16 @@
 {
 	"name": "AIMLCustomModels",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"serviceEndpoint": "https://bacustmodelstorage01q575.blob.core.windows.net/",
+			"serviceEndpoint": "https://baaimlstorage01o2katdvwv.blob.core.windows.net/",
 			"accountKind": "StorageV2"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
