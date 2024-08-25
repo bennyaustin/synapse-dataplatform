@@ -103,7 +103,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "L1Transform-ReStatement",
+						"referenceName": {
+							"value": "@pipeline().parameters.NotebookName",
+							"type": "Expression"
+						},
 						"type": "NotebookReference"
 					},
 					"parameters": {
