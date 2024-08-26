@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e2488087-4053-4490-9d07-09e69e548e86"
+				"spark.autotune.trackingId": "5a0e42cc-8654-4abe-9158-7852afb01d40"
 			}
 		},
 		"metadata": {
@@ -340,7 +340,7 @@
 					"\n",
 					"#Summary1\n",
 					"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -361,7 +361,7 @@
 					"\n",
 					"#Summary2\n",
 					"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights.\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -382,7 +382,7 @@
 					"\n",
 					"#Summary3\n",
 					"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\n",
-					"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
+					"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
 					"completion = (\n",
 					"    OpenAICompletion()\n",
 					"    .setSubscriptionKey(aoaiApiKey)\n",
