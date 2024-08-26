@@ -7037,7 +7037,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2214803b-e872-4af4-b12b-6652e94d79a0"
+						"spark.autotune.trackingId": "b31844a3-2a5d-446f-9ac2-9e67cbeefc15"
 					}
 				},
 				"metadata": {
@@ -7062,13 +7062,15 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28
+						"memory": 28,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
 						],
@@ -7203,8 +7205,8 @@
 							"            )\n",
 							"\n",
 							"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\n",
-							"                ,col(\"statement details.valueObject.COLUMN2.valueString\").alias(\"item_amount\")\n",
-							"                ,col(\"statement details.valueObject.COLUMN1.valueString\").alias(\"item_description\"))\n",
+							"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\n",
+							"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\n",
 							"# df.printSchema()\n",
 							"\n",
 							"#write flattened json to curated zone of data lake\n",
