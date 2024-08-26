@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Event grid trigger for SEC Form 10Q summarization",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
