@@ -2,7 +2,7 @@
 	"name": "Pause-ALL-Dedicated-SQLPools",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
