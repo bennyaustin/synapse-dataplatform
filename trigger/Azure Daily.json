@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Daily Trigger to Extract, Load and Transform data from Azure REST APIs",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
