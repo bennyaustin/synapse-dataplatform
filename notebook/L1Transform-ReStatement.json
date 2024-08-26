@@ -22,7 +22,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2bf2b588-d488-4c99-90b3-4e2747abd91b"
+				"spark.autotune.trackingId": "34ea8cb3-a373-417e-8a3d-a26d70949192"
 			}
 		},
 		"metadata": {
@@ -47,8 +47,7 @@
 				"sparkVersion": "3.2",
 				"nodeCount": 3,
 				"cores": 4,
-				"memory": 28,
-				"automaticScaleJobs": false
+				"memory": 28
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -186,7 +185,7 @@
 					"            )\n",
 					"\n",
 					"df = df.select(\"re_agency\",\"owner\",\"re_agency_address\",\"rental_address\",\"statement_date\",\"tenant\",\"total_payment\"\n",
-					"                ,col(\"statement details.valueObject.amount.valueNumber\").alias(\"item_amount\")\n",
+					"                ,col(\"statement details.valueObject.amount.valueString\").alias(\"item_amount\")\n",
 					"                ,col(\"statement details.valueObject.item description.valueString\").alias(\"item_description\"))\n",
 					"# df.printSchema()\n",
 					"\n",
