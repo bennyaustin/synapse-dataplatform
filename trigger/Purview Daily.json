@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Daily trigger to refresh Purview data",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
