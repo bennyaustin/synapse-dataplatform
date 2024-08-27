@@ -7280,7 +7280,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "e2488087-4053-4490-9d07-09e69e548e86"
+						"spark.autotune.trackingId": "5a0e42cc-8654-4abe-9158-7852afb01d40"
 					}
 				},
 				"metadata": {
@@ -7605,7 +7605,7 @@
 							"\n",
 							"#Summary1\n",
 							"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\n",
-							"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
+							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
 							"completion = (\n",
 							"    OpenAICompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -7626,7 +7626,7 @@
 							"\n",
 							"#Summary2\n",
 							"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\n",
-							"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights.\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
+							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
 							"completion = (\n",
 							"    OpenAICompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -7647,7 +7647,7 @@
 							"\n",
 							"#Summary3\n",
 							"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\n",
-							"                                    , concat(lit(\"summarize the text below as bullet list. Keep the summary concise and only include key highlights\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
+							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
 							"completion = (\n",
 							"    OpenAICompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
@@ -11750,56 +11750,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/xlargeGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 16,
-					"minNodeCount": 8
-				},
-				"nodeCount": 0,
-				"nodeSize": "XLarge",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/mediumGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 8,
-					"minNodeCount": 4
-				},
-				"nodeCount": 0,
-				"nodeSize": "Medium",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/xlargeMO')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -11866,56 +11816,6 @@
 				"nodeCount": 0,
 				"nodeSize": "Large",
 				"nodeSizeFamily": "MemoryOptimized",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/largeGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 12,
-					"minNodeCount": 6
-				},
-				"nodeCount": 0,
-				"nodeSize": "Large",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
-				"sparkVersion": "3.2",
-				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "australiaeast"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/smallGPU')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"autoPause": {
-					"enabled": true,
-					"delayInMinutes": 10
-				},
-				"autoScale": {
-					"enabled": true,
-					"maxNodeCount": 4,
-					"minNodeCount": 3
-				},
-				"nodeCount": 0,
-				"nodeSize": "Small",
-				"nodeSizeFamily": "HardwareAcceleratedGPU",
 				"sparkVersion": "3.2",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": false,
