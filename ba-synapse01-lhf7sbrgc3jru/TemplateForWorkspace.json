@@ -6416,7 +6416,7 @@
 			"properties": {
 				"description": "SQL Script to query JSON files in datalake",
 				"content": {
-					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-lhf7sbrgc3jru')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-lhf7sbrgc3jru]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='form10q')\n    CREATE EXTERNAL DATA SOURCE [form10q]\n    WITH (    LOCATION   = 'https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/curated-silver/form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-lhf7sbrgc3jru]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2024/08/standardized_2024-08-26_133839_form10q.json/part-00000-1c167e8d-bae1-483e-a3e8-c1dfc0a9c124-c000.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary'\n    ) \n\n    DROP VIEW vwSecForm10Q\n    GO\n    --Create View\n    CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(MAX) '$.mgmt_analysis_summary'\n            ,risk_disclosure_summary varchar(MAX) '$.risk_disclosure_summary'\n            ,controls_procedures_summary varchar(MAX) '$.controls_procedures_summary'\n            ) \n--Query View all columns\n-- select * from vwSecForm10Q\n\n--Query Summaries\nselect distinct org_name, reporting_quarter,mgmt_analysis_summary,risk_disclosure_summary,controls_procedures_summary\nfrom vwSecForm10Q\n \n\n",
+					"query": "-- Create a db master key if one does not already exist, using your own password.\n-- CREATE MASTER KEY ENCRYPTION BY PASSWORD='<EnterStrongPasswordHere>';\n\n\n-- Create a database scoped credential with the workspace managed IDENTITY\nIF NOT EXISTS (select 1 from sys.database_scoped_credentials where name = 'ba-synapse01-lhf7sbrgc3jru')\n    CREATE DATABASE SCOPED CREDENTIAL [ba-synapse01-lhf7sbrgc3jru]\n    WITH IDENTITY = 'MANAGED IDENTITY'\n\n-- Create EXTERNAL FILE Format as JSON not explicitly required for SQL Serverless. The format used by OPENROWSET is CSV\n\n--Create External Data Source\nIF NOT EXISTS (select 1 from sys.external_data_sources where name ='form10q')\n    CREATE EXTERNAL DATA SOURCE [form10q]\n    WITH (    LOCATION   = 'https://badatalake01lhf7sbrgc3jr.dfs.core.windows.net/curated-silver/form10q' --'https://<storage_account>.dfs.core.windows.net/<container>/<path>'\n            ,CREDENTIAL = [ba-synapse01-lhf7sbrgc3jru]\n    )\n\n\n--Query Single file\nselect top 10 *\nfrom openrowset(\n        bulk '2024/08/standardized_2024-08-26_133839_form10q.json/part-00000-1c167e8d-bae1-483e-a3e8-c1dfc0a9c124-c000.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Query multiple files using wildcards\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\n\n\n--Flatten with OPENJSON\nselect top 10 *\nfrom openrowset(\n        bulk '*/*/*/part*.json',\n        data_source = 'form10q',\n        format = 'csv',\n        fieldterminator ='0x0b',\n        fieldquote = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    ) with (doc nvarchar(max)) as rows\ncross apply openjson(doc)\nwith (org_name varchar(50) '$.org_name'\n    ,org_address varchar(400) '$.org_address'\n    ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n    ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n    ,reporting_quarter varchar(20) '$.reporting_quarter'\n    ,stock_exchange varchar(10) '$.stock_exchange'\n    ,total_assets int '$.total_assets'\n    ,total_comprehensive_income int '$.total_comprehensive_income'\n    ,total_equity int '$.total_equity'\n    ,total_liabilities int '$.total_liabilities'\n    ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n    ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n    ,controls_procedures varchar(MAX) '$.controls_procedures'\n    ,mgmt_analysis_summary varchar(100) '$.mgmt_analysis_summary[0]'\n    ,risk_disclosure_summary varchar(100) '$.risk_disclosure_summary[0]'\n    ,controls_procedures_summary varchar(100) '$.controls_procedures_summary[0]'\n    ) \n\n    DROP VIEW vwSecForm10Q\n    GO\n    --Create View\n    CREATE VIEW vwSecForm10Q AS\n        select * \n        from openrowset(\n                bulk '*/*/*/part*.json',\n                data_source = 'form10q',\n                format = 'csv',\n                fieldterminator ='0x0b',\n                fieldquote = '0x0b',\n                ROWTERMINATOR = '0x0b'\n            ) with (doc nvarchar(max)) as rows\n        cross apply openjson(doc)\n        with (org_name varchar(50) '$.org_name'\n            ,org_address varchar(400) '$.org_address'\n            ,org_jurisdiction varchar(100) '$.org_jurisdiction'\n            ,org_stock_ticker varchar(5) '$.org_stock_ticker'\n            ,reporting_quarter varchar(20) '$.reporting_quarter'\n            ,stock_exchange varchar(10) '$.stock_exchange'\n            ,total_assets int '$.total_assets'\n            ,total_comprehensive_income int '$.total_comprehensive_income'\n            ,total_equity int '$.total_equity'\n            ,total_liabilities int '$.total_liabilities'\n            ,mgmt_analysis varchar(MAX) '$.mgmt_analysis'\n            ,risk_disclosure varchar(MAX) '$.risk_disclosure'\n            ,controls_procedures varchar(MAX) '$.controls_procedures'\n            ,mgmt_analysis_summary varchar(MAX) '$.mgmt_analysis_summary[0]'\n            ,risk_disclosure_summary varchar(MAX) '$.risk_disclosure_summary[0]'\n            ,controls_procedures_summary varchar(MAX) '$.controls_procedures_summary[0]'\n            ) \n--Query View all columns\n-- select * from vwSecForm10Q\n\n--Query Summaries\nselect distinct org_name, reporting_quarter,mgmt_analysis_summary,risk_disclosure_summary,controls_procedures_summary\nfrom vwSecForm10Q\n \n\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -7275,17 +7275,16 @@
 					"executorMemory": "28g",
 					"executorCores": 4,
 					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": true,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "5a0e42cc-8654-4abe-9158-7852afb01d40"
+						"spark.autotune.trackingId": "48bb37a2-603e-417d-b61a-78d29a301eed"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"enableDebugMode": true,
+					"enableDebugMode": false,
 					"kernelspec": {
 						"name": "synapse_pyspark",
 						"display_name": "Synapse PySpark"
@@ -7305,62 +7304,20 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28
+						"memory": 28,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# Install SynapseML for this spark session\n",
-							"https://microsoft.github.io/SynapseML/docs/getting_started/installation/"
-						]
-					},
-					{
 						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"%%configure -f\n",
-							"{\n",
-							"  \"name\": \"synapseml\",\n",
-							"  \"conf\": {\n",
-							"      \"spark.jars.packages\": \"com.microsoft.azure:synapseml_2.12:0.11.0,org.apache.spark:spark-avro_2.12:3.3.1\",\n",
-							"      \"spark.jars.repositories\": \"https://mmlspark.azureedge.net/maven\",\n",
-							"      \"spark.jars.excludes\": \"org.scala-lang:scala-reflect,org.apache.spark:spark-tags_2.12,org.scalactic:scalactic_2.12,org.scalatest:scalatest_2.12,com.fasterxml.jackson.core:jackson-databind\",\n",
-							"      \"spark.yarn.user.classpath.first\": \"true\",\n",
-							"      \"spark.sql.parquet.enableVectorizedReader\": \"false\",\n",
-							"      \"spark.sql.legacy.replaceDatabricksSparkAvro.enabled\": \"true\"\n",
-							"  }\n",
-							"}"
-						],
-						"outputs": [],
-						"execution_count": 1
-					},
-					{
-						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"%run /common/datalake-functions {\"storageAccount\": \"badatalake01lhf7sbrgc3jr\" }"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 41
 					},
 					{
 						"cell_type": "code",
@@ -7379,45 +7336,7 @@
 							"%run /common/keyvault-functions {\"kvLinkedService\": \"keyvault01\"}"
 						],
 						"outputs": [],
-						"execution_count": 3
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# %run /common/dedicatedSQLPool-functions {\"server\": \"ba-synapse01-lhf7sbrgc3jru.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\" }"
-						],
-						"outputs": [],
-						"execution_count": 4
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# %run /common/upsertSdp-function {\"server\": \"ba-synapse01-lhf7sbrgc3jru.sql.azuresynapse.net,1433\",\"database\" :\"dwh01\",\"sqlUidSecret\": \"sqlserver-admin-username\",\"sqlPwdSecret\":\"sqlserver-admin-password\", \"sinkType\": \"Synapse\"}"
-						],
-						"outputs": [],
-						"execution_count": 14
+						"execution_count": 42
 					},
 					{
 						"cell_type": "markdown",
@@ -7472,7 +7391,7 @@
 							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 43
 					},
 					{
 						"cell_type": "code",
@@ -7488,31 +7407,31 @@
 							}
 						},
 						"source": [
-							"# # Parameters for Testing only, should be commented off\n",
-							"# L1TransformInstanceID = 11\n",
-							"# L1TransformID  = 2\n",
-							"# IngestID = 1\n",
-							"# CustomParameters = None\n",
-							"# InputRawFileSystem = \"raw-bronze\"\n",
-							"# InputRawFileFolder = \"form10q/2024/08\"\n",
-							"# InputRawFile = \"2024-08-25_211827_form10q.json\"\n",
-							"# InputRawFileDelimiter = None\n",
-							"# InputFileHeaderFlag = None\n",
-							"# OutputL1CurateFileSystem = \"curated-silver\"\n",
-							"# OutputL1CuratedFolder = \"form10q/2024/08\"\n",
-							"# OutputL1CuratedFile = \"standardized_2024-08-25_211913_form10q.json\"\n",
-							"# OutputL1CuratedFileDelimiter = None\n",
-							"# OutputL1CuratedFileFormat = \"json\"\n",
-							"# OutputL1CuratedFileWriteMode = \"overwrite\"\n",
-							"# OutputDWStagingTable = \"[stg].[merge_sec_form10q]\"\n",
-							"# LookupColumns = \"['org_name','reporting_quarter']\"\n",
-							"# OutputDWTable = \"[sec].[form10q]\"\n",
-							"# OutputDWTableWriteMode = \"append\"\n",
-							"# ReRunL1TransformFlag = None\n",
-							"# DeltaName = None"
+							"# Parameters for Testing only, should be commented off\n",
+							"L1TransformInstanceID = 9\n",
+							"L1TransformID  = 2\n",
+							"IngestID = 1\n",
+							"CustomParameters = None\n",
+							"InputRawFileSystem = \"raw-bronze\"\n",
+							"InputRawFileFolder = \"form10q/2024/08\"\n",
+							"InputRawFile = \"2024-08-26_133747_form10q.json\"\n",
+							"InputRawFileDelimiter = None\n",
+							"InputFileHeaderFlag = None\n",
+							"OutputL1CurateFileSystem = \"curated-silver\"\n",
+							"OutputL1CuratedFolder = \"form10q/2024/08\"\n",
+							"OutputL1CuratedFile = \"standardized_2024-08-26_133837_form10q.json\"\n",
+							"OutputL1CuratedFileDelimiter = None\n",
+							"OutputL1CuratedFileFormat = \"json\"\n",
+							"OutputL1CuratedFileWriteMode = \"overwrite\"\n",
+							"OutputDWStagingTable = None\n",
+							"LookupColumns = None\n",
+							"OutputDWTable = None\n",
+							"OutputDWTableWriteMode = None\n",
+							"ReRunL1TransformFlag = None\n",
+							"DeltaName = None"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": 44
 					},
 					{
 						"cell_type": "markdown",
@@ -7565,7 +7484,7 @@
 							"            )"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 45
 					},
 					{
 						"cell_type": "markdown",
@@ -7596,78 +7515,114 @@
 						},
 						"source": [
 							"import os\n",
-							"from synapse.ml.core.platform import running_on_synapse, find_secret\n",
-							"from synapse.ml.cognitive import OpenAICompletion\n",
+							"from synapse.ml.services.openai import OpenAIChatCompletion\n",
 							"\n",
 							"aoaiEndpoint = getSecret(\"aoai-endpoint\")\n",
 							"aoaiDeploymentName = \"gpt-35-turbo\"\n",
 							"aoaiApiKey = getSecret(\"aoai-api-key\")\n",
+							"location = \"australiaeast\"\n",
+							"\n",
+							"def make_message(role, content):\n",
+							"    return Row(role=role, content=content, name=role)\n",
+							"\n",
+							"systemPrompt = \"summarize the text as bullet points. Include key highligts. Generate concise summary. Exclude content not in supplied prompt\"\n",
 							"\n",
 							"#Summary1\n",
-							"dfPrompt_mgmt_analysis = df.select( col(\"mgmt_analysis\")\n",
-							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"mgmt_analysis\"),lit(\"\\n summary:\")).alias(\"mgmt_analysis_prompt\"))\n",
-							"completion = (\n",
-							"    OpenAICompletion()\n",
+							"dfSummaryMgmtAnalysis = spark.createDataFrame(\n",
+							"    [\n",
+							"        (\n",
+							"            [\n",
+							"                make_message(\n",
+							"                    \"system\", systemPrompt\n",
+							"                ),\n",
+							"                make_message(\"user\", df.first()[\"mgmt_analysis\"]),\n",
+							"            ],\n",
+							"        )\n",
+							"    ]\n",
+							").toDF(\"messages\")\n",
+							"\n",
+							"chat_completion = (\n",
+							"    OpenAIChatCompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
 							"    .setDeploymentName(aoaiDeploymentName)\n",
-							"    .setUrl(aoaiEndpoint)\n",
-							"    .setMaxTokens(100)\n",
-							"    .setPromptCol(\"mgmt_analysis_prompt\")\n",
+							"    .setCustomServiceName(location)\n",
+							"    .setMessagesCol(\"messages\")\n",
 							"    .setErrorCol(\"error\")\n",
 							"    .setOutputCol(\"mgmt_analysis_summary\")\n",
 							")\n",
 							"\n",
-							"dfSummaryMgmtAnalysis = completion.transform(dfPrompt_mgmt_analysis).cache()\n",
-							"# display(dfSummaryMgmtAnalysis.select(\n",
-							"#   col(\"mgmt_analysis_prompt\"), col(\"error\"), col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"text\")))\n",
-							"# dfSummaryMgmtAnalysis.printSchema()\n",
-							"\n",
-							"dfSummaryMgmtAnalysis = dfSummaryMgmtAnalysis.select(col(\"mgmt_analysis_summary.choices.text\").getItem(0).alias(\"mgmt_analysis_summary\"))\n",
+							"# display(\n",
+							"#     chat_completion.transform(dfSummaryMgmtAnalysis).select(\n",
+							"#         \"messages\", \"error\",\"mgmt_analysis_summary.choices.message.content\"\n",
+							"#     )\n",
+							"# )\n",
+							"dfSummaryMgmtAnalysis =  chat_completion.transform(dfSummaryMgmtAnalysis).select(col(\"mgmt_analysis_summary.choices.message.content\").alias(\"mgmt_analysis_summary\"))\n",
 							"\n",
 							"#Summary2\n",
-							"dfPrompt_risk_disclosure = df.select( col(\"risk_disclosure\")\n",
-							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"risk_disclosure\"),lit(\"\\n summary:\")).alias(\"risk_disclosure_prompt\"))\n",
-							"completion = (\n",
-							"    OpenAICompletion()\n",
+							"dfSummaryRisk = spark.createDataFrame(\n",
+							"    [\n",
+							"        (\n",
+							"            [\n",
+							"                make_message(\n",
+							"                    \"system\", systemPrompt\n",
+							"                ),\n",
+							"                make_message(\"user\", df.first()[\"risk_disclosure\"]),\n",
+							"            ],\n",
+							"        )\n",
+							"    ]\n",
+							").toDF(\"messages\")\n",
+							"\n",
+							"chat_completion = (\n",
+							"    OpenAIChatCompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
 							"    .setDeploymentName(aoaiDeploymentName)\n",
-							"    .setUrl(aoaiEndpoint)\n",
-							"    .setMaxTokens(100)\n",
-							"    .setPromptCol(\"risk_disclosure_prompt\")\n",
+							"    .setCustomServiceName(location)\n",
+							"    .setMessagesCol(\"messages\")\n",
 							"    .setErrorCol(\"error\")\n",
 							"    .setOutputCol(\"risk_disclosure_summary\")\n",
 							")\n",
 							"\n",
-							"dfSummaryRisk = completion.transform(dfPrompt_risk_disclosure).cache()\n",
-							"# display(dfSummaryRisk.select(\n",
-							"#   col(\"risk_disclosure_prompt\"), col(\"error\"), col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"text\")))\n",
-							"# dfSummaryRisk.printSchema()\n",
+							"# display(\n",
+							"#     chat_completion.transform(dfSummaryRisk).select(\n",
+							"#         \"messages\", \"error\",\"risk_disclosure_summary.choices.message.content\"\n",
+							"#     )\n",
+							"# )\n",
 							"\n",
-							"dfSummaryRisk = dfSummaryRisk.select(col(\"risk_disclosure_summary.choices.text\").getItem(0).alias(\"risk_disclosure_summary\"))\n",
+							"dfSummaryRisk= chat_completion.transform(dfSummaryRisk).select(col(\"risk_disclosure_summary.choices.message.content\").alias(\"risk_disclosure_summary\"))\n",
 							"\n",
 							"#Summary3\n",
-							"dfPrompt_controls_procedures = df.select( col(\"controls_procedures\")\n",
-							"                                    , concat(lit(\"summarize the text below\\n\"),lit(\"text:\"),col(\"controls_procedures\"),lit(\"\\n summary:\")).alias(\"controls_procedures_prompt\"))\n",
-							"completion = (\n",
-							"    OpenAICompletion()\n",
+							"dfSummaryCP = spark.createDataFrame(\n",
+							"    [\n",
+							"        (\n",
+							"            [\n",
+							"                make_message(\n",
+							"                    \"system\", systemPrompt\n",
+							"                ),\n",
+							"                make_message(\"user\", df.first()[\"controls_procedures\"]),\n",
+							"            ],\n",
+							"        )\n",
+							"    ]\n",
+							").toDF(\"messages\")\n",
+							"\n",
+							"chat_completion = (\n",
+							"    OpenAIChatCompletion()\n",
 							"    .setSubscriptionKey(aoaiApiKey)\n",
 							"    .setDeploymentName(aoaiDeploymentName)\n",
-							"    .setUrl(aoaiEndpoint)\n",
-							"    .setMaxTokens(100)\n",
-							"    .setPromptCol(\"controls_procedures_prompt\")\n",
+							"    .setCustomServiceName(location)\n",
+							"    .setMessagesCol(\"messages\")\n",
 							"    .setErrorCol(\"error\")\n",
 							"    .setOutputCol(\"controls_procedures_summary\")\n",
 							")\n",
 							"\n",
-							"dfSummaryCP = completion.transform(dfPrompt_controls_procedures).cache()\n",
-							"# display(dfSummaryCP.select(\n",
-							"#   col(\"controls_procedures_prompt\"), col(\"error\"), col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"text\")))\n",
-							"# dfSummaryCP.printSchema()\n",
-							"\n",
-							"dfSummaryCP = dfSummaryCP.select(col(\"controls_procedures_summary.choices.text\").getItem(0).alias(\"controls_procedures_summary\"))"
+							"# display(\n",
+							"#     chat_completion.transform(dfSummaryCP).select(\n",
+							"#         \"messages\", \"error\",\"controls_procedures_summary.choices.message.content\"\n",
+							"#     )\n",
+							"# )\n",
+							"dfSummaryCP = chat_completion.transform(dfSummaryCP).select(col(\"controls_procedures_summary.choices.message.content\").alias(\"controls_procedures_summary\"))"
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": 118
 					},
 					{
 						"cell_type": "code",
@@ -7694,7 +7649,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 119
 					},
 					{
 						"cell_type": "markdown",
@@ -7727,37 +7682,7 @@
 							"writeFile(dfFinal,OutputL1CurateFileSystem, OutputL1CuratedFolder + \"/\" + OutputL1CuratedFile)"
 						],
 						"outputs": [],
-						"execution_count": 10
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"# pos = OutputDWTable.find(\".\")\n",
-							"# schemaName = OutputDWTable[0:pos]\n",
-							"# tableName = OutputDWTable[pos+1:]\n",
-							"\n",
-							"# posStg = OutputDWStagingTable.find(\".\")\n",
-							"# stgSchemaName = OutputDWStagingTable[0:posStg]\n",
-							"# stgTableName = OutputDWStagingTable[posStg+1:]\n",
-							"\n",
-							"# if OutputDWTableWriteMode == 'append' and OutputDWStagingTable is not None and LookupColumns is not None:\n",
-							"#     upsertSdp(df,SchemaStagingTable=stgSchemaName,StagingTable=stgTableName, SchemaTargetTable=schemaName, TargetTable=tableName, KeyColumns=LookupColumns, DeltaColumn=DeltaName) \n",
-							"# else:\n",
-							"#     insertSdpTable(df, schema=schemaName,table=tableName, mode=OutputDWTableWriteMode)"
-						],
-						"outputs": [],
-						"execution_count": 19
+						"execution_count": 120
 					},
 					{
 						"cell_type": "markdown",
@@ -7794,7 +7719,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 121
 					}
 				]
 			},
